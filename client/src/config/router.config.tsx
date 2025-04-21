@@ -31,6 +31,8 @@ import CartPage from "../pages/auth/AddToCart";
 import React from "react";
 import UserDetails from "../pages/Use Details";
 import UserOrders from "../pages/INDIVIDUAL ORDERS";
+import Reactivate from "../pages/auth/Reactivate";
+import ChangePassword from "../pages/auth/Reset";
 const RoutingConfig = () => {
     const [loggedInUser, setLoggedInUser] = useState();
     const [loading, setLoading] = useState(true)
@@ -154,7 +156,8 @@ const RoutingConfig = () => {
 
                      <Route path="/admin/page" element={<AdminPage />}></Route>
                         <Route path="/:userrole/:username/details" element={<UserDetails />}></Route>
-                        
+                        <Route path="/reset-password" element={<ChangePassword />}></Route>
+                        <Route path="/reactivate" element={<Reactivate />}></Route>
                         <Route path="admin/orderlist/:orderId/payment-success" element={<PaymentSuccessPage />}></Route>
                            <Route path="/:productName/:productId/order/payment" element={<PaymentPage />} />
                            <Route path="/:userId/orders" element={<UserOrders />} />

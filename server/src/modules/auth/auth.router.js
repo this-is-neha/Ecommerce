@@ -12,7 +12,9 @@ authRoute.get("/activate/:token",authCtrl.activate)
 authRoute.post('/login',bodyValidator(loginDTO), authCtrl.login)
 
 authRoute.get("/me",auth,authCtrl.getLoggedIn)
-
+authRoute.post("/reset",auth,authCtrl.forgotPassword)
+authRoute.put("/reset-password",auth,authCtrl.changePassword)
+authRoute.get("/resettok/:token",authCtrl.checkResetToken)
 authRoute.get("/admin",auth,allowRole(['admin','seller']),authCtrl.adminAccess)
 
 module.exports = authRoute
