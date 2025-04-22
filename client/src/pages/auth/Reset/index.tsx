@@ -55,7 +55,9 @@ const ChangePassword = () => {
                             }
                         })}
                     />
-                    {errors.newPassword && <p className="text-red-500 text-sm mt-1">{errors.newPassword.message}</p>}
+                 {errors.newPassword && typeof errors.newPassword.message === 'string' && (
+  <p className="text-red-500 text-sm mt-1">{errors.newPassword.message}</p>
+)}
                 </div>
 
                 <div className="mb-4">
