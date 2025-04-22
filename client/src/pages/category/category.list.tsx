@@ -20,7 +20,7 @@ const AdminCategoryList = () => {
   const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         params: {
           page: page,
           limit: limit,

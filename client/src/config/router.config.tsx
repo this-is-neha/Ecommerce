@@ -28,7 +28,7 @@ import OrderDetails from "../pages/orderrDetails";
 import AdminPage from "../pages/admin";
 import PaymentSuccessPage from "../components/neha";
 import CartPage from "../pages/auth/AddToCart";
-import React from "react";
+
 import UserDetails from "../pages/Use Details";
 import UserOrders from "../pages/INDIVIDUAL ORDERS";
 import Reactivate from "../pages/auth/Reactivate";

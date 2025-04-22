@@ -7,7 +7,6 @@ import TableActionButton from "../../components/common/table/action-button.compo
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-
 export const PER_PAGE_LIMIT = 17;
 
 const AdminBrand = () => {
@@ -54,7 +53,7 @@ const AdminBrand = () => {
       setLoading(true);
       console.log(`Deleting brand with ID: ${id}`); // Log the ID of the brand being deleted
 
-      await axiosInstance.delete(`${baseURL}/brand/${id}`, {
+      await axiosInstance.delete(`/brand/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 
