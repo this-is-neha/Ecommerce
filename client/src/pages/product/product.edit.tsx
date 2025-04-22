@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "../../config/axios.config";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminProductEdit = () => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<any[]>([]);
@@ -37,7 +38,7 @@ const AdminProductEdit = () => {
  
   const fetchCategories = async () => {
     try {
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -52,7 +53,7 @@ const AdminProductEdit = () => {
   
   const fetchBrands = async () => {
     try {
-      const response = await axiosInstance.get("/brand", {
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -66,7 +67,7 @@ const AdminProductEdit = () => {
   const getProduct = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/product/${id}`, {
+      const response = await axiosInstance.get(`${baseURL}/product/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -140,7 +141,7 @@ const AdminProductEdit = () => {
         "Content-Type": "multipart/form-data",
       };
 
-      await axiosInstance.put(`/product/${id}`, formData, { headers });
+      await axiosInstance.put(`${baseURL}/product/${id}`, formData, { headers });
       toast.success("Product updated successfully");
       navigate("/admin/products");
 

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const ProductCreate = () => {
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const ProductCreate = () => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -56,7 +56,7 @@ const ProductCreate = () => {
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axiosInstance.get("/brand", {
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),// where token is retrieved using localStorage.getItem("token")
 
@@ -101,7 +101,7 @@ const ProductCreate = () => {
 
   const checkSlugExists = async (slug: string) => {
     try {
-      const response = await axiosInstance.get(`/product/check-slug?slug=${slug}`, {
+      const response = await axiosInstance.get(`${baseURL}/product/check-slug?slug=${slug}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -139,7 +139,7 @@ const ProductCreate = () => {
     });
 
     try {
-      const response = await axiosInstance.post("/product", formData, {
+      const response = await axiosInstance.post(`${baseURL}/product`, formData, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
           "Content-Type": "multipart/form-data",

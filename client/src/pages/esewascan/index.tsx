@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FooterComponent, HeaderComponent } from '../../components/common';
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const ImageUploadPage = () => {
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -36,7 +36,7 @@ const ImageUploadPage = () => {
 
   const fetchOrderDetails = async (orderId: string) => {
     try {
-      const response = await axiosInstance.get(`orders/${orderId}`); // Adjust the endpoint accordingly
+      const response = await axiosInstance.get(`${baseURL}orders/${orderId}`); // Adjust the endpoint accordingly
       console.log('Order details fetched successfully:', response.data);
       // Log the details to the console
       console.log('Full Name:', response.data.fullName);
@@ -87,7 +87,7 @@ const ImageUploadPage = () => {
     formData.append('orderId', orderId); 
 
     try {
-      const response = await axiosInstance.post('/confrom', formData, {
+      const response = await axiosInstance.post(`${baseURL}/confrom`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

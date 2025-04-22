@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "axios"; 
 import { toast } from "react-toastify";
 import React from "react";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const Activate = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Activate = () => {
   const ActivateAccount = async (activationToken:any) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`http://localhost:9004/auth/activate/${activationToken}`);
+      const response = await axiosInstance.get(`${baseURL}/auth/activate/${activationToken}`);
       setLoading(false);
 
       if (response.data.result) {

@@ -51,7 +51,7 @@ const LoginPage = () => {
 
   const submitForm = async (data: any) => {
     try {
-      const response = await axiosInstance.post('http://localhost:9004/auth/login', data);
+      const response = await axiosInstance.post('https://ecommerce-1-lsr9.onrender.com/auth/login', data);
 
       localStorage.setItem("accessToken", response.data.result.token.accessToken);
       localStorage.setItem("refreshToken", response.data.result.token.refreshToken);

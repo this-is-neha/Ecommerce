@@ -14,7 +14,7 @@ const PaymentPage = () => {
   const [productPrice, setProductPrice] = useState("");
   const [productImage, setProductImage] = useState("");
   const [mobileBankDetails, setMobileBankDetails] = useState({ bank: "", accountNumber: "" });
-  
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
   // Extract order details from location.state
   const orderDetails = location.state?.order; // Ensure optional chaining to avoid errors
   const { order, orderId } = location.state || {};
@@ -31,7 +31,7 @@ const PaymentPage = () => {
           throw new Error("Authorization token missing");
         }
 
-        const response = await axiosInstance.get(`/product/${productId}`, {
+        const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +64,7 @@ const PaymentPage = () => {
           throw new Error("Authorization token missing");
         }
 
-        const response = await axiosInstance.get(`/order/${orderId}`, {
+        const response = await axiosInstance.get(`${baseURL}/order/${orderId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

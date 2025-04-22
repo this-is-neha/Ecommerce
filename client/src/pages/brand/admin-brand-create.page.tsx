@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInputField, SelectOptionComponent, CheckboxField } from "../../components/common/form";
 import { useNavigate } from "react-router-dom";
 import { HeaderComponent } from "../../components/common";
-// import React from "react";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminBrandCreate = () => {
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ const AdminBrandCreate = () => {
       console.log('Headers:', headers); 
       console.log('FormData:', formData); 
 
-      const response = await axiosInstance.post('/brand', formData, { headers });
+      const response = await axiosInstance.post(`${baseURL}/brand`, formData, { headers });
 
       toast.success("Brand created successfully");
       navigate("/admin/brand");

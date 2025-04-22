@@ -7,7 +7,7 @@ import TableActionButton from "../../components/common/table/action-button.compo
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
 export const PER_PAGE_LIMIT = 28;
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminCategoryList = () => {
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ const AdminCategoryList = () => {
       setLoading(true);
       console.log(`Deleting Category with ID: ${id}`); 
 
-      await axiosInstance.delete(`/category/${id}`, {
+      await axiosInstance.delete(`${baseURL}/category/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 

@@ -5,7 +5,7 @@ import axiosInstance from "../../config/axios.config";
 import { toast } from "react-toastify";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const OrderListing = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +13,7 @@ const OrderListing = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/order", {
+      const response = await axiosInstance.get(`${baseURL}/order`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -38,7 +38,7 @@ const OrderListing = () => {
       const confirmation = window.confirm("Are you sure you want to delete this order?");
       if (!confirmation) return;
 
-      await axiosInstance.delete(`/order/${orderId}`, {
+      await axiosInstance.delete(`${baseURL}/order/${orderId}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },

@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
 import React from "react";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminBannerEdit = () => {
     let [loading, setLoading] = useState(true);
@@ -40,7 +41,7 @@ const AdminBannerEdit = () => {
                 formData.append('image', data.image);
             }
 
-            await axiosInstance.put('/banner/' + params.id, formData, {
+            await axiosInstance.put(`${baseURL}/banner/` + params.id, formData, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('accessToken'),
                     "Content-Type": "multipart/form-data",

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "axios";
 import { toast } from "react-toastify";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const Reactivate = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Reactivate = () => {
     }
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`http://localhost:9004/auth/resettok/${activationToken}`, {
+      const response = await axiosInstance.get(`${baseURL}/auth/resettok/${activationToken}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
       });
 

@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axiosInstance from "../config/axios.config"
 
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const getBannerDetail: any = createAsyncThunk(
     "banner/getBannerDeatil",
     async (id: any, thunkAPI) => {
         try {
 
-            const response: any = await axiosInstance.get("/banner/" + id, {
+            const response: any = await axiosInstance.get(`${baseURL}/banner/` + id, {
                 headers: {
                     "Authorization": "Bearer" + localStorage.getItem("accessToken")
                 }

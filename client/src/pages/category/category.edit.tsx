@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
 import React from "react";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminCategoryEdit = () => {
     let [loading, setLoading] = useState(true);
     const params = useParams();
@@ -40,7 +40,7 @@ const AdminCategoryEdit = () => {
 
             formData.append('parentId', data.parentId);
             formData.append('section', data.section ? data.section : '');
-            await axiosInstance.put('/category/' + params.id, formData, {
+            await axiosInstance.put(`${baseURL}/category/` + params.id, formData, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('accessToken'),
                     "Content-Type": "multipart/form-data",

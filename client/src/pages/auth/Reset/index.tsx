@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const ChangePassword = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [message, setMessage] = useState("");
@@ -15,7 +15,7 @@ const ChangePassword = () => {
             const token = localStorage.getItem('accessToken');
 
             const response = await axios.put(
-                "http://localhost:9004/auth/reset-password",
+                `${baseURL}/auth/reset-password`,
                 { newPassword: data.newPassword },
                 {
                     headers: { Authorization: `Bearer ${token}` },

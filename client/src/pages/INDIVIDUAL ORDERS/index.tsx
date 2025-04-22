@@ -23,7 +23,7 @@ interface Product {
     images: string;
     summary:string
 }
-
+const baseURLl = import.meta.env.VITE_API_BASE_URL;
 const UserOrders = () => {
     const { userId } = useParams<{ userId: string }>();
     const [orders, setOrders] = useState<Order[]>([]);
@@ -31,12 +31,12 @@ const UserOrders = () => {
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const baseURL = "http://127.0.0.1:5500/public/uploads/product/"
+    const baseURL = `${baseURLl}/public/uploads/product/`
     useEffect(() => {
         const fetchUserOrders = async () => {
             try {
                 if (userId) {
-                    const response = await axiosInstance.get(`http://localhost:9004/order/users/${userId}`);
+                    const response = await axiosInstance.get(`${baseURLl}/order/users/${userId}`);
                     setOrders(response);
 
                     const productIds = response.map((order: Order) => order.productId);
@@ -44,7 +44,7 @@ const UserOrders = () => {
                     const token = localStorage.getItem("accessToken") || null;
                     const productResponses = await Promise.all(
                         uniqueProductIds.map(productId =>
-                            axiosInstance.get(`http://localhost:9004/product/${productId}`, {
+                            axiosInstance.get(`${baseURLl}/product/${productId}`, {
                                 headers: {
                                     Authorization: `Bearer ${token}`,
                                 }
@@ -78,7 +78,7 @@ const UserOrders = () => {
     const handleViewProduct = async (productId: string) => {
         try {
             const token = localStorage.getItem("accessToken") || null;
-            const response = await axiosInstance.get(`http://localhost:9004/product/${productId}`, {
+            const response = await axiosInstance.get(`${baseURLl}/product/${productId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminBannerCreate = () => {
     const [loading, setLoading] = useState(false);
 
@@ -45,7 +45,7 @@ const AdminBannerCreate = () => {
                 "Content-Type": "multipart/form-data"
             };
 
-            const response = await axiosInstance.post('/banner', formData, { headers });
+            const response = await axiosInstance.post(`${baseURL}/banner`, formData, { headers });
             toast.success("Banner created successfully");
             navigate("/admin/banner");
         } catch (error: any) {

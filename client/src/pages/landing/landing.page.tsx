@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
 import React from "react";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string;
   _id: string;
@@ -26,14 +26,14 @@ const LandingPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  const baseUrl = 'http://127.0.0.1:5500/public/uploads/category/';
-  const baseUrll = 'http://127.0.0.1:5500/public/uploads/brands/';
+  const baseUrl = `${baseURL}/public/uploads/category/`;
+  const baseUrll = `${baseURL}/public/uploads/brands/`;
   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -57,7 +57,7 @@ const LandingPage = () => {
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axiosInstance.get("/brand", {
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },

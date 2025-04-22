@@ -1,20 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es5",                                 // ECMAScript version target
-    "lib": ["dom", "dom.iterable", "esnext"],        // Library types to include
-    "allowJs": true,                                 // Allow JavaScript files to be compiled
-    "skipLibCheck": true,                            // Skip type checking of all declaration files
-    "esModuleInterop": true,                         // Ensures correct handling of ES modules
-    "allowSyntheticDefaultImports": true,            // Allow default imports from modules without default exports
-    "strict": true,                                  // Enable all strict type-checking options
-    "forceConsistentCasingInFileNames": true,        // Enforce consistent casing in import paths
-    "noFallthroughCasesInSwitch": true,              // Ensure switch cases are correctly handled
-    "module": "esnext",                              // Module system used in the project (ESNext modules)
-    "moduleResolution": "node",                      // How module paths are resolved
-    "resolveJsonModule": true,                       // Allow importing `.json` files
-    "isolatedModules": true,                         // Ensure each file can be safely transpiled without depending on others
-    "noEmit": true,                                  // Do not emit any output files (useful for type-checking only)
-    "jsx": "react"                                   // Use React's JSX emit for JSX syntax
+    "target": "es5",                              
+    "lib": ["dom", "dom.iterable", "esnext"],        
+    "allowJs": true,                                
+    "skipLibCheck": true,                            
+    "esModuleInterop": true,                         
+    "allowSyntheticDefaultImports": true,            
+    "strict": true,                                  
+    "forceConsistentCasingInFileNames": true,        
+    "noFallthroughCasesInSwitch": true,              
+    "module": "esnext",                             
+    "moduleResolution": "node",                      
+    "resolveJsonModule": true,                     
+    "isolatedModules": true,                         
+    "noEmit": true,                                   
+    "jsx": "react-jsx",                          // ✅ Use react-jsx for React 17+
+    "allowUmdGlobalAccess": true,               // ✅ Fix UMD global access issues
+    "types": ["vite/client", "react", "react-dom"] // ✅ Ensures proper type resolution                                
   },
-  "include": ["src"]                                  // Specify the folder(s) to include in the compilation
+  "include": ["src"]                                 
 }

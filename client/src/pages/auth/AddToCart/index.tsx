@@ -4,20 +4,20 @@ import { toast } from 'react-toastify';
 import axiosInstance from '../../../config/axios.config'; // Adjust the import as necessary
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { FooterComponent, HeaderComponent } from '../../../components/common';
-
+const baseURLll = import.meta.env.VITE_API_BASE_URL;
 const CartPage = () => {
   const { cartItems, removeFromCart, setCartItems } = useCart();
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null); // State to hold the user ID
   const [productResponses, setProductResponses] = useState<any[]>([]); // State to store product details responses
 
-  const baseURL = 'http://127.0.0.1:5500/public/uploads/product/';
+  const baseURL = `${baseURLll}/public/uploads/product/`;
   const navigate = useNavigate(); // Initialize useNavigate
 
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      const response = await axiosInstance.get('/auth/me', {
+      const response = await axiosInstance.get(`${baseURLll}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
@@ -40,7 +40,7 @@ const CartPage = () => {
       try {
         const token = localStorage.getItem("accessToken") || null;
 
-        const response = await axiosInstance.get(`addToCart/cart/${userId}`, {
+        const response = await axiosInstance.get(`${baseURL}/addToCart/cart/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`, 
           },
@@ -50,7 +50,7 @@ const CartPage = () => {
   
         const updatedCartItems = await Promise.all(
           cartItems.map(async (item: any) => {
-            const productResponse = await axiosInstance.get(`/product/${item.productId}`, {
+            const productResponse = await axiosInstance.get(`${baseURLll}/product/${item.productId}`, {
               headers: {
                 Authorization: `Bearer ${token}`, 
               },
@@ -79,7 +79,7 @@ const CartPage = () => {
   const handleRemoveProduct = async (productId: string) => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      await axiosInstance.delete(`/addToCart/remove/${userId}`, {
+      await axiosInstance.delete(`${baseURLll}/addToCart/remove/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

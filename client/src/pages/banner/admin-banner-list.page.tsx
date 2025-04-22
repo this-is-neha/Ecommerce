@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { helloWorld } from "../../reducer/banner.reducer";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const PER_PAGE_LIMIT = 15;
 
 const AdminBanner = () => {
@@ -25,7 +25,7 @@ const AdminBanner = () => {
   const getBannerList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      const response: any = await axiosInstance.get("/banner", {
+      const response: any = await axiosInstance.get(`${baseURL}/banner`, {
         params: {
           page: page,
           limit: limit,
@@ -58,7 +58,7 @@ const AdminBanner = () => {
   const deleteBanner = async (id: string) => {
     try {
       setLoading(true);
-      await axiosInstance.delete(`/banner/${id}`, {
+      await axiosInstance.delete(`${baseURL}/banner/${id}`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },

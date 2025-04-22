@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { TextInputField, SelectOptionComponent } from '../../components/common/form';
 import React from 'react';
 import { FooterComponent, HeaderComponent } from '../../components/common';
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminCategoryCreate = () => {
     const [loading, setLoading] = useState(false);
 
@@ -54,7 +54,7 @@ const AdminCategoryCreate = () => {
 
             console.log("FormData:", formData);
             formData.forEach((value, key) => console.log(`${key}:`, value));
-            const response = await axiosInstance.post('/category', formData, { headers });
+            const response = await axiosInstance.post(`${baseURL}/category`, formData, { headers });
             console.log("Category creation response:", response.data); // Log the response
             toast.success('Category created successfully');
             navigate('/admin/category');

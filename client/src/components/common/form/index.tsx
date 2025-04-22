@@ -1,3 +1,4 @@
+import React from "react";
 import { useController } from "react-hook-form"
 
 import { Controller } from 'react-hook-form';
@@ -69,8 +70,7 @@ export const SelectComponent = ({ errMsg = null, name, control, options = [] }: 
               {opt.value}
             </option>
           ))}
-        {/* <option value="seller">Seller</option>
-        <option value="cuustomer">Customer</option> */}
+      
       </select>
       <span className="text-red-500">{errMsg}</span>
 

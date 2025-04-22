@@ -9,7 +9,7 @@ import axiosInstance from "../../../config/axios.config";
 import { toast } from "react-toastify";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string; 
   _id: string;
@@ -33,7 +33,7 @@ const HeaderComponent = (): ReactNode => {
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null
-      const response = await axiosInstance.get('/auth/me', {
+      const response = await axiosInstance.get(`${baseURL}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
@@ -68,7 +68,7 @@ const HeaderComponent = (): ReactNode => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },

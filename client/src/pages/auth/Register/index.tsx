@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import {AuthContext }from "../../../context/auth.context";
 import React from "react";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const RegisterPage = () => {
     const auth = useContext(AuthContext);
     const rules = Yup.object({
@@ -38,7 +38,7 @@ const RegisterPage = () => {
         }
         
         try {
-            const response = await axiosInstance.post("http://localhost:9004/auth/register", formData, {
+            const response = await axiosInstance.post(`${baseURL}/auth/register`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }

@@ -7,7 +7,7 @@ import { HeaderComponent, FooterComponent } from "../../components/common";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import React from "react";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 const schema = yup.object().shape({
   user: yup.string(),
   productId: yup.string(),
@@ -39,7 +39,7 @@ const ProductOrderPage = () => {
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await axiosInstance.get('/auth/me', {
+      const response = await axiosInstance.get(`${baseURL}/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -61,7 +61,7 @@ const ProductOrderPage = () => {
           throw new Error("Authorization token missing");
         }
 
-        const response = await axiosInstance.get(`/product/${productId}`, {
+        const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -100,7 +100,7 @@ const ProductOrderPage = () => {
 
       console.log("Submitting Order Data:", orderData);
 
-      const response = await axiosInstance.post("/order", orderData, {
+      const response = await axiosInstance.post(`${baseURL}/order`, orderData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

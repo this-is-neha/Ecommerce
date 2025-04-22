@@ -4,7 +4,7 @@ import axiosInstance from "../../config/axios.config";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import * as yup from "yup";
 import React from "react";
-
+const baseURLl = import.meta.env.VITE_API_BASE_URL;
 const schema = yup.object().shape({
   orderId: yup.string(),
   fullName: yup.string().required("Full name is required"),
@@ -32,7 +32,7 @@ const OrderDetail = () => {
   const [orderImage, setOrderImage] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [productDetails, setProductDetails] = useState(null);
-  const baseURL = "http://127.0.0.1:5500/public/uploads/product/";
+  const baseURL = `${baseURLl}/public/uploads/product/`;
 
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -50,7 +50,7 @@ const OrderDetail = () => {
           throw new Error("Authorization token missing");
         }
 
-        const orderResponse = await axiosInstance.get(`order/${orderId}`, {
+        const orderResponse = await axiosInstance.get(`${baseURLl}/order/${orderId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

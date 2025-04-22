@@ -6,7 +6,7 @@ import PaginationComponent from '../../components/common/table/pagination.compon
 import { useCart } from '../../context/cart.context';
 import { PER_PAGE_LIMIT } from '../brand-product';
 import { FooterComponent, HeaderComponent } from '../../components/common';
-
+const baseURLl = import.meta.env.VITE_API_BASE_URL;
 const CategoryProductList = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
@@ -17,13 +17,13 @@ const CategoryProductList = () => {
   const { addToCart } = useCart();
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null); // Initialize state for logged-in user
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
-  const baseURL = 'http://127.0.0.1:5500/server/public/uploads/product/';
+  const baseURL = `${baseURLl}/server/public/uploads/product/`;
 
   const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, sort = sortOption }) => {
     try {
       setLoading(true);
       console.log('Fetching products with sort option:', sort);
-      const response = await axiosInstance.get('/product', {
+      const response = await axiosInstance.get(`${baseURLl}/product`, {
         params: { page, limit, categoryId, sort },
         headers: { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
       });
@@ -42,7 +42,7 @@ const CategoryProductList = () => {
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      const response = await axiosInstance.get('/auth/me', {
+      const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
@@ -71,7 +71,7 @@ const CategoryProductList = () => {
       console.log('User ID:', loggedInUserId);
       const token = localStorage.getItem("accessToken") || null; // Get the token from local storage
   
-      const response = await axiosInstance.post(`/addToCart/add/${loggedInUserId}`, {
+      const response = await axiosInstance.post(`${baseURLl}/addToCart/add/${loggedInUserId}`, {
         productId: product._id, // Send the product ID in the request body
       }, {
         headers: {

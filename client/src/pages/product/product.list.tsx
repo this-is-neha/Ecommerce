@@ -6,7 +6,7 @@ import PaginationComponent from "../../components/common/table/pagination.compon
 import TableActionButton from "../../components/common/table/action-button.component";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const PER_PAGE_LIMIT = 17;
 
 const AdminProductList = () => {
@@ -24,7 +24,7 @@ const AdminProductList = () => {
   const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, brandId }: any) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/product", {
+      const response = await axiosInstance.get(`${baseURL}/product`, {
         params: { page, limit, categoryId, brandId },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
@@ -43,7 +43,7 @@ const AdminProductList = () => {
   const fetchCategories = async () => {
     if (isCategoryFetched) return;
     try {
-      const response = await axiosInstance.get("/category", {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
       setCategories(response.result);
@@ -57,7 +57,7 @@ const AdminProductList = () => {
   const fetchBrands = async () => {
     if (isBrandFetched) return;
     try {
-      const response = await axiosInstance.get("/brand", {
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
       setBrands(response.result);
@@ -82,7 +82,7 @@ const AdminProductList = () => {
   const deleteProduct = async (id: string) => {
     try {
       setLoading(true);
-      await axiosInstance.delete(`/product/${id}`, {
+      await axiosInstance.delete(`${baseURL}/product/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
       toast.success("Product deleted successfully");

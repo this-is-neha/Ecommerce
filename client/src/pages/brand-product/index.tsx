@@ -7,7 +7,8 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import { FooterComponent, HeaderComponent } from "../../components/common";
 export const PER_PAGE_LIMIT = 22;
- const baseURL='http://127.0.0.1:5500/server/public/uploads/product/';
+const baseURLl = import.meta.env.VITE_API_BASE_URL;
+ const baseURL=`${baseURLl}/server/public/uploads/product/`;
 const BrandProductList = () => {
   const { brandId } = useParams<{ brandId: string }>();
   const navigate = useNavigate();
@@ -17,11 +18,11 @@ const BrandProductList = () => {
   const [sortOption, setSortOption] = useState("default"); 
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
-const baseURL = 'http://127.0.0.1:5500/public/uploads/product/';
+const baseURL = `${baseURLl}/public/uploads/product/`;
   const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, brandId, sort = sortOption }) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/product", {
+      const response = await axiosInstance.get(`${baseURLl}/product`, {
         params: { page, limit, brandId, sort },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
@@ -46,7 +47,7 @@ const baseURL = 'http://127.0.0.1:5500/public/uploads/product/';
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      const response = await axiosInstance.get('/auth/me', {
+      const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
@@ -71,10 +72,10 @@ const baseURL = 'http://127.0.0.1:5500/public/uploads/product/';
     try {
       console.log('Product ID:', product._id);
       console.log('User ID:', loggedInUserId);
-      const token = localStorage.getItem("accessToken") || null; // Get the token from local storage
+      const token = localStorage.getItem("accessToken") || null; 
   
-      const response = await axiosInstance.post(`/addToCart/add/${loggedInUserId}`, {
-        productId: product._id, // Send the product ID in the request body
+      const response = await axiosInstance.post(`${baseURLl}/addToCart/add/${loggedInUserId}`, {
+        productId: product._id, 
       }, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer

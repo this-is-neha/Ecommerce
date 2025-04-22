@@ -34,36 +34,11 @@ import UserOrders from "../pages/INDIVIDUAL ORDERS";
 import Reactivate from "../pages/auth/Reactivate";
 import ChangePassword from "../pages/auth/Reset";
 const RoutingConfig = () => {
-    const [loggedInUser, setLoggedInUser] = useState();
+    const [loggedInUser, setLoggedInUser] = useState<undefined | null | any>(undefined);
     const [loading, setLoading] = useState(true)
     const auth = useContext(AuthContext)
     console.log(auth)
-    // const getLoggedInUser = async () => {
-    //     try {
-    //         const token = localStorage.getItem("accessToken") || null
-    //         const response = await axiosInstance.get('/auth/me', {
-    //             headers: {
-    //                 "Authorization": `Bearer ${token}`, // Ensure space after Bearer
-    //             },
-    //         });
-    //         const user = response.data.result; // adjust based on actual response shape
-    //   setLoggedInUser(user); // set user in state
-    //         // console.log("Routing page ", response)
-    //         // const user = response.result; // Assuming the response structure has a result object
-    //         console.log("User Name:", user.name); // Log the user's name
-    //         console.log("User ID:", user._id)
-    //         // auth.setLoggedInUser(response)
-
-    //     }
-    //     catch (exception) {
-
-    //     }
-
-    //     finally {
-    //         setLoading(false)
-    //     }
-    // }
-
+  
     const getLoggedInUser = async () => {
         try {
             const token = localStorage.getItem("accessToken") || null;
