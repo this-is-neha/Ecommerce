@@ -39,7 +39,7 @@ const HeaderComponent = (): ReactNode => {
         },
       });
       console.log("Routing page ", response)
-      const user = response.result; // Assuming the response structure has a result object
+      const user = response.data; // Assuming the response structure has a result object
       setUserName(user._id)
    
 

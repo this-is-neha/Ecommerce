@@ -1,17 +1,18 @@
-import React from "react";
+
 import { 
   Dialog,
   DialogPanel,
   } from "@headlessui/react";
 import { NavLink } from "react-router-dom";
-
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface MobileMenuProps {
-mobileMenuOpen: boolean;
-setMobileMenuOpen: any;
-categories: Category[];
-loadingCategories: boolean;
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  categories: Category[];
+  loadingCategories: boolean;
 }
+
 
 const MobileMenu = ({ mobileMenuOpen, setMobileMenuOpen, categories, loadingCategories }: MobileMenuProps) => {
 return (
@@ -37,7 +38,7 @@ return (
                   categories.map((category) => (
                     <NavLink
                       key={category._id}
-                      to={`/category/${category._id}`}
+                      to={`${baseURL}/category/${category._id}`}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                     >
                       {category.title}
