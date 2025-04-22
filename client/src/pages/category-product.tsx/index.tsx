@@ -47,8 +47,8 @@ const CategoryProductList = () => {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
       });
-      const user = response.result; // Assuming the response structure has a result object
-      console.log("User Name by :", user.name); // Log the user's name
+      const user = response.result; 
+      console.log("User Name by :", user.name); 
       setLoggedInUser(user.name);
       setLoggedInUserId(user._id) // Store user details in state
     } catch (exception) {

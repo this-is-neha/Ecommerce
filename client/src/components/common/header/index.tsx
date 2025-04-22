@@ -28,6 +28,8 @@ const HeaderComponent = (): ReactNode => {
   const [userName, setUserName] = useState()
   const auth = useContext(AuthContext);
  const navigate=useNavigate()
+
+
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null
@@ -50,6 +52,8 @@ const HeaderComponent = (): ReactNode => {
       setLoading(false)
     }
   }
+
+  
   useEffect(() => {
     const token = localStorage.getItem("accessToken") || null
     if (token) {

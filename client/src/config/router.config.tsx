@@ -38,29 +38,58 @@ const RoutingConfig = () => {
     const [loading, setLoading] = useState(true)
     const auth = useContext(AuthContext)
     console.log(auth)
+    // const getLoggedInUser = async () => {
+    //     try {
+    //         const token = localStorage.getItem("accessToken") || null
+    //         const response = await axiosInstance.get('/auth/me', {
+    //             headers: {
+    //                 "Authorization": `Bearer ${token}`, // Ensure space after Bearer
+    //             },
+    //         });
+    //         const user = response.data.result; // adjust based on actual response shape
+    //   setLoggedInUser(user); // set user in state
+    //         // console.log("Routing page ", response)
+    //         // const user = response.result; // Assuming the response structure has a result object
+    //         console.log("User Name:", user.name); // Log the user's name
+    //         console.log("User ID:", user._id)
+    //         // auth.setLoggedInUser(response)
+
+    //     }
+    //     catch (exception) {
+
+    //     }
+
+    //     finally {
+    //         setLoading(false)
+    //     }
+    // }
+
     const getLoggedInUser = async () => {
         try {
-            const token = localStorage.getItem("accessToken") || null
-            const response = await axiosInstance.get('/auth/me', {
+            const token = localStorage.getItem("accessToken") || null;
+            const response = await axiosInstance.get("/auth/me", {
                 headers: {
-                    "Authorization": `Bearer ${token}`, // Ensure space after Bearer
+                    Authorization: `Bearer ${token}`,
                 },
             });
-            console.log("Routing page ", response)
-            const user = response.result; // Assuming the response structure has a result object
-            console.log("User Name:", user.name); // Log the user's name
-            console.log("User ID:", user._id)
-            // auth.setLoggedInUser(response)
-
+    
+            const user = response.data.result;
+            setLoggedInUser(user);
+            console.log("User Name:", user.name);
+            console.log("User ID:", user._id);
+        } catch (error) {
+            // 🔥 This is the important part!
+            if (error.response?.status === 401) {
+                localStorage.removeItem("accessToken");
+                setLoggedInUser(null); // logout user
+            } else {
+                console.error("Unexpected error while checking auth:", error);
+            }
+        } finally {
+            setLoading(false);
         }
-        catch (exception) {
-
-        }
-
-        finally {
-            setLoading(false)
-        }
-    }
+    };
+    
     useEffect(() => {
         const token = localStorage.getItem("accessToken") || null
         if (token) {

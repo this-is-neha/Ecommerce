@@ -18,7 +18,7 @@ const HomeBannerComponent =()=>{
   var settings = {
     dots: true,
     autoplay: true,
-    autoplaySpeed: 3000, // 3000 milliseconds = 3 seconds
+    autoplaySpeed: 3000, 
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -40,10 +40,7 @@ setData(response.result)
   }
   useEffect(()=>{},[])
 
-//   const bannerData=useSelector((root:any)=>{
-//     return  root.banner.listAll;
-//   })
-// console.log(bannerData)
+
 
  return (<>
  <div className="bg-white">
