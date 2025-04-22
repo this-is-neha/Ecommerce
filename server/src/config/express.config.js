@@ -80,7 +80,6 @@
 
 
 // module.exports = app
-
 const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -94,12 +93,7 @@ const app = express();
 
 app.use(helmet());
 
-app.use(
-  cors({
-    origin: "https://eclectic-entremet-69d9a6.netlify.app",
-    credentials: true,
-  })
-);
+app.use(cors())
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
