@@ -7,7 +7,7 @@ import MobileMenu from "./mobile-menu.component";
 import { AuthContext } from "../../../../src/context/auth.context";
 import axiosInstance from "../../../config/axios.config"; 
 import { toast } from "react-toastify";
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
@@ -92,7 +92,7 @@ const HeaderComponent = (): ReactNode => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const data = await axiosInstance.get(`${baseURL}/category`, {
+      const data = await axiosInstance.get<{ result: Category[] }>(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -113,6 +113,7 @@ const HeaderComponent = (): ReactNode => {
       setLoadingCategories(false);
     }
   };
+  
   
   
   

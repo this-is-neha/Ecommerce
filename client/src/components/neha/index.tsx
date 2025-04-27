@@ -46,42 +46,44 @@ const PaymentSuccessPage = () => {
                 const token = localStorage.getItem('accessToken');
                 if (!token) throw new Error('Authorization token missing');
 
-                // Fetch order details
+       
+
                 const orderResponse = await axiosInstance.get(`order/${orderId}`, {
                     headers: { Authorization: `Bearer ${token}` },
-                });
+                  });
+                  
 
-                setOrderFullname(orderResponse.fullName);
-                setOrderPhone(orderResponse.phoneNumber);
-                setOrderAddress(orderResponse.address);
-                setOrderCity(orderResponse.city);
-                setOrderRegion(orderResponse.region);
-                setOrderProductId(orderResponse.productId);
-                setOrderDeliveryOption(orderResponse.deliveryOption);
-                setOrderDeliveryLabel(orderResponse.deliveryLabel);
-
-                // Fetch product details
-                const productResponse = await axiosInstance.get(`product/${orderResponse.productId}`, {
+                  setOrderFullname(orderResponse.data.fullName);
+                  setOrderPhone(orderResponse.data.phoneNumber);
+                  setOrderAddress(orderResponse.data.address);
+                  setOrderCity(orderResponse.data.city);
+                  setOrderRegion(orderResponse.data.region);
+                  setOrderProductId(orderResponse.data.productId);
+                  setOrderDeliveryOption(orderResponse.data.deliveryOption);
+                  setOrderDeliveryLabel(orderResponse.data.deliveryLabel);
+                  
+                  // Fetch product details based on productId
+                  const productResponse = await axiosInstance.get(`product/${orderResponse.data.productId}`, {
                     headers: { Authorization: `Bearer ${token}` },
-                });
-                setProductDetails(productResponse.result);
-
-                // Fetch image URL associated with the orderId
-               
-                // Fetch all images
-                const allImagesResponse = await axiosInstance.get('/confrom', {
+                  });
+                  
+                  setProductDetails(productResponse.data.result);
+                  
+                  // Fetch all images
+                  const allImagesResponse = await axiosInstance.get('/confrom', {
                     headers: { Authorization: `Bearer ${token}` },
-                });
-                console.log('All Images Response:', allImagesResponse); 
-
-
-                console.log(orderId)
-                const imageResponse = await axiosInstance.get(`/confrom/${orderId}`, {
+                  });
+                  console.log('All Images Response:', allImagesResponse);
+                  
+                  // Fetch the specific image for this order
+                  const imageResponse = await axiosInstance.get(`/confrom/${orderId}`, {
                     headers: { Authorization: `Bearer ${token}` },
-                });
-
-                console.log('Image Response:', imageResponse);
-                setUploadedImageUrl(imageResponse.images); 
+                  });
+                  console.log('Image Response:', imageResponse);
+                  
+                  // Again .data
+                  setUploadedImageUrl(imageResponse.data.images);
+                  
                 
             } catch (error: any) {
                 console.error('Error fetching order details:', error.response?.data || error.message);

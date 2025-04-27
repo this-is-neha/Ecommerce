@@ -1,3 +1,4 @@
+import { Category } from "../../../../src/category.types";
 
 import { 
   Dialog,

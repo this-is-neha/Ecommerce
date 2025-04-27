@@ -21,8 +21,8 @@ const CartPage = () => {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
       });
-      const user = response.result; // Assuming the response structure has a result object
-      setUserId(user._id); // Store user ID in state
+      const user = response.result; 
+      setUserId(user._id);
     } catch (exception) {
       console.error('Error fetching User Details:', exception);
     }
