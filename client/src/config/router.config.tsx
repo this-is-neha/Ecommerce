@@ -53,7 +53,7 @@ const RoutingConfig = () => {
             setLoggedInUser(user);
             console.log("User Name:", user.name);
             console.log("User ID:", user._id);
-        } catch (error) {
+        } catch (error: any) {
             // 🔥 This is the important part!
             if (error.response?.status === 401) {
                 localStorage.removeItem("accessToken");

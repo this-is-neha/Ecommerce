@@ -56,7 +56,9 @@ const LoginPage = () => {
       localStorage.setItem("accessToken", response.data.result.token.accessToken);
       localStorage.setItem("refreshToken", response.data.result.token.refreshToken);
 
-      auth.loggedInUser = response.data.result.detail;
+      if (auth) {
+        auth.loggedInUser = response.data.result.detail;
+      }
 
       console.log("User Details:");
       console.log("Name:", response.data.result.detail.name);
@@ -74,12 +76,13 @@ const LoginPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (auth.loggedInUser) {
-      toast.info("You are already logged in");
-      navigate("/");
-    }
-  }, [auth, navigate]);
+ 
+useEffect(() => {
+  if (auth?.loggedInUser) {
+    toast.info("You are already logged in");
+    navigate("/" + auth.loggedInUser.role);
+  }
+}, [auth, navigate]);
 
   const closeModal = () => {
     setShowModal(false);

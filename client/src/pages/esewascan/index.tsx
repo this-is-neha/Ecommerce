@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from 'react';
 import esewa from '../../../src/assets/esewa.jpg';
 import axiosInstance from '../../config/axios.config';

@@ -21,6 +21,7 @@ const schema = yup.object().shape({
 const OrderDetail = () => {
   const { productId } = useParams();
   console.log("Product ID:", productId);
+
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
@@ -34,30 +35,41 @@ const OrderDetail = () => {
         console.error("Product ID is undefined");
         return;
       }
-      
+
       try {
         const token = localStorage.getItem("accessToken");
-        if (!token) {
-          throw new Error("Authorization token missing");
+        if (!token) throw new Error("Authorization token missing");
+
+        // Fetch product details
+        const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        // Log the full axios response and data
+        console.log("Full response:", response);
+        console.log("Response data:", response.data);
+
+        // Depending on your axios config, data might be wrapped in 'result'
+        // Check and use accordingly
+        const product = response.data?.result || response.result || null;
+
+        if (!product) {
+          console.error("No product data in response");
+          return;
         }
 
-       
-        const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Product Details:", response.result);
-        
-      
-        setProductName(response.result.title);
-        setProductDescription(response.result.description);
-        setProductPrice(response.result.price);
-        setProductImage(response.result.image);
-        setProductsummary(response.result.summary)
-        setProductdiscount(response.result.discount)
+        // Set state from product details
+        setProductName(product.title || "");
+        setProductDescription(product.description || "");
+        setProductPrice(product.price || "");
+        setProductImage(product.image || "");
+        setProductsummary(product.summary || "");
+        setProductdiscount(product.discount || "");
       } catch (error: any) {
-        console.error("Error fetching product details:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error fetching product details:",
+          error.response ? error.response.data : error.message
+        );
       }
     };
 
