@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../../context/cart.context';
 import { toast } from 'react-toastify';
-import axiosInstance from '../../../config/axios.config'; // Adjust the import as necessary
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axiosInstance from '../../../config/axios.config'; 
+import { useNavigate } from 'react-router-dom'; 
 import { FooterComponent, HeaderComponent } from '../../../components/common';
-const baseURLll = import.meta.env.VITE_API_BASE_URL;
+const baseURLl = import.meta.env.VITE_API_BASE_URL;
 const CartPage = () => {
   const { cartItems, removeFromCart, setCartItems } = useCart();
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null); // State to hold the user ID
-  const [productResponses, setProductResponses] = useState<any[]>([]); // State to store product details responses
-
-  const baseURL = `${baseURLll}/public/uploads/product/`;
+  const [userId, setUserId] = useState(null); 
+  const [productResponses, setProductResponses] = useState<any[]>([]); 
+  const baseURL = `${baseURLl}/public/uploads/product/`;
   const navigate = useNavigate(); // Initialize useNavigate
 
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      const response = await axiosInstance.get(`${baseURLll}/auth/me`, {
+      const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
@@ -40,9 +39,9 @@ const CartPage = () => {
       try {
         const token = localStorage.getItem("accessToken") || null;
 
-        const response = await axiosInstance.get(`${baseURL}/addToCart/cart/${userId}`, {
+        const response = await axiosInstance.get(`${baseURLl}/addToCart/cart/${userId}`, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         });
         
@@ -50,10 +49,8 @@ const CartPage = () => {
   
         const updatedCartItems = await Promise.all(
           cartItems.map(async (item: any) => {
-            const productResponse = await axiosInstance.get(`${baseURLll}/product/${item.productId}`, {
-              headers: {
-                Authorization: `Bearer ${token}`, 
-              },
+            const productResponse = await axiosInstance.get(`${baseURLl}/product/${item.productId}`, {
+              headers: { Authorization: `Bearer ${token}` },
             });  
             setProductResponses(prevResponses => [...prevResponses, productResponse]);
 
@@ -79,7 +76,7 @@ const CartPage = () => {
   const handleRemoveProduct = async (productId: string) => {
     try {
       const token = localStorage.getItem("accessToken") || null;
-      await axiosInstance.delete(`${baseURLll}/addToCart/remove/${userId}`, {
+      await axiosInstance.delete(`${baseURLl}/addToCart/remove/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -99,7 +96,7 @@ const CartPage = () => {
 
   const handleOrderClick = (productId: string, productTitle: string) => {
     const encodedTitle = encodeURIComponent(productTitle);
-    navigate(`/${encodedTitle}/${productId}/order`); 
+    navigate(`${baseURLl}/${encodedTitle}/${productId}/order`); 
   };
 
   return (
@@ -156,3 +153,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+
