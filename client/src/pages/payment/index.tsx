@@ -6,7 +6,7 @@ import axiosInstance from "../../config/axios.config";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
-import React from "react";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const schema = yup.object().shape({
   user: yup.string(),
@@ -46,7 +46,7 @@ const ProductOrderPage = () => {
       });
       const user = response.result;
       setLoggedInUser(user._id);
-      setValue("user", user._id); // Set the user field value dynamically
+      setValue("user", user._id); 
     } catch (error) {
       console.error("Error fetching logged-in user:", error);
     }
@@ -76,7 +76,7 @@ const ProductOrderPage = () => {
     fetchProductDetails();
   }, [productId]);
 
-  // Fetch the logged-in user on component mount
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -257,7 +257,7 @@ const ProductOrderPage = () => {
               </button>
             </form>
           ) : (
-            <p>Loading...</p> // Show a loading message until user data is available
+            <p>Loading...</p>
           )}
         </div>
       </div>

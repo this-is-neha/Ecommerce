@@ -20,7 +20,7 @@ const AdminPage = () => {
           <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
           <div className="flex flex-col gap-8">
             <button
-              onClick={() => navigate('/admin/category')}
+              onClick={() => navigate(`/admin/category`)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded min-w-[400px]"
             >
               CATEGORY

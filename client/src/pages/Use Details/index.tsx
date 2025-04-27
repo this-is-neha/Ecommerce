@@ -90,32 +90,31 @@ const UserDetails = () => {
                 </div>
 
                 {/* Cart Items button */}
-            {/* Cart Items button */}
-<button 
-    className="absolute top-6 right-36 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-    onClick={() => navigate(`/${loggedInUser._id}/cart`)}
->
-    Cart Items
-</button>
-
-{/* Your Orders button */}
-<button 
-    className="absolute top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-    onClick={() => navigate(`/${loggedInUser._id}/orders`)}
->
-    Your Orders
-</button>
-
-{/* Admin Panel button (placed under 'Your Orders') */}
-{loggedInUser.role === "admin" && (
+                <button 
+                    className="absolute top-6 right-36 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    onClick={() => navigate(`/${loggedInUser._id}/cart`)}  // Navigate to the cart page
+                >
+                   Cart Items
+                </button>
+                {loggedInUser.role === "admin" && (
     <button 
-        className="absolute top-20 right-6 bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600"
-        onClick={() => navigate('/admin/page')}
+    className="absolute top-6 left-24 bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+
+        onClick={() => navigate('/admin/page')} // or wherever your admin page is
     >
         Admin Panel
     </button>
 )}
 
+                {/* Your Orders button */}
+                
+                <button 
+                    className="absolute top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                    onClick={() => navigate(`/${loggedInUser._id}/orders`)}  // Navigate to the orders page
+                >
+                   Your Orders
+                </button>
+ 
 
             </div>
             

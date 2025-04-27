@@ -94,7 +94,7 @@ const ImageUploadPage = () => {
       });
       const { imageUrl } = response; 
       console.log('File uploaded successfully:', response);
-      // navigate(`/admin/orderlist/${orderId}/payment-success`, { state: { orderId, uploadedImageUrl: imageUrl } });
+     
       navigate ('/')
       setUploadedImageUrl(imageUrl);
       setShowModal(true);
