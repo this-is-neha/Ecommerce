@@ -68,6 +68,7 @@ const ProductOrderPage = () => {
         });
         console.log("Product Details:", response.result);
         setProductName(response.result.title);
+        console.log(response.result.title);
       } catch (error: any) {
         console.error("Error fetching product details:", error.response ? error.response.data : error.message);
       }
@@ -147,15 +148,13 @@ const ProductOrderPage = () => {
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Product ID</label>
                 <input
-                  value={productId} // Set the value to productId
-                  readOnly // Make the input read-only
+                  value={productId}
+                  readOnly
                   className="border border-gray-300 p-2 w-full rounded-md bg-gray-100"
                 />
               </div>
 
-              {/* Additional form fields for full name, phone number, region, etc. */}
-
-                          {/* Additional form fields here */}
+            
              <div className="mb-4">
                <label className="block text-sm font-medium mb-1">Full Name</label>
                <input

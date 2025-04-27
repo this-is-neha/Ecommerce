@@ -33,6 +33,7 @@ import UserDetails from "../pages/Use Details";
 import UserOrders from "../pages/INDIVIDUAL ORDERS";
 import Reactivate from "../pages/auth/Reactivate";
 import ChangePassword from "../pages/auth/Reset";
+import OrderDetail from "../pages/orderDetails";
 const RoutingConfig = () => {
     const [loggedInUser, setLoggedInUser] = useState<undefined | null | any>(undefined);
     const [loading, setLoading] = useState(true)
@@ -152,6 +153,8 @@ const RoutingConfig = () => {
                             <Route path="orderlist" element={<Suspense fallback={<LoadingComponent />}> <OrderListPage /></Suspense>}></Route>
            
                             <Route path="orderlist/:orderId" element={<OrderDetails />} />
+                            <Route path="orderlist/order-details/:productId" element={<OrderDetail />} />
+
 
 
                             <Route path="*" element={<>Error Page</>}></Route>

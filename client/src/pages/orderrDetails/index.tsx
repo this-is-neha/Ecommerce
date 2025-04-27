@@ -316,39 +316,8 @@ const OrderDetail = () => {
               </div>
             )}
 
-            {productDetails && (
-              <div className="bg-white p-8  w-[1000px] rounded-lg shadow-lg w-full max-w-lg mt-6">
-                <h3 className="text-2xl font-semibold mb-6">Product Details:</h3>
-                <p>
-                  <strong>Name:</strong> {productDetails.title}
-                </p>
-                <p>
-                  <strong>Description:</strong> {productDetails.description}
-                </p>
-                <p>
-                  <strong>Price:</strong> ${productDetails.price}
-                </p>
-                <p>
-                  <strong>Discount:</strong> ${productDetails.discount}
-                </p>
-                <p>
-                  <strong>Summary:</strong> {productDetails.summary}
-                </p>
 
-                {productDetails.images && productDetails.images.length > 0 && (
-                  <div className="mt-4">
-                    <h3 className="text-xl font-semibold">Product Image:</h3>
-                    <img
-                      src={`${baseURL}${productDetails.images[0]}`}
-                      alt="Product"
-                      className="w-full h-auto mt-2"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Add button to navigate to another page */}
+          
             <button
               className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={handleNavigate}

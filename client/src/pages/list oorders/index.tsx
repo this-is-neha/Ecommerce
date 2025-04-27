@@ -92,7 +92,7 @@ const OrderListing = () => {
                   </Link>
                 </td>
                 <td className="px-4 py-2 border">
-                  <Link to={`${order.productId}`} className="text-blue-500 hover:underline">
+                  <Link to={`order-details/${order.productId}`} className="text-blue-500 hover:underline">
                     {order.productId}
                   </Link>
                 </td>
