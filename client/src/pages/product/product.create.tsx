@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import axiosInstance from "../../config/axios.config";
 import { toast } from "react-toastify";
@@ -32,52 +30,73 @@ const ProductCreate = () => {
     slug: "",
   });
 
+
+    
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axiosInstance.get(`${baseURL}/category`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
-        },
-      });
-      setCategories(response.result);
+     
+const response: { result: any[] } = await axiosInstance.get(`${baseURL}/category`, {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("accessToken"),
+  },
+});
+const brs = response.result ?? [];
+
+      setCategories(brs);
+  
+      if (brs.length > 0) {
+        setProduct((prev) => ({ ...prev, categoryIdId: prev.categoryId || brs[0]._id }));
+      }
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      toast.error("Error fetching categories...");
+      console.error("Error fetching Categories:", error);
+      toast.error("Error fetching category...");
+      setCategories([]);
     } finally {
       setLoadingCategories(false);
     }
   };
-  const openImageModal = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
-    setIsModalOpen(true);
-  };
-
+  
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axiosInstance.get(`${baseURL}/brand`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),// where token is retrieved using localStorage.getItem("token")
+    
+const response: { result: any[] } = await axiosInstance.get(`${baseURL}/brand`, {
+  headers: {
+    Authorization: "Bearer " + localStorage.getItem("accessToken"),
+  },
+});
+const brs = response.result ?? [];
 
-        },
-      });
-      setBrands(response.result);
+      setBrands(brs);
+  
+      if (brs.length > 0) {
+        setProduct((prev) => ({ ...prev, brandId: prev.brandId || brs[0]._id }));
+      }
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Error fetching brands...");
+      setBrands([]);
     } finally {
       setLoadingBrands(false);
     }
   };
-
+  
+  
+  
   useEffect(() => {
     fetchCategories();
     fetchBrands();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+  const openImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target as HTMLInputElement;
+    const checked = (e.target as HTMLInputElement).checked;
     setProduct((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
