@@ -252,7 +252,7 @@ const PaymentPage = () => {
         console.log("Full response:", response);
         
        
-        const product = response.result;
+        const product = response.data;
         
         if (!product) {
           throw new Error("No product found in response");

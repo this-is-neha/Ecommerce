@@ -44,7 +44,7 @@ const ProductOrderPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const user = response.result;
+      const user = response.data;
       setLoggedInUser(user._id);
       setValue("user", user._id); 
     } catch (error) {
@@ -66,9 +66,9 @@ const ProductOrderPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("Product Details:", response.result);
-        setProductName(response.result.title);
-        console.log(response.result.title);
+        console.log("Product Details:", response.data);
+        setProductName(response.data.title);
+        console.log(response.data.title);
       } catch (error: any) {
         console.error("Error fetching product details:", error.response ? error.response.data : error.message);
       }
@@ -107,7 +107,7 @@ const ProductOrderPage = () => {
         },
       });
 
-     const { order, orderId } = response;
+     const { order, orderId } = response.data;
 
       if (orderId) {
         console.log('Order ID:', orderId);

@@ -95,7 +95,7 @@ const UserOrders = () => {
                 },
             });
             setSelectedProductId(productId);
-            setProducts(prev => ({ ...prev, [productId]: response.result }));
+            setProducts(prev => ({ ...prev, [productId]: response.data }));
         } catch (err) {
             console.error('Error fetching product details:', err);
         }

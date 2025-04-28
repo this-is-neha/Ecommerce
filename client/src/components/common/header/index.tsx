@@ -65,29 +65,7 @@ const HeaderComponent = (): ReactNode => {
 
   })
 
-  // const fetchCategories = async () => {
-  //   try {
-  //     setLoadingCategories(true);
-  //     const response = await axiosInstance.get(`${baseURL}/category`, {
-  //       headers: {
-  //         Authorization: "Bearer " + localStorage.getItem("accessToken"),
-  //       },
-  //     });
-   
-  //     setCategories(response.result);
-  //     console.log("Categories",response.result)
-  //     const neha=response.result;
-  //     neha.forEach((category:Category) => {
-  //       console.log("Title:", category._id);
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //     toast.error("Error fetching categories...");
-  //   } finally {
-  //     setLoadingCategories(false);
-  //   }
-  // };
-
+ 
 
   const fetchCategories = async () => {
     try {
@@ -100,8 +78,8 @@ const HeaderComponent = (): ReactNode => {
   
       console.log("Response from /category API:", data);
   
-      if (data && data.result) {
-        setCategories(data.result);
+      if (data && data.data.result) {
+        setCategories(data.data.result);
       } else {
         console.error("Unexpected category response format:", data);
         toast.error("Invalid category data structure");

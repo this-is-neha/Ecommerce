@@ -21,7 +21,7 @@ const OrderListing = () => {
 
       console.log("Full Response:", response);
       // Assuming response.data contains the orders
-      const ordersData = response; // Access the correct data from response
+      const ordersData = response.data; // Access the correct data from response
       console.log("Orders Data:", ordersData);
 
       setOrders(ordersData);

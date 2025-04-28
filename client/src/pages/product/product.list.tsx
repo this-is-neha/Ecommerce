@@ -21,17 +21,29 @@ const AdminProductList = () => {
   const [isCategoryFetched, setIsCategoryFetched] = useState(false);
   const [isBrandFetched, setIsBrandFetched] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, brandId }: any) => {
+  const getProductList = async ({ page: currentPage = 1, limit = PER_PAGE_LIMIT, categoryId = null, brandId = null }: { page?: number; limit?: number | undefined; categoryId?: string | null; brandId?: string | null }) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`${baseURL}/product`, {
-        params: { page, limit, categoryId, brandId },
+      interface ProductResponse {
+        data: {
+          meta: {
+            total: number;
+            limit: number;
+            page: number;
+          };
+          products: any[]; // Replace 'any[]' with the actual product type if available
+        };
+      }
+
+      const response: ProductResponse = await axiosInstance.get(`${baseURL}/product`, {
+        params: { categoryId, brandId },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 
-      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
-      setPagination({ totalPages, currentPage: response.meta.page });
-      setProducts(response.result);
+      const { total, limit, page } = response.data.meta;
+      const totalPages = Math.ceil(total / limit);
+      setPagination({ totalPages, currentPage: page });
+      setProducts(response.data.products);
     } catch (exception) {
       console.error("Error fetching products:", exception);
       toast.error("Error fetching products...");

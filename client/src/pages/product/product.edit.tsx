@@ -43,7 +43,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setCategories(response.result);
+      setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Error fetching categories...");
@@ -58,7 +58,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setBrands(response.result);
+      setBrands(response.data);
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Error fetching brands...");
@@ -73,7 +73,7 @@ const AdminProductEdit = () => {
         },
       });
 
-      const product = response.result;
+      const product = response.data;
 
       if (!product) {
         throw new Error("Product data is missing or not returned properly");
@@ -111,7 +111,7 @@ const AdminProductEdit = () => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setValue("images", fileArray);
+      setValue("images", fileArray.map(file => file.name));
     }
   };
 
@@ -236,7 +236,6 @@ const AdminProductEdit = () => {
                   control={control}
                   name="categoryId"
                   errMsg={errors.categoryId?.message || ""}
-                  required={true}
                 />
               </div>
 
@@ -245,14 +244,13 @@ const AdminProductEdit = () => {
                   Brand<span className="text-red">*</span>
                 </label>
                 <SelectOptionComponent
+                
                   options={brands.map(brand => ({ label: brand._id, value: brand._id }))}
                   control={control}
                   name="brandId"
                   errMsg={errors.brandId?.message || ""}
-                  required={true}
                 />
-              </div>
-
+</div>
               <div className="col-span-6">
                 <label htmlFor="status" className="block text-xl font-medium text-gray-700">
                   Status

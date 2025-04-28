@@ -32,12 +32,12 @@ const AdminCategoryList = () => {
 
       console.log(response);
 
-      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+      const totalPages = Math.ceil(response.data.meta.total / response.data.meta.limit);
       setPagination({
         totalPages: totalPages,
-        currentPage: response.meta.page,
+        currentPage: response.data.meta.page,
       });
-      setCategories(response.result);
+      setCategories(response.data.result);
     } catch (exception) {
       console.error("Error fetching Category:", exception);
       toast.error("Error fetching Category...");

@@ -49,12 +49,12 @@ const CategoryProductList = () => {
       console.log('Full product response:', response);  // response is actual data object here
   
       if (!response) throw new Error("No data in response");
-      if (!response.meta) throw new Error("No meta in response");
-      if (!response.result) throw new Error("No result in response");
+      if (!response.data.meta) throw new Error("No meta in response");
+      if (!response.data.result) throw new Error("No result in response");
   
-      const totalPages = Math.ceil((response.meta.total || 0) / (response.meta.limit || 1));
-      setPagination({ totalPages, currentPage: response.meta.page || 1 });
-      setProducts(response.result || []);
+      const totalPages = Math.ceil((response.data.meta.total || 0) / (response.data.meta.limit || 1));
+      setPagination({ totalPages, currentPage: response.data.meta.page || 1 });
+      setProducts(response.data.result || []);
     } catch (exception) {
       console.error('Error fetching products:', exception);
       toast.error('Error fetching products...');

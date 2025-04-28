@@ -82,7 +82,13 @@ const ImageUploadPage = () => {
 
     const formData = new FormData();
     formData.append('image', image);
-    formData.append('orderId', orderId); 
+    if (orderId) {
+      formData.append('orderId', orderId);
+    } else {
+      console.error('Order ID is undefined');
+      alert('Order ID is missing!');
+      return;
+    }
 
     try {
       const response = await axiosInstance.post(`${baseURL}/confrom`, formData, {
@@ -90,7 +96,7 @@ const ImageUploadPage = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const { imageUrl } = response; 
+      const { imageUrl } = response.data; 
       console.log('File uploaded successfully:', response);
      
       navigate ('/')
