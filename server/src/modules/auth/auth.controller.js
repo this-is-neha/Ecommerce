@@ -61,7 +61,21 @@ class AuthController {
             }
             if (bcrypt.compareSync(password, userDetail.password)) {
                 if (userDetail.status != 'active') {
-               
+                    throw {
+                        code: 400,
+                        message: "Your account has not been activated.Please activate or contact administration"
+                    }
+                }
+                const accessToken = jwt.sign({
+                    sub: userDetail._id
+                }, process.env.JWT_SECRET)
+
+                const refreshToken = jwt.sign({
+                    sub: userDetail._id
+                }, process.env.JWT_SECRET, {
+                    expiresIn: "6d"
+                })
+
                 res.json({
                     result: {
                         detail: {

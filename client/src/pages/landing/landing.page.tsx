@@ -1,92 +1,11 @@
-// import { useEffect, useState } from "react";
-// import { toast } from "react-toastify";
-// import axiosInstance from "../../config/axios.config";
-// import { NavLink } from "react-router-dom";
-// import "./landing.page.css";
-// import { HomeBannerComponent } from "../../components/banner";
-// import React from "react";
-// const baseURL = import.meta.env.VITE_API_BASE_URL;
-// interface Category {
-//   section: string;
-//   _id: string;
-//   title: string;
-//   image: string;
-// }
-
-// interface Brand {
-//   _id: string;
-//   title: string;
-//   image: string; // Assuming 'image' is part of the Brand response too
-// }
-
-// const LandingPage = () => {
-//   const [brands, setBrands] = useState<Brand[]>([]);
-//   const [loadingBrands, setLoadingBrands] = useState(false);
-//   const [showBrands, setShowBrands] = useState(false);
-//   const [categories, setCategories] = useState<Category[]>([]);
-//   const [loadingCategories, setLoadingCategories] = useState(true);
-
-//   const baseUrl = `${baseURL}/public/uploads/category/`;
-//   const baseUrll = `${baseURL}/public/uploads/brands/`;
-//   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
-
-//   const fetchCategories = async () => {
-//     try {
-//       setLoadingCategories(true);
-//       const response = await axiosInstance.get(`${baseURL}/category`, {
-//         headers: {
-//           Authorization: "Bearer " + localStorage.getItem("accessToken"),
-//         },
-//       });
-//       const filteredCategories = response.data.filter(
-//         (category: Category) => !excludedCategoryIds.includes(category._id)
-//       );
-//       setCategories(filteredCategories);
-//     } catch (error) {
-//       console.error("Error fetching categories:", error);
-//       toast.error("Error fetching categories...");
-//     } finally {
-//       setLoadingCategories(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchCategories();
-//   }, []);
-
-//   const fetchBrands = async () => {
-//     try {
-//       setLoadingBrands(true);
-//       const response = await axiosInstance.get(`${baseURL}/brand`, {
-//         headers: {
-//           Authorization: "Bearer " + localStorage.getItem("accessToken"),
-//         },
-//       });
-      
-//       // Filter out the brand with title 'Parade'
-//       const filteredBrands = response.data.filter(
-//         (brand: Brand) => brand.title.toLowerCase() !== "parade"
-//       );
-      
-//       setBrands(filteredBrands);
-//       setShowBrands(true);
-//     } catch (error) {
-//       console.error("Error fetching brands:", error);
-//       toast.error("Error fetching brands...");
-//     } finally {
-//       setLoadingBrands(false);
-//     }
-//   };
-  
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../../config/axios.config";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
-import { AuthContext } from "../../context/auth.context";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string;
   _id: string;
@@ -99,83 +18,72 @@ interface Brand {
   title: string;
   image: string; // Assuming 'image' is part of the Brand response too
 }
+
 const LandingPage = () => {
-  const authContext = useContext(AuthContext);
-
-  if (!authContext) {
-    throw new Error("AuthContext is undefined. Ensure it is properly provided.");
-  }
-
-  const { loggedInUser } = authContext;
-  const navigate = useNavigate();
-
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loadingBrands, setLoadingBrands] = useState(false);
   const [showBrands, setShowBrands] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL;
   const baseUrl = `${baseURL}/public/uploads/category/`;
   const baseUrll = `${baseURL}/public/uploads/brands/`;
-
-  useEffect(() => {
-    if (!loggedInUser) {
-      // If no user, redirect to login page
-      navigate("/login");
-      return;
-    }
-
-    // If user exists, fetch categories
-    fetchCategories();
-  }, [loggedInUser]);
+  const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("No token found");
-
       const response = await axiosInstance.get(`${baseURL}/category`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
       });
       const filteredCategories = response.data.filter(
-        (category: Category) =>
-          !["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"].includes(category._id)
+        (category: Category) => !excludedCategoryIds.includes(category._id)
       );
       setCategories(filteredCategories);
     } catch (error) {
-      toast.error("Error fetching categories");
+      console.error("Error fetching categories:", error);
+      toast.error("Error fetching categories...");
     } finally {
       setLoadingCategories(false);
     }
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const token = localStorage.getItem("accessToken");
-      if (!token) throw new Error("No token found");
-
       const response = await axiosInstance.get(`${baseURL}/brand`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
       });
+      
+      // Filter out the brand with title 'Parade'
       const filteredBrands = response.data.filter(
         (brand: Brand) => brand.title.toLowerCase() !== "parade"
       );
+      
       setBrands(filteredBrands);
       setShowBrands(true);
     } catch (error) {
-      toast.error("Error fetching brands");
+      console.error("Error fetching brands:", error);
+      toast.error("Error fetching brands...");
     } finally {
       setLoadingBrands(false);
     }
   };
+  
+
   return (
     <>
       <HomeBannerComponent />
 
-      {/* Brands Section */}
+      
       <div className="bg-lime-50 my-10">
         <button
           onClick={fetchBrands}
