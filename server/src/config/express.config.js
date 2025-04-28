@@ -101,6 +101,7 @@ app.use(helmet());
 const allowedOrigins = [
   'https://this-is-neha.netlify.app',
   'http://localhost:5173',
+   'http://localhost:5174',
 ];
 
 const corsOptions = {
