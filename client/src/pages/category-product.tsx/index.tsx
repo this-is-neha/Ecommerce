@@ -19,18 +19,42 @@ const CategoryProductList = () => {
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
   const baseURL = `${baseURLl}/server/public/uploads/product/`;
 
-  const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, sort = sortOption }) => {
+
+  //   try {
+  //     setLoading(true);
+  //     console.log('Fetching products with sort option:', sort);
+  //     const response = await axiosInstance.get(`${baseURLl}/product`, {
+  //       params: { page, limit, categoryId, sort },
+  //       headers: { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
+  //     });
+
+  //     const totalPages = Math.ceil(response?.meta?.total / response?.meta?.limit || 1);
+  //     setPagination({ totalPages, currentPage: response?.meta?.page || 1 });
+  //     setProducts(response?.result || []);
+  //   } catch (exception) {
+  //     console.error('Error fetching products:', exception);
+  //     toast.error('Error fetching products...');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, sort = sortOption }: { page?: number; limit?: number; categoryId: string; sort?: string }) => {
     try {
       setLoading(true);
-      console.log('Fetching products with sort option:', sort);
       const response = await axiosInstance.get(`${baseURLl}/product`, {
         params: { page, limit, categoryId, sort },
         headers: { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
       });
-
-      const totalPages = Math.ceil(response?.meta?.total / response?.meta?.limit || 1);
-      setPagination({ totalPages, currentPage: response?.meta?.page || 1 });
-      setProducts(response?.result || []);
+  
+      console.log('Full product response:', response);  // response is actual data object here
+  
+      if (!response) throw new Error("No data in response");
+      if (!response.meta) throw new Error("No meta in response");
+      if (!response.result) throw new Error("No result in response");
+  
+      const totalPages = Math.ceil((response.meta.total || 0) / (response.meta.limit || 1));
+      setPagination({ totalPages, currentPage: response.meta.page || 1 });
+      setProducts(response.result || []);
     } catch (exception) {
       console.error('Error fetching products:', exception);
       toast.error('Error fetching products...');
@@ -38,23 +62,49 @@ const CategoryProductList = () => {
       setLoading(false);
     }
   };
-
+  
+  
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
       const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
-        headers: {
-          "Authorization": `Bearer ${token}`, // Ensure space after Bearer
-        },
+        headers: { "Authorization": `Bearer ${token}` },
       });
-      const user = response.result; 
-      console.log("User Name by :", user.name); 
+  
+      console.log('Full user response:', response);
+  
+      if (!response) throw new Error("No data in user response");
+      if (!response.data.result) throw new Error("No result in user response");
+  
+      const user = response.data.result;
       setLoggedInUser(user.name);
-      setLoggedInUserId(user._id) // Store user details in state
+      setLoggedInUserId(user._id);
     } catch (exception) {
       console.error('Error fetching User Details:', exception);
     }
   };
+  
+  
+  
+  
+  // const getLoggedInUser = async () => {
+  //   try {
+  //     const token = localStorage.getItem("accessToken") || null;
+  //     const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
+  //       headers: {
+  //         "Authorization": `Bearer ${token}`, // Ensure space after Bearer
+  //       },
+  //     });
+  //     const user = response.result; 
+  //     console.log("User Name by :", user.name); 
+  //     setLoggedInUser(user.name);
+  //     setLoggedInUserId(user._id) // Store user details in state
+  //   } catch (exception) {
+  //     console.error('Error fetching User Details:', exception);
+  //   }
+  // };
+
+  
 
   useEffect(() => {
     if (categoryId) {
@@ -178,7 +228,7 @@ const CategoryProductList = () => {
             </div>
           )}
         </div>
-        <PaginationComponent pagination={pagination} getProductList={getProductList} />
+        <PaginationComponent pagination={pagination} fetchCall={getProductList} />
       </div>
     </section>
 <FooterComponent/></>
