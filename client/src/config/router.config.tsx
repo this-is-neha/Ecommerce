@@ -246,6 +246,7 @@ const RoutingConfig = () => {
       const response = await axiosInstance.get("/auth/me", {
         headers: {
           Authorization: `Bearer ${token}`,
+          withCredentials: true,
         },
       });
 
