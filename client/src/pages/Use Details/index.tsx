@@ -31,7 +31,7 @@ const UserDetails = () => {
                 },
             });
             
-            const user: User = response.result;
+            const user: User = response.data;
             setLoggedInUser(user);
             console.log("User Name:", user.name);
         } catch (exception) {

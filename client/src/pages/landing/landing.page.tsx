@@ -38,7 +38,7 @@ const LandingPage = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      const filteredCategories = response.result.filter(
+      const filteredCategories = response.data.filter(
         (category: Category) => !excludedCategoryIds.includes(category._id)
       );
       setCategories(filteredCategories);
@@ -64,7 +64,7 @@ const LandingPage = () => {
       });
       
       // Filter out the brand with title 'Parade'
-      const filteredBrands = response.result.filter(
+      const filteredBrands = response.data.filter(
         (brand: Brand) => brand.title.toLowerCase() !== "parade"
       );
       
