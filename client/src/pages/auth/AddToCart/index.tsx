@@ -21,7 +21,7 @@ const CartPage = () => {
           "Authorization": `Bearer ${token}`, // Ensure space after Bearer
         },
       });
-      const user = response.result; 
+      const user = response.data; 
       setUserId(user._id);
     } catch (exception) {
       console.error('Error fetching User Details:', exception);
@@ -45,7 +45,7 @@ const CartPage = () => {
           },
         });
         
-        const cartItems = response.products; 
+        const cartItems = response.data.products; 
   
         const updatedCartItems = await Promise.all(
           cartItems.map(async (item: any) => {

@@ -47,7 +47,7 @@ const BrandProductList = () => {
       console.log("API response:", response);
 
       // response is the data directly here
-      const { meta = {}, result = [] } = response || {};
+      const { meta = {}, result = [] } = response.data || {};
 
       const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
       setPagination({ totalPages, currentPage: meta.page || 1 });
@@ -74,7 +74,7 @@ const BrandProductList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const user = response.result; // same adjustment if response shape is similar
+      const user = response.data; // same adjustment if response shape is similar
       console.log("User Name by :", user.name);
       setLoggedInUser(user.name);
       setLoggedInUserId(user._id);
@@ -184,7 +184,7 @@ const BrandProductList = () => {
               </div>
             )}
           </div>
-          <PaginationComponent pagination={pagination} getProductList={getProductList} />
+          <PaginationComponent pagination={pagination} fetchCall={getProductList} />
         </div>
       </section>
       <FooterComponent />
