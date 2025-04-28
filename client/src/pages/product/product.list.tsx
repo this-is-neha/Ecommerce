@@ -4,10 +4,10 @@ import { toast } from "react-toastify";
 import axiosInstance from "../../config/axios.config";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
-import React from "react";
+
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-export const PER_PAGE_LIMIT = 17;
+export const PER_PAGE_LIMIT = 20;
 
 const AdminProductList = () => {
   const navigate = useNavigate(); 
@@ -46,7 +46,7 @@ const AdminProductList = () => {
       const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-      setCategories(response.result);
+      setCategories(response.data);
       setIsCategoryFetched(true);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -60,7 +60,7 @@ const AdminProductList = () => {
       const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-      setBrands(response.result);
+      setBrands(response.data.result);
       setIsBrandFetched(true);
     } catch (error) {
       console.error("Error fetching brands:", error);
@@ -249,9 +249,8 @@ const AdminProductList = () => {
             </table>
           </div>
           <PaginationComponent
-            totalPages={pagination.totalPages}
-            currentPage={pagination.currentPage}
-            onPageChange={(page) => getProductList({ page })}
+            pagination={{ currentPage: pagination.currentPage, totalPages: pagination.totalPages }}
+            fetchCall={(page: number) => getProductList({ page })}
           />
         </div>
       </div>
