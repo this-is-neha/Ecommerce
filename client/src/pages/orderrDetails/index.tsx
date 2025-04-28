@@ -1,11 +1,12 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../../config/axios.config";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import * as yup from "yup";
 import React from "react";
+
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
+
 const schema = yup.object().shape({
   orderId: yup.string(),
   fullName: yup.string().required("Full name is required"),
@@ -32,10 +33,10 @@ const OrderDetail = () => {
   const [orderDeliveryLabel, setOrderDeliveryLabel] = useState<string>("");
   const [orderImage, setOrderImage] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [productDetails, setProductDetails] = useState(null);
+  const [productDetails, setProductDetails] = useState<any>(null);
   const baseURL = `${baseURLl}/public/uploads/product/`;
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -56,28 +57,42 @@ const OrderDetail = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+        
+        console.log("Order response full:", orderResponse);
+        console.log("Order response data:", orderResponse.data);
+        
+        const orderData = orderResponse?.result ?? orderResponse;
+        
+        if (!orderData || !orderData._id) {
+          throw new Error("Order data is missing or invalid");
+        }
+        
+        setOrderIdd(orderData._id);
+        setOrderFullname(orderData.fullName);
+        setOrderPhone(orderData.phoneNumber);
+        setOrderAddress(orderData.address);
+        setOrderCity(orderData.city);
+        setOrderRegion(orderData.region);
+        setOrderProductId(orderData.productId);
+        setOrderDeliveryOption(orderData.deliveryOption);
+        setOrderDeliveryLabel(orderData.deliveryLabel);
+        setOrderImage(orderData.image);
+        
+        // Fetch product similarly, e.g.:
+        const productResponse = await axiosInstance.get(`product/${orderData.productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        const productData = productResponse?.result ?? productResponse;
+        
+        setProductDetails(productData);
+        
 
-        setOrderIdd(orderResponse._id);
-        setOrderFullname(orderResponse.fullName);
-        setOrderPhone(orderResponse.phoneNumber);
-        setOrderAddress(orderResponse.address);
-        setOrderCity(orderResponse.city);
-        setOrderRegion(orderResponse.region);
-        setOrderProductId(orderResponse.productId);
-        setOrderDeliveryOption(orderResponse.deliveryOption);
-        setOrderDeliveryLabel(orderResponse.deliveryLabel);
-        setOrderImage(orderResponse.image);
+        
 
-        const productResponse = await axiosInstance.get(
-          `product/${orderResponse.productId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setProductDetails(productResponse.result);
+        
       } catch (error: any) {
         console.error(
           "Error fetching order details:",
@@ -92,21 +107,18 @@ const OrderDetail = () => {
   }, [orderId]);
 
   const handleNavigate = () => {
-    navigate("payment-success"); 
+    navigate("payment-success");
   };
 
   return (
     <>
-     <HeaderComponent/>
-     
+      <HeaderComponent />
+
       <div className="h-[2400px] flex flex-col justify-center items-center bg-blue-100 p-8">
         {loading ? (
           <p>Loading order details...</p>
-          
         ) : (
-          
           <div className="bg-white p-8 mt-[20px] w-[1000px] rounded-lg shadow-lg w-full max-w-xl">
-
             <h2 className="text-2xl font-semibold mb-6">Order Details</h2>
             <h3 className="text-xl font-semibold">Order ID: {orderIdd}</h3>
             <h3 className="text-xl font-semibold">Full Name: {orderFullname}</h3>
@@ -115,41 +127,35 @@ const OrderDetail = () => {
             <h3 className="text-xl font-semibold">City: {orderCity}</h3>
             <h3 className="text-xl font-semibold">Address: {orderAddress}</h3>
             <h3 className="text-xl font-semibold">Product ID: {orderProductId}</h3>
-            <h3 className="text-xl font-semibold">
-              Delivery Label: {orderDeliveryLabel}
-            </h3>
-            <h3 className="text-xl font-semibold">
-              Delivery Method: {orderDeliveryOption}
-            </h3>
+            <h3 className="text-xl font-semibold">Delivery Label: {orderDeliveryLabel}</h3>
+            <h3 className="text-xl font-semibold">Delivery Method: {orderDeliveryOption}</h3>
 
             {orderImage && (
               <div className="mt-4">
                 <h3 className="text-xl font-semibold">Uploaded Image:</h3>
-                <img
-                  src={orderImage}
-                  alt="Uploaded"
-                  className="w-full h-auto mt-2"
-                />
+                <img src={orderImage} alt="Uploaded" className="w-full h-auto mt-2" />
               </div>
             )}
 
+            {/* Optional: Display some product details if needed */}
+           
 
-          
             <button
               className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               onClick={handleNavigate}
             >
-              View Payment 
+              View Payment
             </button>
           </div>
         )}
       </div>
-    <FooterComponent/>
+
+      <FooterComponent />
     </>
   );
 };
 
-export default OrderDetail; 
+export default OrderDetail;
 
 
 // import { useState, useEffect } from "react";
@@ -203,36 +209,34 @@ export default OrderDetail;
 //         if (!token) {
 //           throw new Error("Authorization token missing");
 //         }
+
 //         const orderResponse = await axiosInstance.get(`${baseURLl}/order/${orderId}`, {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
 //           },
 //         });
-//         console.log("Order Response Data:", orderResponse.data);
-        
-//         setOrderIdd(orderResponse.data._id);
-//         setOrderFullname(orderResponse.data.fullName);
-//         setOrderPhone(orderResponse.data.phoneNumber);
-//         setOrderAddress(orderResponse.data.address);
-//         setOrderCity(orderResponse.data.city);
-//         setOrderRegion(orderResponse.data.region);
-//         setOrderProductId(orderResponse.data.productId);
-//         setOrderDeliveryOption(orderResponse.data.deliveryOption);
-//         setOrderDeliveryLabel(orderResponse.data.deliveryLabel);
-//         setOrderImage(orderResponse.data.image);
-        
-        
+
+//         setOrderIdd(orderResponse._id);
+//         setOrderFullname(orderResponse.fullName);
+//         setOrderPhone(orderResponse.phoneNumber);
+//         setOrderAddress(orderResponse.address);
+//         setOrderCity(orderResponse.city);
+//         setOrderRegion(orderResponse.region);
+//         setOrderProductId(orderResponse.productId);
+//         setOrderDeliveryOption(orderResponse.deliveryOption);
+//         setOrderDeliveryLabel(orderResponse.deliveryLabel);
+//         setOrderImage(orderResponse.image);
+
 //         const productResponse = await axiosInstance.get(
-//           `product/${orderResponse.data.productId}`,
+//           `product/${orderResponse.productId}`,
 //           {
 //             headers: {
 //               Authorization: `Bearer ${token}`,
 //             },
 //           }
 //         );
-        
-//         setProductDetails(productResponse.data.result);
-        
+
+//         setProductDetails(productResponse.result);
 //       } catch (error: any) {
 //         console.error(
 //           "Error fetching order details:",
@@ -305,3 +309,4 @@ export default OrderDetail;
 // };
 
 // export default OrderDetail; 
+
