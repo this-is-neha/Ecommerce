@@ -96,12 +96,15 @@ const app = express();
 
 app.use(helmet());
 
+const cors = require('cors');
+
 const corsOptions = {
-  origin: 'https://this-is-neha.netlify.app', // <- correct URL (no extra 'a')
+  origin: 'https://this-is-neha.netlify.app', // ✅ correct one!
   credentials: true,
 };
 
 app.use(cors(corsOptions));
+
 
 
 app.use(express.json());
