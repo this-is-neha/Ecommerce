@@ -98,12 +98,27 @@ app.use(helmet());
 
 
 
+const allowedOrigins = [
+  'https://this-is-neha.netlify.app',
+  'http://localhost:5173',
+];
+
 const corsOptions = {
-  origin: 'https://this-is-neha.netlify.app', 
+  origin: function (origin, callback) {
+    // allow requests with no origin (like curl or postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
 
 app.use(cors(corsOptions));
+
 
 
 
