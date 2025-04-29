@@ -7,6 +7,43 @@ class ConformController {
 
 
 
+  // async uploadImage(req, res) {
+  //   try {
+  //     const { error } = imageUploadSchema.validate({
+  //       orderId: req.body.orderId,
+  //     });
+  
+  //     if (error) {
+  //       return res.status(400).json({ message: error.details[0].message });
+  //     }
+  
+  //     if (!req.file) {
+  //       return res.status(400).json({ message: 'No image file uploaded' });
+  //     }
+  
+  //     const imageUrl = `${req.file.filename}`;
+  
+  //     const newImage = new Image({
+  //       orderId: req.body.orderId,
+  //       image: req.file.filename,
+  //     });
+  
+  //     const savedImage = await newImage.save();
+  
+    
+  //     res.status(201).json({
+  //       message: 'Image uploaded successfully!',
+  //       orderId: savedImage.orderId,
+  //       imageUrl: savedImage.image,
+  //       id: savedImage._id, 
+  //     });
+  //   } catch (err) {
+  //     console.error('Error while uploading image:', err);
+  //     res.status(500).json({ message: 'Internal server error' });
+  //   }
+  // }
+  
+
   async uploadImage(req, res) {
     try {
       const { error } = imageUploadSchema.validate({
@@ -14,14 +51,20 @@ class ConformController {
       });
   
       if (error) {
-        return res.status(400).json({ message: error.details[0].message });
+        return res.status(400).json({
+          data: null,
+          message: error.details[0].message,
+          meta: null,
+        });
       }
   
       if (!req.file) {
-        return res.status(400).json({ message: 'No image file uploaded' });
+        return res.status(400).json({
+          data: null,
+          message: 'No image file uploaded',
+          meta: null,
+        });
       }
-  
-      const imageUrl = `${req.file.filename}`;
   
       const newImage = new Image({
         orderId: req.body.orderId,
@@ -30,20 +73,27 @@ class ConformController {
   
       const savedImage = await newImage.save();
   
-    
       res.status(201).json({
+        data: {
+          result: {
+            orderId: savedImage.orderId,
+            imageUrl: savedImage.image,
+            id: savedImage._id,
+          },
+        },
         message: 'Image uploaded successfully!',
-        orderId: savedImage.orderId,
-        imageUrl: savedImage.image,
-        id: savedImage._id, 
+        meta: null,
       });
     } catch (err) {
       console.error('Error while uploading image:', err);
-      res.status(500).json({ message: 'Internal server error' });
+      res.status(500).json({
+        data: null,
+        message: 'Internal server error',
+        meta: null,
+      });
     }
   }
   
-
   async getAllImages(req, res) {
     try {
 
