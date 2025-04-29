@@ -86,10 +86,13 @@ class ProductController {
                 return res.status(404).json({ message: "Product not found" });
             }
             res.json({
-                result: detail,
+                data: {
+                    result: detail,
+                },
                 message: "Product detail fetched",
                 meta: null,
             });
+            
         } catch (exception) {
             console.error("Error fetching product detail:", exception); // Log the exception
             return res.status(500).json({ 
