@@ -9,9 +9,13 @@ export const getBannerDetail: any = createAsyncThunk(
 
             const response: any = await axiosInstance.get(`${baseURL}/banner/` + id, {
                 headers: {
-                    "Authorization": "Bearer" + localStorage.getItem("accessToken")
+                   "Authorization": "Bearer " + localStorage.getItem("accessToken")
+
                 }
+                
             })
+            console.log("Token being sent:", localStorage.getItem("accessToken"));
+
             return response.result
         }
         catch (exception) {
