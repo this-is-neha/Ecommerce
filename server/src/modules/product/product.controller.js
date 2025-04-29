@@ -55,17 +55,32 @@ class ProductController {
                 sort.price = -1; // Descending
             }
     
-            const data = await productSvc.listAll({ limit, skip, filter, sort });
-            const countData = await productSvc.count({ filter });
+            // const data = await productSvc.listAll({ limit, skip, filter, sort });
+            // const countData = await productSvc.count({ filter });
     
+            // res.json({
+            //     result: data,
+            //     message: "Product list",
+            //     meta: {
+            //         limit,
+            //         page,
+            //         total: countData,
+            //     },
+            // });
+            const data = await productSvc.listAll({ limit, skip, filter, sort });
+            console.log('Fetched data:', data); // This logs the fetched products data
+            
+            const countData = await productSvc.count({ filter });
+            console.log('Count data:', countData); // This logs the count of products
+            
             res.json({
-                result: data,
-                message: "Product list",
-                meta: {
-                    limit,
-                    page,
-                    total: countData,
-                },
+              result: data, // This will be the array of product data from listAll()
+              message: "Product list", // A simple message
+              meta: {
+                limit, // Limit for pagination
+                page, // Current page
+                total: countData, // Total count of products
+              },
             });
         } catch (exception) {
             console.error("Error fetching product list:", exception);
