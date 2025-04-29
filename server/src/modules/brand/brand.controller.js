@@ -41,7 +41,9 @@ class BrandContoller {
             })
 
             res.json({
-                result: data,
+                data: {
+                    result: data,
+                  },
                 message: "Brand list",
                 meta: {
                     limit: limit,

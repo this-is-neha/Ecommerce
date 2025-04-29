@@ -39,7 +39,9 @@ catch(exception){
         const countData = await categorySvc.count({ filter });
   
         const response = {
-          result: data,
+            data: {
+                result: data,
+              },
           message: "Category list",
           meta: {
             limit: limit,
