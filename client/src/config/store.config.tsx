@@ -20,31 +20,26 @@
 // export const persistor=persistStore(store);
 
 // export default store
-
+// store.config.ts
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-// Your reducers
 import bannerReducer from "../reducer/banner.reducer";
-import authReducer from "../reducer/authSlice"; // 🆕 Add this line
+import authReducer from "../reducer/authSlice"; // 👈 Add this
 
-// Combine all reducers
 const rootReducer = combineReducers({
   banner: bannerReducer,
-  auth: authReducer, // 🆕 Add this slice
+  auth: authReducer, // 👈 Add this
 });
 
-// Configuration for redux-persist
 const persistConfig = {
   key: "root",
   storage,
 };
 
-// Persist the combined reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Create and export store
 const store = configureStore({
   reducer: persistedReducer,
 });
