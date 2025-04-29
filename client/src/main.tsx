@@ -44,8 +44,6 @@ import "./index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { BrowserRouter } from "react-router-dom";
 import RouterConfig from "./config/router.config";
-
-import { LoadingComponent } from "./components/common";
 import { AuthProvider } from "./context/auth.context";
 import { BrandProvider } from "./context/brand-context";
 import { CartProvider } from "./context/cart.context";
