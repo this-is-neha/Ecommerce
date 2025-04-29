@@ -43,10 +43,27 @@ class OrderController {
  
   
   
+  // async getOrders(req, res) {
+  //   try {
+  //     const orders = await OrderService.getOrders();
+  //     res.status(200).json(orders);
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       message: "Error fetching orders",
+  //       error: error.message,
+  //     });
+  //   }
+  // }
   async getOrders(req, res) {
     try {
       const orders = await OrderService.getOrders();
-      res.status(200).json(orders);
+      
+      // Wrap the orders in the "data" and "result" fields
+      res.status(200).json({
+        data: {
+          result: orders,
+        },
+      });
     } catch (error) {
       res.status(500).json({
         message: "Error fetching orders",
@@ -54,7 +71,7 @@ class OrderController {
       });
     }
   }
-
+  
 
   async getOrderById(req, res) {
     try {
