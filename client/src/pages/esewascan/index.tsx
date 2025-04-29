@@ -34,19 +34,20 @@ const ImageUploadPage = () => {
 
   const fetchOrderDetails = async (orderId: string) => {
     try {
-      const response = await axiosInstance.get(`${baseURL}orders/${orderId}`); // Adjust the endpoint accordingly
+      const response = await axiosInstance.get(`${baseURL}/order/${orderId}`);
+      console.log("order response",response) // Adjust the endpoint accordingly
       console.log('Order details fetched successfully:', response.data);
-      // Log the details to the console
-      console.log('Full Name:', response.data.fullName);
-      console.log('Phone Number:', response.data.phoneNumber);
-      console.log('Region:', response.data.region);
-      console.log('City:', response.data.city);
-      console.log('Area:', response.data.area);
-      console.log('Address:', response.data.address);
-      console.log('Delivery Label:', response.data.deliveryLabel);
-      console.log('Delivery Method:', response.data.deliveryOption);
-      console.log('Status:', response.data.status);
-      console.log('Created At:', new Date(response.data.createdAt).toLocaleDateString());
+     
+      console.log('Full Name:', response.data.result.fullName);
+      console.log('Phone Number:', response.data.result.phoneNumber);
+      console.log('Region:', response.data.result.region);
+      console.log('City:', response.data.result.city);
+      console.log('Area:', response.data.result.area);
+      console.log('Address:', response.data.result.address);
+      console.log('Delivery Label:', response.data.result.deliveryLabel);
+      console.log('Delivery Method:', response.data.result.deliveryOption);
+      console.log('Status:', response.data.result.status);
+      console.log('Created At:', new Date(response.data.result.createdAt).toLocaleDateString());
     } catch (error: any) {
       console.error('Error fetching order details:', error.response?.data || error.message);
     }
@@ -96,7 +97,9 @@ const ImageUploadPage = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      const { imageUrl } = response.data; 
+      console.log('Response:', response);
+      const imageUrl = response.data.result.imageUrl;
+
       console.log('File uploaded successfully:', response);
      
       navigate ('/')

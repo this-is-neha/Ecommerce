@@ -17,30 +17,56 @@ const AdminCategoryList = () => {
     currentPage: 2,
   });
 
+  // const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await axiosInstance.get(`${baseURL}/category`, {
+  //       params: {
+  //         page: page,
+  //         limit: limit,
+  //       },
+  //       headers: {
+  //         Authorization: "Bearer " + localStorage.getItem("accessToken"),
+  //       },
+  //     });
+
+  //     console.log(response);
+
+  //     const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+  //     setPagination({
+  //       totalPages: totalPages,
+  //       currentPage: response.meta.page,
+  //     });
+  //     setCategories(response.result);
+  //   } catch (exception) {
+  //     console.error("Error fetching Category:", exception);
+  //     toast.error("Error fetching Category...");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`${baseURL}/category`, {
-        params: {
-          page: page,
-          limit: limit,
-        },
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
-        },
+      console.log(`Fetching categorys for page ${page} with limit ${limit}`); // Log the parameters
+
+      const response: any = await axiosInstance.get(`${baseURL}/category`, {
+        params: { page, limit },
+        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 
-      console.log(response);
+      console.log('API Response:', response); // Log the entire response
 
-      const totalPages = Math.ceil(response.data.meta.total / response.data.meta.limit);
-      setPagination({
-        totalPages: totalPages,
-        currentPage: response.data.meta.page,
-      });
-      setCategories(response.data.result);
+      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+      console.log(`Total Pages: ${totalPages}`); // Log total pages
+
+      setPagination({ totalPages, currentPage: response.meta.page });
+      setCategories(response.result);
+
+      console.log('Categories Data:', response.result); 
     } catch (exception) {
-      console.error("Error fetching Category:", exception);
-      toast.error("Error fetching Category...");
+      console.error("Error fetching categories:", exception);
+      toast.error("Error fetching categories...");
     } finally {
       setLoading(false);
     }
@@ -62,7 +88,7 @@ const AdminCategoryList = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 
-      toast.success("Brand deleted successfully");
+      toast.success("Category deleted successfully");
       getCategoryList({ page: pagination.currentPage, limit: PER_PAGE_LIMIT });
     } catch (exception) {
       toast.error("Category cannot be deleted at this moment");

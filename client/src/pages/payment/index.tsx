@@ -36,47 +36,47 @@ const ProductOrderPage = () => {
   const navigate = useNavigate();
 
   // Fetch the logged-in user details
-  const getLoggedInUser = async () => {
+ // Fetch the logged-in user details
+const getLoggedInUser = async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const response = await axiosInstance.get(`${baseURL}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const user = response.data.result; // <-- Corrected here (response.data.result)
+    setLoggedInUser(user._id);
+    setValue("user", user._id); 
+  } catch (error) {
+    console.error("Error fetching logged-in user:", error);
+  }
+};
+
+
+
+useEffect(() => {
+  const fetchProductDetails = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await axiosInstance.get(`${baseURL}/auth/me`, {
+      if (!token) {
+        throw new Error("Authorization token missing");
+      }
+
+      const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const user = response.data;
-      setLoggedInUser(user._id);
-      setValue("user", user._id); 
-    } catch (error) {
-      console.error("Error fetching logged-in user:", error);
+      console.log("Product Details:", response.data.result); // <-- Corrected here
+      setProductName(response.data.result.title);
+    } catch (error: any) {
+      console.error("Error fetching product details:", error.response ? error.response.data : error.message);
     }
   };
 
-  // Fetch product details
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) {
-          throw new Error("Authorization token missing");
-        }
-
-        const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Product Details:", response.data);
-        setProductName(response.data.title);
-        console.log(response.data.title);
-      } catch (error: any) {
-        console.error("Error fetching product details:", error.response ? error.response.data : error.message);
-      }
-    };
-
-    fetchProductDetails();
-  }, [productId]);
-
+  fetchProductDetails();
+}, [productId]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -91,39 +91,91 @@ const ProductOrderPage = () => {
       if (!token) {
         throw new Error("Authorization token missing");
       }
-
+  
       const orderData = {
         ...formData,
         deliveryLabel,
         deliveryOption: selectedOption,
         productId,
       };
-
+  
       console.log("Submitting Order Data:", orderData);
-
+  
       const response = await axiosInstance.post(`${baseURL}/order`, orderData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-     const { order, orderId } = response.data;
-
+  console.log("Order Resposne:",response ); // Log the URL
+      console.log("Order API Response:", response.data.result); 
+  
+     
+      const result = response.data.result || response.data;
+      const { order, orderId } = result;
+  
       if (orderId) {
-        console.log('Order ID:', orderId);
+        console.log("Order ID:", orderId);
         navigate(`/${productName}/${productId}/order/payment`, {
           state: {
             order,
-            orderId
-          }
+            orderId,
+          },
         });
       }
-
+  
     } catch (error: any) {
       console.error("Error placing order:", error.response ? error.response.data : error.message);
       toast.error("Failed to place the order. Please try again.");
     }
   };
+  
+  // const onSubmit = async (formData: any) => {
+  //   try {
+  //     const token = localStorage.getItem("accessToken");
+  //     if (!token) {
+  //       throw new Error("Authorization token missing");
+  //     }
+  
+  //     const orderData = {
+  //       ...formData,
+  //       deliveryLabel,
+  //       deliveryOption: selectedOption,
+  //       productId,
+  //     };
+  
+  //     console.log("Submitting Order Data:", orderData);
+  
+  //     const response = await axiosInstance.post(`${baseURL}/order`, orderData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  
+  //     console.log("Order Response:", response);
+  
+  //     // Check if the response and result are defined
+  //     if (response?.data?.result) {
+  //       const { order, orderId } = response.data.result;
+  //       if (orderId) {
+  //         console.log("Order ID:", orderId);
+  //         navigate(`/${productName}/${productId}/order/payment`, {
+  //           state: {
+  //             order,
+  //             orderId,
+  //           },
+  //         });
+  //       }
+  //     } else {
+  //       throw new Error("No result returned from order API");
+  //     }
+  
+  //   } catch (error: any) {
+  //     console.error("Error placing order:", error.response ? error.response.data : error.message);
+  //     toast.error("Failed to place the order. Please try again.");
+  //   }
+  // };
+  
+  
 
   return (
     <>

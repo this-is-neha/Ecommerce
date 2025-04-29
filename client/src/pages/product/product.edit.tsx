@@ -28,7 +28,10 @@ const AdminProductEdit = () => {
     categoryId: Yup.string().required("Category is required"),
     brandId: Yup.string().required("Brand is required"),
     slug: Yup.string().required("Slug is required"),
-    images: Yup.array().of(Yup.string()).nullable(),
+    images:Yup.array()
+    .of(Yup.mixed().test("fileType", "Must be a file", value => value instanceof File))
+    .nullable(),
+  
   });
 
   const { control, handleSubmit, setValue, register, formState: { errors } } = useForm({
@@ -43,7 +46,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setCategories(response.data);
+      setCategories(response.data.result);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Error fetching categories...");
@@ -58,7 +61,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setBrands(response.data);
+      setBrands(response.data.result);
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Error fetching brands...");
@@ -73,7 +76,7 @@ const AdminProductEdit = () => {
         },
       });
 
-      const product = response.data;
+      const product = response.data.result;
 
       if (!product) {
         throw new Error("Product data is missing or not returned properly");
@@ -106,15 +109,15 @@ const AdminProductEdit = () => {
     fetchBrands();
     getProduct();
   }, [id]);
-
+  
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setValue("images", fileArray.map(file => file.name));
+      setValue("images", fileArray); // ✅ Store actual File objects
     }
   };
-
+  
   const submitEvent = async (data: any) => {
     try {
       setLoading(true);
@@ -143,7 +146,7 @@ const AdminProductEdit = () => {
 
       await axiosInstance.put(`${baseURL}/product/${id}`, formData, { headers });
       toast.success("Product updated successfully");
-      navigate("/admin/products");
+      navigate("/admin/product");
 
     } catch (exception) {
       console.error("Error updating product:", exception);
@@ -232,10 +235,11 @@ const AdminProductEdit = () => {
                   Category<span className="text-red">*</span>
                 </label>
                 <SelectOptionComponent
-                  options={categories.map(category => ({ label: category._id, value: category.id }))}
+                  options={categories.map(category => ({ label: category._id, value: category._id }))}
                   control={control}
                   name="categoryId"
                   errMsg={errors.categoryId?.message || ""}
+             
                 />
               </div>
 
@@ -244,13 +248,14 @@ const AdminProductEdit = () => {
                   Brand<span className="text-red">*</span>
                 </label>
                 <SelectOptionComponent
-                
                   options={brands.map(brand => ({ label: brand._id, value: brand._id }))}
                   control={control}
                   name="brandId"
                   errMsg={errors.brandId?.message || ""}
+                  
                 />
-</div>
+              </div>
+
               <div className="col-span-6">
                 <label htmlFor="status" className="block text-xl font-medium text-gray-700">
                   Status

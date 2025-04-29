@@ -61,7 +61,7 @@ const OrderDetail = () => {
         console.log("Order response full:", orderResponse);
         console.log("Order response data:", orderResponse.data);
         
-        const orderData = orderResponse?.data ?? orderResponse;
+        const orderData = orderResponse?.data.result ?? orderResponse;
         
         if (!orderData || !orderData._id) {
           throw new Error("Order data is missing or invalid");
@@ -78,14 +78,13 @@ const OrderDetail = () => {
         setOrderDeliveryLabel(orderData.deliveryLabel);
         setOrderImage(orderData.image);
         
-        // Fetch product similarly, e.g.:
         const productResponse = await axiosInstance.get(`product/${orderData.productId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         
-        const productData = productResponse?.data ?? productResponse;
+        const productData = productResponse?.data.result ?? productResponse;
         
         setProductDetails(productData);
         

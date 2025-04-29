@@ -1,75 +1,96 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../../context/cart.context';
 import { toast } from 'react-toastify';
-import axiosInstance from '../../../config/axios.config'; 
-import { useNavigate } from 'react-router-dom'; 
+import axiosInstance from '../../../config/axios.config';
+import { useNavigate } from 'react-router-dom';
 import { FooterComponent, HeaderComponent } from '../../../components/common';
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
 const CartPage = () => {
   const { cartItems, removeFromCart, setCartItems } = useCart();
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null); 
-  const [productResponses, setProductResponses] = useState<any[]>([]); 
+  const [userId, setUserId] = useState(null);
+  const [productResponses, setProductResponses] = useState<any[]>([]);
   const baseURL = `${baseURLl}/public/uploads/product/`;
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
       const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
         headers: {
-          "Authorization": `Bearer ${token}`, // Ensure space after Bearer
+          Authorization: `Bearer ${token}`,
         },
       });
-      const user = response.data; 
-      setUserId(user._id);
+
+      console.log("Full Responses:", response);
+
+      if (response.data.result) {
+        const user = response.data.result;
+        setUserId(user._id);
+      } else {
+        console.error("No user data found in response:", response.data);
+        setUserId(null);
+      }
     } catch (exception) {
-      console.error('Error fetching User Details:', exception);
+      console.error("Error fetching User Details:", exception);
+      setUserId(null);
     }
   };
 
+
   useEffect(() => {
-    getLoggedInUser(); // Fetch the logged-in user details when component mounts
+    getLoggedInUser();
   }, []);
 
   useEffect(() => {
+
     const fetchCartItems = async () => {
-      if (!userId) return; // Return if userId is not set
+      if (!userId) return;
 
       try {
         const token = localStorage.getItem("accessToken") || null;
 
         const response = await axiosInstance.get(`${baseURLl}/addToCart/cart/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        
-        const cartItems = response.data.products; 
-  
+
+        console.log("Cart Items Response:", response);
+        console.log("Cart Items:", response.data.products);
+
+        const products = response.data?.products;
+
+        if (!Array.isArray(products)) {
+          console.error('Invalid response structure:', response);
+          return;
+        }
+
         const updatedCartItems = await Promise.all(
-          cartItems.map(async (item: any) => {
+          products.map(async (item: any) => {
             const productResponse = await axiosInstance.get(`${baseURLl}/product/${item.productId}`, {
               headers: { Authorization: `Bearer ${token}` },
-            });  
-            setProductResponses(prevResponses => [...prevResponses, productResponse]);
+            });
+            console.log("Fetched Product Response:", productResponse);
+            console.log("Fetched Product Response:", productResponse.data);
+
+            setProductResponses(prev => [...prev, productResponse.data]);
 
             return {
               ...item,
-              ...productResponse.data, 
+              ...(productResponse.data?.result || {}),
             };
           })
         );
-      
-        setCartItems(updatedCartItems); 
+
+        setCartItems(updatedCartItems);
       } catch (error) {
         console.error('Error fetching cart items:', error);
-      
       } finally {
         setLoading(false);
       }
     };
-  
+
+
+
     fetchCartItems();
   }, [userId, setCartItems]);
 
@@ -80,11 +101,11 @@ const CartPage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        data: { productId }, 
+        data: { productId },
       });
       toast.success('Product removed from cart!');
 
-      
+
       setCartItems(cartItems.filter(item => item.productId !== productId));
       setProductResponses(productResponses.filter(response => response.result._id !== productId));
     } catch (error) {
@@ -96,59 +117,59 @@ const CartPage = () => {
 
   const handleOrderClick = (productId: string, productTitle: string) => {
     const encodedTitle = encodeURIComponent(productTitle);
-    navigate(`${baseURLl}/${encodedTitle}/${productId}/order`); 
+    navigate(`/{encodedTitle}/${productId}/order`);
   };
 
   return (
- <>
- <HeaderComponent/>
- <section className="container mx-auto px-4 py-4">
-      <h1 className="text-4xl font-bold">Product Details Fetched:</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {productResponses.map((response, index) => (
-            <li key={index}>
-              {response?.result ? (
-                <>
-           
-                  {response.result.images && response.result.images.length > 0 && (
-                    <img
-                      src={`${baseURL}${encodeURIComponent(response.result.images[0])}`} 
-                      alt={response.result.title} 
-                      className="w-50 h-50 object-cover mb-2" 
-                    />
-                  )}
-                  <p>Product ID: {response.result._id}</p>
-                  <p>Title: {response.result.title}</p>
-                  <p>Price: {response.result.price}</p>
-                  <p>Summary: {response.result.summary}</p>
-                  <p>Description: {response.result.description}</p>
-                  <button
-                    className="bg-blue-500 text-white py-2 px-4 rounded mt-4 mr-2" 
-                    onClick={() => handleOrderClick(response.result._id, response.result.title)} 
-                  >
-                    Order
-                  </button>
+    <>
+      <HeaderComponent />
+      <section className="container mx-auto px-4 py-4">
+        <h1 className="text-4xl font-bold">Product Details Fetched:</h1>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <ul>
+            {productResponses.map((response, index) => (
+              <li key={index}>
+                {response?.result ? (
+                  <>
 
-                  <button
-                    className="bg-red-500 text-white py-1 px-2 rounded mt-4" 
-                    onClick={() => handleRemoveProduct(response.result._id)}
-                  >
-                    Remove
-                  </button>
-                  <hr className="my-4" />
-                </>
-              ) : (
-                <p>Error: Product data is not available</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
- <FooterComponent/></>
+                    {response.result.images && response.result.images.length > 0 && (
+                      <img
+                        src={`${baseURL}${encodeURIComponent(response.result.images[0])}`}
+                        alt={response.result.title}
+                        className="w-50 h-50 object-cover mb-2"
+                      />
+                    )}
+                    <p>Product ID: {response.result._id}</p>
+                    <p>Title: {response.result.title}</p>
+                    <p>Price: {response.result.price}</p>
+                    <p>Summary: {response.result.summary}</p>
+                    <p>Description: {response.result.description}</p>
+                    <button
+                      className="bg-blue-500 text-white py-2 px-4 rounded mt-4 mr-2"
+                      onClick={() => handleOrderClick(response.result._id, response.result.title)}
+                    >
+                      Order
+                    </button>
+
+                    <button
+                      className="bg-red-500 text-white py-1 px-2 rounded mt-4"
+                      onClick={() => handleRemoveProduct(response.result._id)}
+                    >
+                      Remove
+                    </button>
+                    <hr className="my-4" />
+                  </>
+                ) : (
+                  <p>Error: Product data is not available</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <FooterComponent /></>
   );
 };
 

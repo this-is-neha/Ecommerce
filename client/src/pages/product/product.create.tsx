@@ -35,19 +35,20 @@ const ProductCreate = () => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-     
-const response: { result: any[] } = await axiosInstance.get(`${baseURL}/category`, {
-  headers: {
-    Authorization: "Bearer " + localStorage.getItem("accessToken"),
-  },
-});
-const brs = response.result ?? [];
-
+      const response = await axiosInstance.get(`${baseURL}/category`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+      });
+      console.log("Category Response:", response.data);
+      
+      const brs = response.data.result ?? [];
       setCategories(brs);
-  
+      
       if (brs.length > 0) {
-        setProduct((prev) => ({ ...prev, categoryIdId: prev.categoryId || brs[0]._id }));
+        setProduct((prev) => ({ ...prev, categoryId: prev.categoryId || brs[0]._id }));
       }
+      
     } catch (error) {
       console.error("Error fetching Categories:", error);
       toast.error("Error fetching category...");
@@ -61,18 +62,20 @@ const brs = response.result ?? [];
     try {
       setLoadingBrands(true);
     
-const response: { result: any[] } = await axiosInstance.get(`${baseURL}/brand`, {
-  headers: {
-    Authorization: "Bearer " + localStorage.getItem("accessToken"),
-  },
-});
-const brs = response.result ?? [];
-
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+        },
+      });
+      console.log("Brand Response:", response.data);
+      
+      const brs = response.data.result ?? [];
       setBrands(brs);
-  
+      
       if (brs.length > 0) {
         setProduct((prev) => ({ ...prev, brandId: prev.brandId || brs[0]._id }));
       }
+      
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Error fetching brands...");
@@ -113,8 +116,8 @@ const brs = response.result ?? [];
     if (files) {
       const fileArray = Array.from(files);
       const imageUrls = fileArray.map((file) => URL.createObjectURL(file));
-      setUploadedImages(imageUrls); // Store URLs for preview
-      setImageFiles(fileArray); // Store file objects for upload
+      setUploadedImages(imageUrls); 
+      setImageFiles(fileArray); 
     }
   };
 

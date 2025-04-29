@@ -4,7 +4,7 @@ import axiosInstance from "../../config/axios.config";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
-import React from "react";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string;
@@ -16,7 +16,7 @@ interface Category {
 interface Brand {
   _id: string;
   title: string;
-  image: string; // Assuming 'image' is part of the Brand response too
+  image: string; 
 }
 
 const LandingPage = () => {
@@ -38,7 +38,7 @@ const LandingPage = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      const filteredCategories = response.data.filter(
+      const filteredCategories = response.data.result.filter(
         (category: Category) => !excludedCategoryIds.includes(category._id)
       );
       setCategories(filteredCategories);
@@ -63,8 +63,8 @@ const LandingPage = () => {
         },
       });
       
-      // Filter out the brand with title 'Parade'
-      const filteredBrands = response.data.filter(
+    
+      const filteredBrands = response.data.result.filter(
         (brand: Brand) => brand.title.toLowerCase() !== "parade"
       );
       
@@ -78,12 +78,11 @@ const LandingPage = () => {
     }
   };
   
-
   return (
     <>
       <HomeBannerComponent />
 
-      
+      {/* Brands Section */}
       <div className="bg-lime-50 my-10">
         <button
           onClick={fetchBrands}
@@ -165,6 +164,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
-
-

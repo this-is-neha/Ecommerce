@@ -7,7 +7,14 @@ import TableActionButton from "../../components/common/table/action-button.compo
 
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-export const PER_PAGE_LIMIT = 20;
+export const PER_PAGE_LIMIT = 50;
+interface GetProductListParams {
+  page?: number;
+  limit?: number;
+  brandId?: string;
+  categoryId?: string;
+  sort?: string;
+}
 
 const AdminProductList = () => {
   const navigate = useNavigate(); 
@@ -21,29 +28,30 @@ const AdminProductList = () => {
   const [isCategoryFetched, setIsCategoryFetched] = useState(false);
   const [isBrandFetched, setIsBrandFetched] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-  const getProductList = async ({ page: currentPage = 1, limit = PER_PAGE_LIMIT, categoryId = null, brandId = null }: { page?: number; limit?: number | undefined; categoryId?: string | null; brandId?: string | null }) => {
+    const [sortOption, setSortOption] = useState("default");
+  const getProductList = async ({
+    page = 1,
+    limit = PER_PAGE_LIMIT,
+    brandId,
+    sort = sortOption,
+  }: GetProductListParams) => {
     try {
       setLoading(true);
-      interface ProductResponse {
-        data: {
-          meta: {
-            total: number;
-            limit: number;
-            page: number;
-          };
-          products: any[]; // Replace 'any[]' with the actual product type if available
-        };
-      }
-
-      const response: ProductResponse = await axiosInstance.get(`${baseURL}/product`, {
-        params: { categoryId, brandId },
-        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+      const response = await axiosInstance.get(`${baseURL}/product`, {
+        params: { page, limit, brandId, sort },
+        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") }
       });
-
-      const { total, limit, page } = response.data.meta;
-      const totalPages = Math.ceil(total / limit);
-      setPagination({ totalPages, currentPage: page });
-      setProducts(response.data.products);
+      console.log("API response:", response);  
+      console.log("API response data:", response.data.result); 
+      if (response.data && Array.isArray(response.data.result)) {
+        const { meta = {}, result = [] } = response.data;
+        const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
+        setPagination({ totalPages, currentPage: meta.page || 1 });
+        setProducts(result);
+      } else {
+        console.error('Invalid response structure:', response.data);
+        toast.error("Failed to fetch products");
+      }
     } catch (exception) {
       console.error("Error fetching products:", exception);
       toast.error("Error fetching products...");
@@ -51,7 +59,6 @@ const AdminProductList = () => {
       setLoading(false);
     }
   };
-
   const fetchCategories = async () => {
     if (isCategoryFetched) return;
     try {

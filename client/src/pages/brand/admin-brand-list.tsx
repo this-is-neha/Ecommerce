@@ -35,7 +35,7 @@ const AdminBrand = () => {
       setPagination({ totalPages, currentPage: response.meta.page });
       setBrands(response.result);
 
-      console.log('Brands Data:', response.result); // Log the brands data
+      console.log('Brands Data:', response.result); 
     } catch (exception) {
       console.error("Error fetching brands:", exception);
       toast.error("Error fetching brands...");

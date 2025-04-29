@@ -39,18 +39,11 @@ const RegisterPage = () => {
         }
         
         try {
-            const response = await axiosInstance.post(
-                `${baseURL}/auth/register`,
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    },
-                    withCredentials: true, // ✅ Add this here!
+            const response = await axiosInstance.post(`${baseURL}/auth/register`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
                 }
-            );
-            // handle response
-        
+            });
             toast.success(response.data.message);
             navigate("/activate");
         } catch (exception:any) {

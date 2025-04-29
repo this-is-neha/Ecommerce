@@ -18,94 +18,77 @@ const CategoryProductList = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null); // Initialize state for logged-in user
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
   const baseURL = `${baseURLl}/server/public/uploads/product/`;
-
-
-  //   try {
-  //     setLoading(true);
-  //     console.log('Fetching products with sort option:', sort);
-  //     const response = await axiosInstance.get(`${baseURLl}/product`, {
-  //       params: { page, limit, categoryId, sort },
-  //       headers: { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
-  //     });
-
-  //     const totalPages = Math.ceil(response?.meta?.total / response?.meta?.limit || 1);
-  //     setPagination({ totalPages, currentPage: response?.meta?.page || 1 });
-  //     setProducts(response?.result || []);
-  //   } catch (exception) {
-  //     console.error('Error fetching products:', exception);
-  //     toast.error('Error fetching products...');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  const getProductList = async ({ page = 1, limit = PER_PAGE_LIMIT, categoryId, sort = sortOption }: { page?: number; limit?: number; categoryId: string; sort?: string }) => {
+  
+  interface GetProductListParams {
+    page?: number;
+    limit?: number;
+    categoryId?: string;
+    sort?: string;
+  }
+  
+  const getProductList = async ({
+    page = 1,
+    limit = PER_PAGE_LIMIT,
+    categoryId,
+    sort = sortOption,
+  }: GetProductListParams) => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(`${baseURLl}/product`, {
         params: { page, limit, categoryId, sort },
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('accessToken') },
+        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") }
       });
-  
-      console.log('Full product response:', response);  // response is actual data object here
-  
-      if (!response) throw new Error("No data in response");
-      if (!response.data.meta) throw new Error("No meta in response");
-      if (!response.data.result) throw new Error("No result in response");
-  
-      const totalPages = Math.ceil((response.data.meta.total || 0) / (response.data.meta.limit || 1));
-      setPagination({ totalPages, currentPage: response.data.meta.page || 1 });
-      setProducts(response.data.result || []);
+      console.log("API response:", response);  
+      console.log("API response data:", response.data.result); 
+      if (response.data && Array.isArray(response.data.result)) {
+        const { meta = {}, result = [] } = response.data;
+        const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
+        setPagination({ totalPages, currentPage: meta.page || 1 });
+        setProducts(result);
+      } else {
+        console.error('Invalid response structure:', response.data);
+        toast.error("Failed to fetch products");
+      }
     } catch (exception) {
-      console.error('Error fetching products:', exception);
-      toast.error('Error fetching products...');
+      console.error("Error fetching products:", exception);
+      toast.error("Error fetching products...");
     } finally {
       setLoading(false);
     }
   };
   
-  
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null;
       const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
   
-      console.log('Full user response:', response);
+      console.log("User Details Response:", response);
   
-      if (!response) throw new Error("No data in user response");
-      if (!response.data.result) throw new Error("No result in user response");
-  
-      const user = response.data.result;
-      setLoggedInUser(user.name);
-      setLoggedInUserId(user._id);
+      if (response.data?.result) {
+        const user = response.data.result; // ✅ correct extraction
+        console.log("User Name by:", user.name);
+        setLoggedInUser(user.name);
+        setLoggedInUserId(user._id);
+      } else {
+        console.error("No user data found in response:", response);
+        setLoggedInUser(null);
+        setLoggedInUserId(null);
+      }
     } catch (exception) {
-      console.error('Error fetching User Details:', exception);
+      console.error("Error fetching User Details:", exception);
+      setLoggedInUser(null);
+      setLoggedInUserId(null);
     }
   };
   
   
   
   
-  // const getLoggedInUser = async () => {
-  //   try {
-  //     const token = localStorage.getItem("accessToken") || null;
-  //     const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
-  //       headers: {
-  //         "Authorization": `Bearer ${token}`, // Ensure space after Bearer
-  //       },
-  //     });
-  //     const user = response.result; 
-  //     console.log("User Name by :", user.name); 
-  //     setLoggedInUser(user.name);
-  //     setLoggedInUserId(user._id) // Store user details in state
-  //   } catch (exception) {
-  //     console.error('Error fetching User Details:', exception);
-  //   }
-  // };
-
   
-
   useEffect(() => {
     if (categoryId) {
       getProductList({ page: 1, limit: PER_PAGE_LIMIT, categoryId, sort: sortOption });
@@ -236,3 +219,5 @@ const CategoryProductList = () => {
 };
 
 export default CategoryProductList;
+
+

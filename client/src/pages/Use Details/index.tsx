@@ -1,11 +1,11 @@
-
-
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axiosInstance from "../../config/axios.config";  
-import { useNavigate } from 'react-router-dom';  // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth.context';
 import { FooterComponent, HeaderComponent } from '../../components/common';
+
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
+
 interface User {
     name: string;
     email: string;
@@ -19,9 +19,10 @@ const UserDetails = () => {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const auth = useContext(AuthContext);
-    const navigate = useNavigate();  // Initialize navigate hook
+    const navigate = useNavigate();
     const baseURL = `${baseURLl}/public/uploads/users/`;
 
+ 
     const getLoggedInUser = async () => {
         try {
             const token = localStorage.getItem("accessToken") || null;
@@ -30,16 +31,26 @@ const UserDetails = () => {
                     "Authorization": `Bearer ${token}`,
                 },
             });
+    console.log("Response:", response); 
             
-            const user: User = response.data;
-            setLoggedInUser(user);
-            console.log("User Name:", user.name);
+            if (response.data.result) {
+                const user = response.data.result;
+                setLoggedInUser(user);
+                console.log("User Name:", user.name);
+            } else {
+                console.error("No result data found in response:", response);
+                setLoggedInUser(null); 
+            }
         } catch (exception) {
             console.error("Error fetching user details:", exception);
+            setLoggedInUser(null); 
         } finally {
             setLoading(false);
         }
     };
+    
+    
+    
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken") || null;
@@ -61,63 +72,66 @@ const UserDetails = () => {
     return (
         <>
             <HeaderComponent />
-            <div className="container mx-auto p-6 relative">
+            <div className="container mx-auto p-6">
                 <h2 className="text-3xl font-semibold mb-4">User Details</h2>
-                <div className="bg-white shadow-md rounded-lg p-4">
+                <div className="relative bg-white shadow-md rounded-lg p-6">
 
-                    <div className="mb-4 text-xl">
-                        <strong>Id: </strong>{loggedInUser._id}
+                   
+                    <div className="absolute top-4 right-4 flex gap-2">
+                        <button 
+                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                            onClick={() => navigate(`/${loggedInUser._id}/cart`)}
+                        >
+                            Cart Items
+                        </button>
+
+                        <button 
+                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                            onClick={() => navigate(`/${loggedInUser._id}/orders`)}
+                        >
+                            Your Orders
+                        </button>
+
+                        {loggedInUser.role === "admin" && (
+                            <button 
+                                className="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600"
+                                onClick={() => navigate('/admin/page')}
+                            >
+                                Admin Panel
+                            </button>
+                        )}
                     </div>
-                    <div className="mb-4 text-xl">
-                        <strong>Name: </strong>{loggedInUser.name}
-                    </div>
-                    <div className="mb-4 text-xl">
-                        <strong>Email: </strong>{loggedInUser.email}
-                    </div>
-                    <div className="mb-4 text-xl">
-                        <strong>Role: </strong>{loggedInUser.role}
-                    </div>
-                    {loggedInUser.image && (
+
+                    
+                    <div className="mt-16">
                         <div className="mb-4 text-xl">
-                            <strong>Profile Image: </strong>
-                            <img 
-                                src={`${baseURL}${loggedInUser.image}`} 
-                                alt="Profile"
-                                className="w-[500px] h-[500px] -full" 
-                            />
+                            <strong>Id: </strong>{loggedInUser._id}
                         </div>
-                    )}
+                        <div className="mb-4 text-xl">
+                            <strong>Name: </strong>{loggedInUser.name}
+                        </div>
+                        <div className="mb-4 text-xl">
+                            <strong>Email: </strong>{loggedInUser.email}
+                        </div>
+                        <div className="mb-4 text-xl">
+                            <strong>Role: </strong>{loggedInUser.role}
+                        </div>
+
+                        {loggedInUser.image && (
+                            <div className="mb-6">
+                                <strong className="text-xl">Profile Image: </strong>
+                                <div className="mt-2">
+                                    <img 
+                                        src={`${baseURL}${loggedInUser.image}`} 
+                                        alt="Profile"
+                                        className="w-[300px] h-[300px] object-cover rounded-lg mx-auto" 
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
-
-                {/* Cart Items button */}
-                <button 
-                    className="absolute top-6 right-36 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                    onClick={() => navigate(`/${loggedInUser._id}/cart`)}  // Navigate to the cart page
-                >
-                   Cart Items
-                </button>
-                {loggedInUser.role === "admin" && (
-    <button 
-    className="absolute top-6 left-24 bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-
-        onClick={() => navigate('/admin/page')} // or wherever your admin page is
-    >
-        Admin Panel
-    </button>
-)}
-
-                {/* Your Orders button */}
-                
-                <button 
-                    className="absolute top-6 right-6 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-                    onClick={() => navigate(`/${loggedInUser._id}/orders`)}  // Navigate to the orders page
-                >
-                   Your Orders
-                </button>
- 
-
             </div>
-            
             <FooterComponent />
         </>
     );

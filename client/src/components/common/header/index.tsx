@@ -67,33 +67,35 @@ const HeaderComponent = (): ReactNode => {
 
  
 
+  
   const fetchCategories = async () => {
-    try {
-      setLoadingCategories(true);
-      const data = await axiosInstance.get<{ result: Category[] }>(`${baseURL}/category`, {
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
-        },
-      });
+  try {
+    setLoadingCategories(true);
   
-      console.log("Response from /category API:", data);
-  
-      if (data && data.data.result) {
-        setCategories(data.data.result);
-      } else {
-        console.error("Unexpected category response format:", data);
-        toast.error("Invalid category data structure");
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      toast.error("Error fetching categories...");
-    } finally {
-      setLoadingCategories(false);
+    const response = await axiosInstance.get<{ result: Category[], message: string, meta: any }>(`${baseURL}/category`, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),
+      },
+    });
+    
+
+    console.log("Response from /category API:", response);
+
+    if (response.data.result) {
+      setCategories(response.data.result);
     }
-  };
-  
-  
-  
+     else {
+      console.error("Unexpected category response format:", response);
+      toast.error("Invalid category data structure");
+    }
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    toast.error("Error fetching categories...");
+  } finally {
+    setLoadingCategories(false);
+  }
+};
+
   
   
   useEffect(() => {

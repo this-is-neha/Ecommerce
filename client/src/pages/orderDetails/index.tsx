@@ -51,7 +51,7 @@ const OrderDetail = () => {
 
         // Depending on your axios config, data might be wrapped in 'result'
         // Check and use accordingly
-        const product = response.data?.result || null;
+        const product = response.data?.result || response.data.result || null;
 
         if (!product) {
           console.error("No product data in response");
