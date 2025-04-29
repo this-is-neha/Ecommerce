@@ -10,6 +10,7 @@ const OrderListing = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -18,12 +19,14 @@ const OrderListing = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-
+  
       console.log("Full Response:", response);
-      // Assuming response.data contains the orders
-      const ordersData = response; // Access the correct data from response
+      
+      // Access the orders array from response.data.result
+      const ordersData = response.data?.result || [];  // Ensure it's correctly structured
       console.log("Orders Data:", ordersData);
-
+  
+      // Set the orders state with the extracted data
       setOrders(ordersData);
     } catch (error: any) {
       console.error("Error fetching orders:", error.response?.data || error);
@@ -32,7 +35,8 @@ const OrderListing = () => {
       setLoading(false);
     }
   };
-
+  
+  
   const deleteOrder = async (orderId: string) => {
     try {
       const confirmation = window.confirm("Are you sure you want to delete this order?");
