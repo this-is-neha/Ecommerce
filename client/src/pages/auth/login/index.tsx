@@ -263,14 +263,13 @@ const LoginPage = () => {
       const refreshToken = response.data.result.token.refreshToken;
       const user = response.data.result.detail;
 
-      // Save tokens to localStorage
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      // Update Redux
+     
       dispatch(setAuth({ accessToken, user }));
 
-      // Update AuthContext
+      
       if (auth?.setLoggedInUser) {
         auth.setLoggedInUser(user);
       }

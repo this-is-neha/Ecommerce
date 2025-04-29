@@ -1,11 +1,180 @@
+// import { useEffect, useState } from "react";
+// import { toast } from "react-toastify";
+// import axiosInstance from "../../config/axios.config";
+// import { NavLink } from "react-router-dom";
+// import "./landing.page.css";
+// import { HomeBannerComponent } from "../../components/banner";
+
+// const baseURL = import.meta.env.VITE_API_BASE_URL;
+// interface Category {
+//   section: string;
+//   _id: string;
+//   title: string;
+//   image: string;
+// }
+
+// interface Brand {
+//   _id: string;
+//   title: string;
+//   image: string; 
+// }
+
+// const LandingPage = () => {
+//   const [brands, setBrands] = useState<Brand[]>([]);
+//   const [loadingBrands, setLoadingBrands] = useState(false);
+//   const [showBrands, setShowBrands] = useState(false);
+//   const [categories, setCategories] = useState<Category[]>([]);
+//   const [loadingCategories, setLoadingCategories] = useState(true);
+
+//   const baseUrl = `${baseURL}/public/uploads/category/`;
+//   const baseUrll = `${baseURL}/public/uploads/brands/`;
+//   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
+
+//   const fetchCategories = async () => {
+//     try {
+//       setLoadingCategories(true);
+//       const response = await axiosInstance.get(`${baseURL}/category`, {
+//         headers: {
+//           Authorization: "Bearer " + localStorage.getItem("accessToken"),
+//         },
+//       });
+//       const filteredCategories = response.data.result.filter(
+//         (category: Category) => !excludedCategoryIds.includes(category._id)
+//       );
+//       setCategories(filteredCategories);
+//     } catch (error) {
+//       console.error("Error fetching categories:", error);
+//       toast.error("Error fetching categories...");
+//     } finally {
+//       setLoadingCategories(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchCategories();
+//   }, []);
+
+//   const fetchBrands = async () => {
+//     try {
+//       setLoadingBrands(true);
+//       const response = await axiosInstance.get(`${baseURL}/brand`, {
+//         headers: {
+//           Authorization: "Bearer " + localStorage.getItem("accessToken"),
+//         },
+//       });
+      
+    
+//       const filteredBrands = response.data.result.filter(
+//         (brand: Brand) => brand.title.toLowerCase() !== "parade"
+//       );
+      
+//       setBrands(filteredBrands);
+//       setShowBrands(true);
+//     } catch (error) {
+//       console.error("Error fetching brands:", error);
+//       toast.error("Error fetching brands...");
+//     } finally {
+//       setLoadingBrands(false);
+//     }
+//   };
+  
+//   return (
+//     <>
+//       <HomeBannerComponent />
+
+//       {/* Brands Section */}
+//       <div className="bg-lime-50 my-10">
+//         <button
+//           onClick={fetchBrands}
+//           className="bg-blue-500 text-white py-2 px-4 rounded"
+//           disabled={loadingBrands}
+//         >
+//           {loadingBrands ? "Loading..." : "Brand Choice"}
+//         </button>
+
+//         {showBrands && (
+//           <div className="mt-4 relative">
+//             <button
+//               onClick={() => setShowBrands(false)}
+//               className="absolute top-0 right-0 p-2 text-red-500"
+//             >
+//               &times;
+//             </button>
+//             <h2 className="text-lg font-semibold">Available Brands</h2>
+
+//             <ul className="grid grid-cols-2 md:grid-cols-4 gap-5">
+//   {brands.length > 0 ? (
+//     brands.map((brand) => (
+//       <li key={brand._id} className="flex flex-col items-center">
+// <div className="w-[400px] h-auto border-2 border-black p-2">
+//           <NavLink to={`/brand/${brand._id}`}>
+//             <img
+//               src={`${baseUrll}${brand.image}`}
+//               alt={brand.title}
+//                className="w-full h-auto object-cover"
+//             />
+//           </NavLink>
+//         </div>
+//         <p className="text-center font-bold text-xl mt-2">
+//           {brand.title}
+//         </p>
+//       </li>
+//     ))
+//   ) : (
+//     <p>No brands available</p>
+//   )}
+// </ul>
+
+
+//           </div>
+//         )}
+//       </div>
+
+//       {/* Categories Section */}
+//       <div className="bg-lime-50 my-10">
+//         {loadingCategories ? (
+//           <p>Loading categories...</p>
+//         ) : (
+//           <ul className="grid grid-cols-2 md:grid-cols-4 gap-5">
+//             {categories.length > 0 ? (
+//               categories.map((category) => (
+//                 <li key={category._id} className="flex flex-col items-center">
+//                   <div className="w-[400px] h-auto border-2 border-black p-2">
+//                     <NavLink to={`/category/${category._id}`}>
+//                       <img
+//                         src={`${baseUrl}${category.image}`}
+//                         alt={category.title}
+//                         className="w-full h-auto object-cover"
+//                       />
+//                     </NavLink>
+//                   </div>
+//                   <p className="text-center font-bold text-xl mt-2">
+//                     {category.title}
+//                   </p>
+//                 </li>
+//               ))
+//             ) : (
+//               <p>No categories available</p>
+//             )}
+//           </ul>
+//         )}
+//       </div>
+//     </>
+//   );
+// };
+
+// export default LandingPage;
+
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import axiosInstance from "../../config/axios.config";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 interface Category {
   section: string;
   _id: string;
@@ -16,7 +185,7 @@ interface Category {
 interface Brand {
   _id: string;
   title: string;
-  image: string; 
+  image: string;
 }
 
 const LandingPage = () => {
@@ -25,6 +194,8 @@ const LandingPage = () => {
   const [showBrands, setShowBrands] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
+
+  const accessToken = useSelector((state: any) => state.auth.accessToken); // Access token from Redux state
 
   const baseUrl = `${baseURL}/public/uploads/category/`;
   const baseUrll = `${baseURL}/public/uploads/brands/`;
@@ -35,7 +206,7 @@ const LandingPage = () => {
       setLoadingCategories(true);
       const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`, // Use token from Redux
         },
       });
       const filteredCategories = response.data.result.filter(
@@ -51,23 +222,22 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    if (accessToken) {
+      fetchCategories(); // Fetch categories when token is available
+    }
+  }, [accessToken]);
 
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
       const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          Authorization: `Bearer ${accessToken}`, // Use token from Redux
         },
       });
-      
-    
       const filteredBrands = response.data.result.filter(
         (brand: Brand) => brand.title.toLowerCase() !== "parade"
       );
-      
       setBrands(filteredBrands);
       setShowBrands(true);
     } catch (error) {
@@ -77,7 +247,7 @@ const LandingPage = () => {
       setLoadingBrands(false);
     }
   };
-  
+
   return (
     <>
       <HomeBannerComponent />
@@ -103,29 +273,25 @@ const LandingPage = () => {
             <h2 className="text-lg font-semibold">Available Brands</h2>
 
             <ul className="grid grid-cols-2 md:grid-cols-4 gap-5">
-  {brands.length > 0 ? (
-    brands.map((brand) => (
-      <li key={brand._id} className="flex flex-col items-center">
-<div className="w-[400px] h-auto border-2 border-black p-2">
-          <NavLink to={`/brand/${brand._id}`}>
-            <img
-              src={`${baseUrll}${brand.image}`}
-              alt={brand.title}
-               className="w-full h-auto object-cover"
-            />
-          </NavLink>
-        </div>
-        <p className="text-center font-bold text-xl mt-2">
-          {brand.title}
-        </p>
-      </li>
-    ))
-  ) : (
-    <p>No brands available</p>
-  )}
-</ul>
-
-
+              {brands.length > 0 ? (
+                brands.map((brand) => (
+                  <li key={brand._id} className="flex flex-col items-center">
+                    <div className="w-[400px] h-auto border-2 border-black p-2">
+                      <NavLink to={`/brand/${brand._id}`}>
+                        <img
+                          src={`${baseUrll}${brand.image}`}
+                          alt={brand.title}
+                          className="w-full h-auto object-cover"
+                        />
+                      </NavLink>
+                    </div>
+                    <p className="text-center font-bold text-xl mt-2">{brand.title}</p>
+                  </li>
+                ))
+              ) : (
+                <p>No brands available</p>
+              )}
+            </ul>
           </div>
         )}
       </div>
@@ -148,9 +314,7 @@ const LandingPage = () => {
                       />
                     </NavLink>
                   </div>
-                  <p className="text-center font-bold text-xl mt-2">
-                    {category.title}
-                  </p>
+                  <p className="text-center font-bold text-xl mt-2">{category.title}</p>
                 </li>
               ))
             ) : (
