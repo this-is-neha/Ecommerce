@@ -107,7 +107,7 @@ const app = express();
 app.use(helmet());
 
 const corsOptions = {
-  origin: 'https://this-is-nehaa.netlify.app', // Allow only this origin
+  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'], // Allow only this origin
   methods: 'GET,POST,PUT,DELETE',
   allowedHeaders: 'Content-Type, Authorization', // Customize as needed
 };
