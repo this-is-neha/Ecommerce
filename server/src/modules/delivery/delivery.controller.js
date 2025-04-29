@@ -62,7 +62,13 @@ class OrderController {
       if (!order) {
         return res.status(404).json({ message: "Order not found" });
       }
-      res.status(200).json(order);
+      res.status(200).json({
+        data: {
+          result: order
+        },
+        message: "Order fetched successfully",
+        meta: null
+      });;
     } catch (error) {
       res.status(500).json({
         message: "Error fetching order",
@@ -73,30 +79,30 @@ class OrderController {
 
   async getOrdersByUserId(req, res) {
     try {
-      // Destructure userId from request params
+      
       const { userid } = req.params;
       console.log("Request params:", req.params);
       console.log("UserID:", userid);
   
-      // Check if the provided userId is a valid ObjectId
+      
       if (!userid || !mongoose.Types.ObjectId.isValid(userid)) {
         return res.status(400).json({ message: "Invalid user ID" });
       }
   
-      // Fetch orders by userId
-      const orders = await Order.find({ user: userid });  // Assuming `user` is the field in your schema
+      
+      const orders = await Order.find({ user: userid });  
   
       console.log("Query result:", orders);
   
-      // Check if orders exist
+
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found for this user" });
       }
   
-      // Send the orders as the response
+      
       res.status(200).json(orders);
     } catch (error) {
-      // Handle error
+      
       res.status(500).json({
         message: "Error fetching orders",
         error: error.message,

@@ -1,5 +1,3 @@
-// delivery.router
-
 const express = require('express');
 const OrderController = require('./delivery.controller');
 
