@@ -18,13 +18,15 @@ class OrderController {
         const newOrder = await OrderService.createOrder(value);
         console.log("New Order Created:", newOrder); 
 
-       
+     
         res.status(201).json({
           message: "Order placed successfully",
-          result: {
-            orderId: newOrder._id,
-            order: newOrder,
-          },
+          data:{
+            result: {
+              orderId: newOrder._id,
+              order: newOrder,
+            },
+          }
         });
         console.log("OrderId is ", newOrder._id);
     } 
