@@ -19,12 +19,12 @@ const AdminPage = () => {
           <br />
           <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
           <div className="flex flex-col gap-8">
-          <button
+          {/* <button
               onClick={() => navigate(`/admin/banner`)}
               className="bg-orange-500 hover:bg-blue-800 text-white font-bold py-4 px-8 rounded min-w-[400px]"
             >
              BANNER
-            </button>
+            </button> */}
             <button
               onClick={() => navigate(`/admin/category`)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded min-w-[400px]"

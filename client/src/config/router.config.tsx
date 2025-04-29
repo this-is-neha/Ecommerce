@@ -11,11 +11,11 @@ import RegisterPage from "../pages/auth/Register";
 import axiosInstance from "axios";
 import { AuthContext } from "../context/auth.context";
 import { LoadingComponent } from "../components/common";
-import {
-  AdminBanner,
-  AdminBannerCreate,
-  AdminBannerEdit,
-} from "../pages/banner";
+// import {
+//   AdminBanner,
+//   AdminBannerCreate,
+//   AdminBannerEdit,
+// } from "../pages/banner";
 import { AdminBrandCreate, AdminBrandEdit, AdminBrand } from "../pages/brand";
 import {
   AdminCategoryCreate,
@@ -126,7 +126,7 @@ console.log("Responsesss:", response);
                   </Suspense>
                 }
               />
-              <Route
+              {/* <Route
                 path="banner"
                 element={
                   <Suspense fallback={<LoadingComponent />}>
@@ -149,7 +149,7 @@ console.log("Responsesss:", response);
                     <AdminBannerEdit />
                   </Suspense>
                 }
-              />
+              /> */}
               <Route
                 path="brand"
                 element={

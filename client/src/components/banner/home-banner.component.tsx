@@ -1,18 +1,16 @@
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Slider from "react-slick"
-import banner1 from "../../assets/banner1.jpg"
-import banner2 from "../../assets/banner2.jpg"
-import banner3 from "../../assets/banner3.png"
+
 import banner4 from "../../assets/banner4.jpg"
 import banner5 from "../../assets/banner5.jpg"
 import banner11 from "../../assets/banner11.webp"
 import banner12 from "../../assets/banner12.webp"
 import banner13 from "../../assets/banner13.webp"
-import { useSelector } from "react-redux"
+
 import {useState,useEffect} from "react"
 import axiosInstance from "axios"
-import React from "react"
+
 const HomeBannerComponent =()=>{
  
   var settings = {
