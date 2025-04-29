@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
@@ -47,7 +47,7 @@ const AdminCategoryEdit = () => {
                 },
             });
 
-            toast.success("Banner updated successfully");
+            toast.success("Cayegory updated successfully");
             navigate("/admin/category");
         } catch (exception) {
             console.log(exception);
@@ -59,12 +59,15 @@ const AdminCategoryEdit = () => {
 
     const getCategoryById = async () => {
         try {
-            const response: any = await axiosInstance.get("/category/" + params.id, {
+            const response: any = await axiosInstance.get(`${baseURL}/category/` + params.id, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("accessToken"),
                 },
             });
 
+
+            console.log("Resposne",response);  
+            console.log("Resposne",response.result);
             setValue("title", response.result.title);
             setValue("parentId", response.result.parentId);
             setValue("status", response.result.status);

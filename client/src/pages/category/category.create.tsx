@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import axiosInstance from '../../config/axios.config';
+import axiosInstance from 'axios';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';

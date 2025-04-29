@@ -11,7 +11,7 @@ import banner12 from "../../assets/banner12.webp"
 import banner13 from "../../assets/banner13.webp"
 import { useSelector } from "react-redux"
 import {useState,useEffect} from "react"
-import axiosInstance from "../../config/axios.config"
+import axiosInstance from "axios"
 import React from "react"
 const HomeBannerComponent =()=>{
  
@@ -32,7 +32,7 @@ const HomeBannerComponent =()=>{
   const getBannerForHomePage=async()=>{
     try{
 const response:any=await axiosInstance.get("/banner/home-list")
-setData(response.result)
+setData(response.data.result)
     }
     catch(exception){
       getBannerForHomePage()

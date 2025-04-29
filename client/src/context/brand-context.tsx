@@ -1,6 +1,6 @@
 // context/BrandContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axiosInstance from '../config/axios.config';
+import axiosInstance from 'axios';
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Brand {
   _id: string;
@@ -22,7 +22,7 @@ export const BrandProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         const response = await axiosInstance.get(`${baseURL}/brand`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
         });
-        setBrands(response.data.result);
+        setBrands(response.data.data.result);
       } catch (error) {
         console.error('Error fetching brands:', error);
       }

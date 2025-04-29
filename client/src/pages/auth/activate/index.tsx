@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "axios"; 
 import { toast } from "react-toastify";
-import React from "react";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const Activate = () => {
   const { token } = useParams();

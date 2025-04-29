@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { useParams } from 'react-router-dom';
-import axiosInstance from '../../config/axios.config';
+import axiosInstance from 'axios';
 import { HeaderComponent, FooterComponent } from '../../components/common';
 
 interface Order {
@@ -49,8 +49,8 @@ const UserOrders = () => {
         console.log('Orders response:', response);
   
         // Here response is the orders array itself
-        const ordersArray = Array.isArray(response) ? response : [];
-  
+        const ordersArray = Array.isArray(response.data) ? response.data : [];
+  console.log('Orders array:', ordersArray);
         setOrders(ordersArray);
   
         const productIds = Array.from(new Set(ordersArray.map(order => order.productId)));
@@ -95,7 +95,7 @@ const UserOrders = () => {
                 },
             });
             setSelectedProductId(productId);
-            setProducts(prev => ({ ...prev, [productId]: response.data.result }));
+            setProducts(prev => ({ ...prev, [productId]: response.data.data.result }));
         } catch (err) {
             console.error('Error fetching product details:', err);
         }

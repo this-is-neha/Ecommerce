@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import * as yup from "yup";
 import React from "react";
@@ -59,9 +59,9 @@ const OrderDetail = () => {
         });
         
         console.log("Order response full:", orderResponse);
-        console.log("Order response data:", orderResponse.data);
+        console.log("Order response data:", orderResponse.data.data);
         
-        const orderData = orderResponse?.data.result ?? orderResponse;
+        const orderData = orderResponse?.data.data.result ?? orderResponse;
         
         if (!orderData || !orderData._id) {
           throw new Error("Order data is missing or invalid");
@@ -84,7 +84,7 @@ const OrderDetail = () => {
           },
         });
         
-        const productData = productResponse?.data.result ?? productResponse;
+        const productData = productResponse?.data.data.result ?? productResponse;
         
         setProductDetails(productData);
         

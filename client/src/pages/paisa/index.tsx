@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config"; 
+import axiosInstance from "axios"; 
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 
@@ -16,7 +16,7 @@ const PaymentPage = () => {
   const [productImage, setProductImage] = useState("");
   const [mobileBankDetails, setMobileBankDetails] = useState({ bank: "", accountNumber: "" });
   const baseURL = import.meta.env.VITE_API_BASE_URL;
-  // Extract order details from location.state
+
   const orderDetails = location.state?.order; // Ensure optional chaining to avoid errors
   const { order, orderId } = location.state || {};
   const [customerName, setCustomerName] = useState(orderDetails?.fullName || "");
@@ -41,7 +41,7 @@ const PaymentPage = () => {
         console.log("Full response:", response);
         
        
-        const product = response.data.result;
+        const product = response.data.data.result;
         
         if (!product) {
           throw new Error("No product found in response");

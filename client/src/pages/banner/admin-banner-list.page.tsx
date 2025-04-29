@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,15 +34,21 @@ const AdminBanner = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-
+  
       console.log(response); // Debugging the API response
-
-      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+  
+      // Assuming the response structure is { data: { result: [], meta: { total, page } } }
+      const totalPages = Math.ceil(response.data.meta.total / response.data.meta.limit);
+  
+      // Setting pagination state
       setPagination({
         totalPages: totalPages,
-        currentPage: response.meta.page,
+        currentPage: response.data.meta.page,
       });
-      dispatch(helloWorld(response.result));
+  
+      // Dispatching the banner data
+      dispatch(helloWorld(response.data.result));  // Assuming you dispatch the result of banners here
+  
     } catch (exception) {
       console.error("Error fetching banner:", exception);
       toast.error("Error fetching banner...");
@@ -50,6 +56,7 @@ const AdminBanner = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     getBannerList({ page: 1, limit: PER_PAGE_LIMIT });

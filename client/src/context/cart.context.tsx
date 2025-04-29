@@ -83,7 +83,7 @@
 
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import axiosInstance from '../config/axios.config'; // Adjust the import as necessary
+import axiosInstance from 'axios'; // Adjust the import as necessary
 import { toast } from 'react-toastify';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;

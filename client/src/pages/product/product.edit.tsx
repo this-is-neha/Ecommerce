@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -46,7 +46,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setCategories(response.data.result);
+      setCategories(response.data.data.result);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Error fetching categories...");
@@ -61,7 +61,7 @@ const AdminProductEdit = () => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      setBrands(response.data.result);
+      setBrands(response.data.data.result);
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Error fetching brands...");
@@ -76,7 +76,7 @@ const AdminProductEdit = () => {
         },
       });
 
-      const product = response.data.result;
+      const product = response.data.data.result;
 
       if (!product) {
         throw new Error("Product data is missing or not returned properly");

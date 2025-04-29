@@ -1,3 +1,4 @@
+
 import { lazy, useState, useEffect, useContext, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "../pages/landing/landing.page";
@@ -6,8 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import HomeLayout from "../pages/layouts";
 import RegisterPage from "../pages/auth/Register";
-import PermissionConfig from "./permission.config";
-import axiosInstance from "./axios.config";
+//import PermissionConfig from "./permission.config";
+import axiosInstance from "axios";
 import { AuthContext } from "../context/auth.context";
 import { LoadingComponent } from "../components/common";
 import {
@@ -69,8 +70,8 @@ const RoutingConfig = () => {
         });
 console.log("Responsesss:", response); 
         
-        if (response.data.result) {
-            const user = response.data.result;
+        if (response.data.data.result) {
+            const user = response.data.data.result;
             setLoggedInUser(user);
             console.log("User Name:", user.name);
         } else {
@@ -112,9 +113,9 @@ console.log("Responsesss:", response);
             <Route
               path="/admin"
               element={
-                <PermissionConfig allowAccess={"admin"}>
+                
                   <AdminLayout />
-                </PermissionConfig>
+             
               }
             >
               <Route

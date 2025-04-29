@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
 import React from "react";
@@ -17,53 +17,31 @@ const AdminCategoryList = () => {
     currentPage: 2,
   });
 
-  // const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axiosInstance.get(`${baseURL}/category`, {
-  //       params: {
-  //         page: page,
-  //         limit: limit,
-  //       },
-  //       headers: {
-  //         Authorization: "Bearer " + localStorage.getItem("accessToken"),
-  //       },
-  //     });
-
-  //     console.log(response);
-
-  //     const totalPages = Math.ceil(response.meta.total / response.meta.limit);
-  //     setPagination({
-  //       totalPages: totalPages,
-  //       currentPage: response.meta.page,
-  //     });
-  //     setCategories(response.result);
-  //   } catch (exception) {
-  //     console.error("Error fetching Category:", exception);
-  //     toast.error("Error fetching Category...");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  
   const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      console.log(`Fetching categorys for page ${page} with limit ${limit}`); // Log the parameters
-
+      console.log(`Fetching categories for page ${page} with limit ${limit}`); // Log the parameters
+  
       const response: any = await axiosInstance.get(`${baseURL}/category`, {
         params: { page, limit },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-
-      console.log('API Response:', response); // Log the entire response
-
-      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+  
+      // Log the full response structure to check
+      console.log('API Response:', response);
+  
+      // Assuming the response is structured as { data: { result: [], meta: { total, page } } }
+      const totalPages = Math.ceil(response.data.meta.total / limit);
       console.log(`Total Pages: ${totalPages}`); // Log total pages
-
-      setPagination({ totalPages, currentPage: response.meta.page });
-      setCategories(response.result);
-
-      console.log('Categories Data:', response.result); 
+  
+      setPagination({
+        totalPages: totalPages,
+        currentPage: response.data.meta.page,
+      });
+      setCategories(response.data.data.result);
+  
+      console.log('Categories Data:', response.data.result); 
     } catch (exception) {
       console.error("Error fetching categories:", exception);
       toast.error("Error fetching categories...");
@@ -71,7 +49,7 @@ const AdminCategoryList = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     getCategoryList({ page: 1, limit: PER_PAGE_LIMIT });
   }, []);

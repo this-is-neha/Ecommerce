@@ -3,7 +3,7 @@
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
  // Adjust the import based on your setup
-import axiosInstance from "../config/axios.config";
+import axiosInstance from "axios";
 const baseURL = import.meta.env.VITE_API_BASE_URL; // Adjust the import based on your setup
 interface User {
   _id: string;
@@ -29,7 +29,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const response = await axiosInstance.get(`${baseURL}/auth/me`, {
          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
        });
-       setLoggedInUser(response.data.result);
+       console.log("Response:", response);
+       setLoggedInUser(response.data.data.result);
     } catch (error) {
       console.error("Error fetching logged-in user:", error);
     }

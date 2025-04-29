@@ -1,7 +1,7 @@
 import { Key, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
 
@@ -29,43 +29,47 @@ const AdminProductList = () => {
   const [isBrandFetched, setIsBrandFetched] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
     const [sortOption, setSortOption] = useState("default");
-  const getProductList = async ({
-    page = 1,
-    limit = PER_PAGE_LIMIT,
-    brandId,
-    sort = sortOption,
-  }: GetProductListParams) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get(`${baseURL}/product`, {
-        params: { page, limit, brandId, sort },
-        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") }
-      });
-      console.log("API response:", response);  
-      console.log("API response data:", response.data.result); 
-      if (response.data && Array.isArray(response.data.result)) {
-        const { meta = {}, result = [] } = response.data;
-        const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
-        setPagination({ totalPages, currentPage: meta.page || 1 });
+    const getProductList = async ({
+      page = 1,
+      limit = PER_PAGE_LIMIT,
+      brandId,
+      sort = sortOption,
+    }: GetProductListParams) => {
+      try {
+        setLoading(true);
+    
+        const response = await axiosInstance.get(`${baseURL}/product`, {
+          params: { page, limit, brandId, sort },
+          headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+        });
+    
+        console.log("API response:", response);
+    
+        const data = response.data?.data;
+        const result = Array.isArray(data?.result) ? data.result : [];
+    
+        const total = data?.meta?.total ?? 0;
+        const itemsPerPage = data?.meta?.limit ?? PER_PAGE_LIMIT;
+        const currentPage = data?.meta?.page ?? 1;
+        const totalPages = Math.ceil(total / itemsPerPage);
+    
         setProducts(result);
-      } else {
-        console.error('Invalid response structure:', response.data);
-        toast.error("Failed to fetch products");
+        setPagination({ totalPages, currentPage });
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        toast.error("Error fetching products...");
+      } finally {
+        setLoading(false);
       }
-    } catch (exception) {
-      console.error("Error fetching products:", exception);
-      toast.error("Error fetching products...");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    
   const fetchCategories = async () => {
     if (isCategoryFetched) return;
     try {
       const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-      setCategories(response.data);
+      setCategories(response.data.data);
       setIsCategoryFetched(true);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -79,7 +83,7 @@ const AdminProductList = () => {
       const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-      setBrands(response.data.result);
+      setBrands(response.data.data.result);
       setIsBrandFetched(true);
     } catch (error) {
       console.error("Error fetching brands:", error);

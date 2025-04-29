@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom'; // Import useParams
 import * as yup from 'yup';
-import axiosInstance from '../../config/axios.config';
+import axiosInstance from 'axios';
 import React from 'react';
 const baseURLL = import.meta.env.VITE_API_BASE_URL;
 const schema = yup.object().shape({

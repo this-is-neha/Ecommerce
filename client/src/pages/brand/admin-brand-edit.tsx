@@ -1,13 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInputField, SelectOptionComponent, CheckboxField } from "../../components/common/form";
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
-import React from "react";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminBrandEdit = () => {
   const [loading, setLoading] = useState(true);
@@ -68,11 +68,11 @@ const AdminBrandEdit = () => {
         },
       });
 
-      setValue("title", response.result.title);
-      setValue("status", response.result.status);
-      setValue("homeSection", response.result.homeSection);
+      setValue("title", response.data.result.title);
+      setValue("status", response.data.result.status);
+      setValue("homeSection", response.data.result.homeSection);
 
-      setDetail(response.result);
+      setDetail(response.data.result);
     } catch (exception) {
       toast.error("Brand fetch error");
       navigate('/admin/brand');

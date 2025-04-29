@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
 import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
-export const PER_PAGE_LIMIT = 17;
+export const PER_PAGE_LIMIT = 18;
 
 const AdminBrand = () => {
   const [loading, setLoading] = useState(true);
@@ -21,21 +21,25 @@ const AdminBrand = () => {
     try {
       setLoading(true);
       console.log(`Fetching brands for page ${page} with limit ${limit}`); // Log the parameters
-
+  
       const response: any = await axiosInstance.get(`${baseURL}/brand`, {
         params: { page, limit },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-
+  
       console.log('API Response:', response); // Log the entire response
-
-      const totalPages = Math.ceil(response.meta.total / response.meta.limit);
+      console.log('Brands Data:', response.data.data.result); 
+  
+      // Ensure `meta` exists before accessing `total`
+      const totalPages = response.data.meta ? Math.ceil(response.data.meta.total / response.data.meta.limit) : 0;
       console.log(`Total Pages: ${totalPages}`); // Log total pages
-
-      setPagination({ totalPages, currentPage: response.meta.page });
-      setBrands(response.result);
-
-      console.log('Brands Data:', response.result); 
+  
+      setPagination({
+        totalPages,
+        currentPage: response.data.meta ? response.data.meta.page : 1, // Default to 1 if meta is missing
+      });
+      setBrands(response.data.data.result);
+  
     } catch (exception) {
       console.error("Error fetching brands:", exception);
       toast.error("Error fetching brands...");
@@ -43,6 +47,7 @@ const AdminBrand = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     getBrandList({ page: pagination.currentPage, limit: PER_PAGE_LIMIT });

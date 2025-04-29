@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../../context/cart.context';
 import { toast } from 'react-toastify';
-import axiosInstance from '../../../config/axios.config';
+import axiosInstance from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FooterComponent, HeaderComponent } from '../../../components/common';
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
@@ -24,8 +24,8 @@ const CartPage = () => {
 
       console.log("Full Responses:", response);
 
-      if (response.data.result) {
-        const user = response.data.result;
+      if (response.data.data.result) {
+        const user = response.data.data.result;
         setUserId(user._id);
       } else {
         console.error("No user data found in response:", response.data);
@@ -55,9 +55,9 @@ const CartPage = () => {
         });
 
         console.log("Cart Items Response:", response);
-        console.log("Cart Items:", response.data.products);
+        console.log("Cart Items:", response.data.data.products);
 
-        const products = response.data?.products;
+        const products = response.data?.data.products;
 
         if (!Array.isArray(products)) {
           console.error('Invalid response structure:', response);
@@ -70,13 +70,13 @@ const CartPage = () => {
               headers: { Authorization: `Bearer ${token}` },
             });
             console.log("Fetched Product Response:", productResponse);
-            console.log("Fetched Product Response:", productResponse.data);
+            console.log("Fetched Product Response:", productResponse.data.data);
 
-            setProductResponses(prev => [...prev, productResponse.data]);
+            setProductResponses(prev => [...prev, productResponse.data.data]);
 
             return {
               ...item,
-              ...(productResponse.data?.result || {}),
+              ...(productResponse.data?.data.result || {}),
             };
           })
         );

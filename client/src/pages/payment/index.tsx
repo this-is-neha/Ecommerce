@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
@@ -35,8 +35,7 @@ const ProductOrderPage = () => {
 
   const navigate = useNavigate();
 
-  // Fetch the logged-in user details
- // Fetch the logged-in user details
+
 const getLoggedInUser = async () => {
   try {
     const token = localStorage.getItem("accessToken");
@@ -45,7 +44,8 @@ const getLoggedInUser = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const user = response.data.result; // <-- Corrected here (response.data.result)
+    const user = response.data.data.result; 
+    console.log("User Detailssssssssssssssss:", user); // Log the user details
     setLoggedInUser(user._id);
     setValue("user", user._id); 
   } catch (error) {
@@ -68,8 +68,8 @@ useEffect(() => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Product Details:", response.data.result); // <-- Corrected here
-      setProductName(response.data.result.title);
+      console.log("Product Details:", response.data.data.result); // <-- Corrected here
+      setProductName(response.data.data.result.title);
     } catch (error: any) {
       console.error("Error fetching product details:", error.response ? error.response.data : error.message);
     }
@@ -107,10 +107,10 @@ useEffect(() => {
         },
       });
   console.log("Order Resposne:",response ); // Log the URL
-      console.log("Order API Response:", response.data.result); 
+      console.log("Order API Response:", response.data.data.result); 
   
      
-      const result = response.data.result || response.data;
+      const result = response.data.data.result || response.data.data;
       const { order, orderId } = result;
   
       if (orderId) {

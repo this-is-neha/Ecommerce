@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import React from "react";
@@ -40,9 +40,9 @@ const ProductCreate = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      console.log("Category Response:", response.data);
+      console.log("Category Response:", response.data.data);
       
-      const brs = response.data.result ?? [];
+      const brs = response.data.data.result ?? [];
       setCategories(brs);
       
       if (brs.length > 0) {
@@ -67,9 +67,9 @@ const ProductCreate = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      console.log("Brand Response:", response.data);
+      console.log("Brand Response:", response.data.data);
       
-      const brs = response.data.result ?? [];
+      const brs = response.data.data.result ?? [];
       setBrands(brs);
       
       if (brs.length > 0) {
@@ -128,7 +128,7 @@ const ProductCreate = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      return response.data?.exists !== undefined ? response.data.exists : false;
+      return response.data?.data.exists !== undefined ? response.data.data.exists : false;
     } catch (error) {
       console.error("Error checking slug:", error);
       return false;

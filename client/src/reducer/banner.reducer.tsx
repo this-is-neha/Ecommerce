@@ -1,5 +1,6 @@
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axiosInstance from "../config/axios.config"
+import axiosInstance from "axios"
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const getBannerDetail: any = createAsyncThunk(
@@ -16,7 +17,7 @@ export const getBannerDetail: any = createAsyncThunk(
             })
             console.log("Token being sent:", localStorage.getItem("accessToken"));
 
-            return response.result
+            return response.data.result
         }
         catch (exception) {
             throw exception

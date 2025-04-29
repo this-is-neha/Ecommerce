@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import * as yup from "yup";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { useParams } from "react-router-dom";
 
@@ -47,11 +47,11 @@ const OrderDetail = () => {
 
         // Log the full axios response and data
         console.log("Full response:", response);
-        console.log("Response data:", response.data);
+        console.log("Response data:", response.data.data);
 
         // Depending on your axios config, data might be wrapped in 'result'
         // Check and use accordingly
-        const product = response.data?.result || response.data.result || null;
+        const product = response.data?.data.result || response.data.data.result || null;
 
         if (!product) {
           console.error("No product data in response");

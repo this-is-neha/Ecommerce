@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import axiosInstance from "../../config/axios.config";  
+import axiosInstance from "axios";  
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/auth.context';
 import { FooterComponent, HeaderComponent } from '../../components/common';
@@ -33,8 +33,8 @@ const UserDetails = () => {
             });
     console.log("Response:", response); 
             
-            if (response.data.result) {
-                const user = response.data.result;
+            if (response.data.data.result) {
+                const user = response.data.data.result;
                 setLoggedInUser(user);
                 console.log("User Name:", user.name);
             } else {

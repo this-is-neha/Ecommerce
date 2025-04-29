@@ -5,7 +5,7 @@ import { HiChevronDown } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import MobileMenu from "./mobile-menu.component";
 import { AuthContext } from "../../../../src/context/auth.context";
-import axiosInstance from "../../../config/axios.config"; 
+import axiosInstance from "axios"; 
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
@@ -39,7 +39,8 @@ const HeaderComponent = (): ReactNode => {
         },
       });
       console.log("Routing page ", response)
-      const user = response.data;
+      const user = response.data.data.result;
+      console.log("User Namess:", user.name);
       setUserName(user._id)
    
 
@@ -72,17 +73,19 @@ const HeaderComponent = (): ReactNode => {
   try {
     setLoadingCategories(true);
   
-    const response = await axiosInstance.get<{ result: Category[], message: string, meta: any }>(`${baseURL}/category`, {
-      headers: {
+    
+    const response = await axiosInstance.get(`${baseURL}/category`, {  
+    headers: {
         Authorization: "Bearer " + localStorage.getItem("accessToken"),
       },
     });
     
 
     console.log("Response from /category API:", response);
+    console.log("Categories:", response.data.data.result); 
 
-    if (response.data.result) {
-      setCategories(response.data.result);
+    if (response.data.data.result) {
+      setCategories(response.data.data.result);
     }
      else {
       console.error("Unexpected category response format:", response);

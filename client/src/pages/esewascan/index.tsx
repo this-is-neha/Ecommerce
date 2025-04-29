@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import esewa from '../../../src/assets/esewa.jpg';
-import axiosInstance from '../../config/axios.config';
+import axiosInstance from 'axios';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -36,20 +36,20 @@ const ImageUploadPage = () => {
     try {
       const response = await axiosInstance.get(`${baseURL}/order/${orderId}`);
       console.log("order response",response) // Adjust the endpoint accordingly
-      console.log('Order details fetched successfully:', response.data);
+      console.log('Order details fetched successfully:', response.data.data);
      
-      console.log('Full Name:', response.data.result.fullName);
-      console.log('Phone Number:', response.data.result.phoneNumber);
-      console.log('Region:', response.data.result.region);
-      console.log('City:', response.data.result.city);
-      console.log('Area:', response.data.result.area);
-      console.log('Address:', response.data.result.address);
-      console.log('Delivery Label:', response.data.result.deliveryLabel);
-      console.log('Delivery Method:', response.data.result.deliveryOption);
-      console.log('Status:', response.data.result.status);
-      console.log('Created At:', new Date(response.data.result.createdAt).toLocaleDateString());
+      console.log('Full Name:', response.data.data.result.fullName);
+      console.log('Phone Number:', response.data.data.result.phoneNumber);
+      console.log('Region:', response.data.data.result.region);
+      console.log('City:', response.data.data.result.city);
+      console.log('Area:', response.data.data.result.area);
+      console.log('Address:', response.data.data.result.address);
+      console.log('Delivery Label:', response.data.data.result.deliveryLabel);
+      console.log('Delivery Method:', response.data.data.result.deliveryOption);
+      console.log('Status:', response.data.data.result.status);
+      console.log('Created At:', new Date(response.data.data.result.createdAt).toLocaleDateString());
     } catch (error: any) {
-      console.error('Error fetching order details:', error.response?.data || error.message);
+      console.error('Error fetching order details:', error.response?.data.data || error.message);
     }
   };
 
@@ -98,7 +98,7 @@ const ImageUploadPage = () => {
         },
       });
       console.log('Response:', response);
-      const imageUrl = response.data.result.imageUrl;
+      const imageUrl = response.data.data.result.imageUrl;
 
       console.log('File uploaded successfully:', response);
      
@@ -107,7 +107,7 @@ const ImageUploadPage = () => {
       setShowModal(true);
       
     } catch (error: any) {
-      console.error('Upload error:', error.response?.data || error.message);
+      console.error('Upload error:', error.response?.data.data || error.message);
       alert('Error uploading the image!');
       setShowModal(false);
     }

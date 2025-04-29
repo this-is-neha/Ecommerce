@@ -1,13 +1,18 @@
+// // const PermissionConfig=({children}:any)=>{
+// // return  children
+
+// // }
+// // export default PermissionConfig
 
 
-import  { Suspense } from 'react';
+// import React, { Suspense } from 'react';
 
-const PermissionConfig = ({ children }: any) => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      {children}
-    </Suspense>
-  );
-};
+// const PermissionConfig = ({ children }: any) => {
+//   return (
+//     <Suspense fallback={<div>Loading...</div>}>
+//       {children}
+//     </Suspense>
+//   );
+// };
 
-export default PermissionConfig;
+// export default PermissionConfig;

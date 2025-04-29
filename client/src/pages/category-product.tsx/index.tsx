@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import axiosInstance from '../../config/axios.config';
+import axiosInstance from 'axios';
 import PaginationComponent from '../../components/common/table/pagination.component';
 import { useCart } from '../../context/cart.context';
 import { PER_PAGE_LIMIT } from '../brand-product';
@@ -18,7 +18,7 @@ const CategoryProductList = () => {
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null); // Initialize state for logged-in user
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
   const baseURL = `${baseURLl}/server/public/uploads/product/`;
-  
+
   interface GetProductListParams {
     page?: number;
     limit?: number;
@@ -39,14 +39,14 @@ const CategoryProductList = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") }
       });
       console.log("API response:", response);  
-      console.log("API response data:", response.data.result); 
-      if (response.data && Array.isArray(response.data.result)) {
-        const { meta = {}, result = [] } = response.data;
+      console.log("API response data:", response.data.data.result); 
+      if (response.data && Array.isArray(response.data.data.result)) {
+        const { meta = {}, result = [] } = response.data.data;
         const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
         setPagination({ totalPages, currentPage: meta.page || 1 });
         setProducts(result);
       } else {
-        console.error('Invalid response structure:', response.data);
+        console.error('Invalid response structure:', response.data.data);
         toast.error("Failed to fetch products");
       }
     } catch (exception) {
@@ -68,8 +68,8 @@ const CategoryProductList = () => {
   
       console.log("User Details Response:", response);
   
-      if (response.data?.result) {
-        const user = response.data.result; // ✅ correct extraction
+      if (response.data?.data.result) {
+        const user = response.data.data.result; // ✅ correct extraction
         console.log("User Name by:", user.name);
         setLoggedInUser(user.name);
         setLoggedInUserId(user._id);

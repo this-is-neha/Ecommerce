@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
@@ -38,7 +38,8 @@ const LandingPage = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      const filteredCategories = response.data.result.filter(
+      console.log(response); // Log the response
+      const filteredCategories = response.data.data.result.filter(
         (category: Category) => !excludedCategoryIds.includes(category._id)
       );
       setCategories(filteredCategories);
@@ -63,8 +64,8 @@ const LandingPage = () => {
         },
       });
       
-    
-      const filteredBrands = response.data.result.filter(
+    console.log(response); // Log the response
+      const filteredBrands = response.data.data.result.filter(
         (brand: Brand) => brand.title.toLowerCase() !== "parade"
       );
       

@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { toast } from "react-toastify";
-import React from "react";
+
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const OrderListing = () => {
@@ -23,13 +23,13 @@ const OrderListing = () => {
       console.log("Full Response:", response);
       
       // Access the orders array from response.data.result
-      const ordersData = response.data?.result || [];  // Ensure it's correctly structured
+      const ordersData = response.data?.data.result || [];  // Ensure it's correctly structured
       console.log("Orders Data:", ordersData);
   
       // Set the orders state with the extracted data
       setOrders(ordersData);
     } catch (error: any) {
-      console.error("Error fetching orders:", error.response?.data || error);
+      console.error("Error fetching orders:", error.response?.data.data || error);
       toast.error("Error fetching orders...");
     } finally {
       setLoading(false);

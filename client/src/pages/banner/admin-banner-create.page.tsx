@@ -1,13 +1,13 @@
 
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
-import React from "react";
+
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminBannerCreate = () => {
@@ -51,7 +51,7 @@ const AdminBannerCreate = () => {
         } catch (error: any) {
             console.error("Error creating Banner:", error);
             toast.error(error?.message || "Error creating Banner");
-            if (error.response && error.response.data) {
+            if (error.response && error.response.data.data) {
                 console.log("Server response:", error.response.data);
             }
         } finally {

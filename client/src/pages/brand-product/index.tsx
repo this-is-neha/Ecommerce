@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axiosInstance from "../../config/axios.config";
+import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
-import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
 
 export const PER_PAGE_LIMIT = 22;
@@ -43,14 +42,14 @@ const BrandProductList = () => {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") }
       });
       console.log("API response:", response);  
-      console.log("API response data:", response.data.result); 
-      if (response.data && Array.isArray(response.data.result)) {
-        const { meta = {}, result = [] } = response.data;
+      console.log("API response data:", response.data.data.result); 
+      if (response.data.data && Array.isArray(response.data.data.result)) {
+        const { meta = {}, result = [] } = response.data.data;
         const totalPages = Math.ceil((meta.total || 0) / (meta.limit || 1));
         setPagination({ totalPages, currentPage: meta.page || 1 });
         setProducts(result);
       } else {
-        console.error('Invalid response structure:', response.data);
+        console.error('Invalid response structure:', response.data.data);
         toast.error("Failed to fetch products");
       }
     } catch (exception) {
@@ -78,10 +77,10 @@ const BrandProductList = () => {
         },
       });
   
-      console.log("User Details Response:", response);
-  
-      if (response.data?.result) {
-        const user = response.data.result; // ✅ correct extraction
+      console.log("User Details Responsessss:", response);
+  console.log("User name ", response.data.data.result.name); // Log the user name
+      if (response.data?.data.result) {
+        const user = response.data.data.result; 
         console.log("User Name by:", user.name);
         setLoggedInUser(user.name);
         setLoggedInUserId(user._id);
