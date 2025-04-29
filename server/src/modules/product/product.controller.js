@@ -27,6 +27,70 @@ class ProductController {
     
 
 
+    // index = async (req, res, next) => {
+    //     try {
+    //         const page = +req.query.page || 1;
+    //         const limit = +req.query.limit || 15;
+    //         const skip = (page - 1) * limit;
+    
+    //         let filter = {};
+    
+    //         if (req.query.search) {
+    //             filter.title = new RegExp(req.query.search, 'i');
+    //         }
+    
+    //         if (req.query.categoryId) {
+    //             filter.categoryId = req.query.categoryId;
+    //         }
+    
+    //         if (req.query.brandId) {
+    //             filter.brandId = req.query.brandId;
+    //         }
+    
+    //         // Determine sort order
+    //         let sort = {};
+    //         if (req.query.sort === "priceAsc") {
+    //             sort.price = 1; // Ascending
+    //         } else if (req.query.sort === "priceDesc") {
+    //             sort.price = -1; // Descending
+    //         }
+    
+            
+    //         const data = await productSvc.listAll({ limit, skip, filter, sort });
+    //         console.log('Fetched data:', data); // This logs the fetched products data
+            
+    //         const countData = await productSvc.count({ filter });
+    //         console.log('Count data:', countData); // This logs the count of products
+            
+    //         // res.json({
+    //         //   result: data, // This will be the array of product data from listAll()
+    //         //   message: "Product list", // A simple message
+    //         //   meta: {
+    //         //     limit, // Limit for pagination
+    //         //     page, // Current page
+    //         //     total: countData, // Total count of products
+    //         //   },
+    //         // });
+    //            res.json({
+    //         data: {
+    //             result: data, // Array of products
+    //             message: "Product list", // Message
+    //             meta: {
+    //                 limit, // Limit for pagination
+    //                 page, // Current page
+    //                 total: countData, // Total count of products
+    //             }
+    //         }
+    //     });
+    //     } catch (exception) {
+    //         console.error("Error fetching product list:", exception);
+    //         return res.status(500).json({ 
+    //             error: "Failed to fetch products", 
+    //             details: exception.message 
+    //         });
+    //     }
+    // };
+    
     index = async (req, res, next) => {
         try {
             const page = +req.query.page || 1;
@@ -55,42 +119,32 @@ class ProductController {
                 sort.price = -1; // Descending
             }
     
-            // const data = await productSvc.listAll({ limit, skip, filter, sort });
-            // const countData = await productSvc.count({ filter });
-    
-            // res.json({
-            //     result: data,
-            //     message: "Product list",
-            //     meta: {
-            //         limit,
-            //         page,
-            //         total: countData,
-            //     },
-            // });
             const data = await productSvc.listAll({ limit, skip, filter, sort });
             console.log('Fetched data:', data); // This logs the fetched products data
             
             const countData = await productSvc.count({ filter });
             console.log('Count data:', countData); // This logs the count of products
             
+            // Wrap the result in a `data` object
             res.json({
-              result: data, // This will be the array of product data from listAll()
-              message: "Product list", // A simple message
-              meta: {
-                limit, // Limit for pagination
-                page, // Current page
-                total: countData, // Total count of products
-              },
+                data: {
+                    result: data, // Array of products
+                    message: "Product list", // Message
+                    meta: {
+                        limit, // Limit for pagination
+                        page, // Current page
+                        total: countData, // Total count of products
+                    }
+                }
             });
         } catch (exception) {
             console.error("Error fetching product list:", exception);
-            return res.status(500).json({ 
-                error: "Failed to fetch products", 
-                details: exception.message 
+            return res.status(500).json({
+                error: "Failed to fetch products",
+                details: exception.message
             });
         }
     };
-    
     
 
 
