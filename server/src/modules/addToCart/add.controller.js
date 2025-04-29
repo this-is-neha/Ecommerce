@@ -36,26 +36,62 @@ class CartController{
 };
 
 // Function to get all items in the cart
+// getCartItems = async (req, res) => {
+//     const { userId } = req.params;
+
+//     if (!userId || userId === 'null') { // Check for null or 'null'
+//         return res.status(400).json({ message: 'Valid user ID is required.' });
+//     }
+
+//     try {
+//         // Find the cart for the user
+//         const cart = await Cart.findOne({ userId });
+
+//         if (!cart) {
+//             return res.status(404).json({ message: 'Cart not found.' });
+//         }
+
+//         // Return the products in the cart
+//         return res.status(200).json({ message: 'Cart retrieved successfully!', products: cart.products });
+//     } catch (error) {
+//         console.error('Error retrieving cart items:', error);
+//         return res.status(500).json({ message: 'Internal server error.' });
+//     }
+// };
 getCartItems = async (req, res) => {
     const { userId } = req.params;
 
-    if (!userId || userId === 'null') { // Check for null or 'null'
-        return res.status(400).json({ message: 'Valid user ID is required.' });
+    if (!userId || userId === 'null') {
+        return res.status(400).json({ 
+            data: null,
+            message: 'Valid user ID is required.',
+            meta: null
+        });
     }
 
     try {
-        // Find the cart for the user
         const cart = await Cart.findOne({ userId });
 
         if (!cart) {
-            return res.status(404).json({ message: 'Cart not found.' });
+            return res.status(404).json({ 
+                data: null,
+                message: 'Cart not found.',
+                meta: null
+            });
         }
 
-        // Return the products in the cart
-        return res.status(200).json({ message: 'Cart retrieved successfully!', products: cart.products });
+        return res.status(200).json({ 
+            data: { products: cart.products }, // 👈 WRAP inside "data"
+            message: 'Cart retrieved successfully!',
+            meta: null
+        });
     } catch (error) {
         console.error('Error retrieving cart items:', error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({ 
+            data: null,
+            message: 'Internal server error.',
+            meta: null
+        });
     }
 };
 
