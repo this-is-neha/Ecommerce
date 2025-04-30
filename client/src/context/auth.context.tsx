@@ -2,9 +2,9 @@
 
 
 import React, { createContext, useState, useEffect, ReactNode } from "react";
- // Adjust the import based on your setup
+
 import axiosInstance from "axios";
-const baseURL = import.meta.env.VITE_API_BASE_URL; // Adjust the import based on your setup
+const baseURL = import.meta.env.VITE_API_BASE_URL; 
 interface User {
   _id: string;
   name: string;
