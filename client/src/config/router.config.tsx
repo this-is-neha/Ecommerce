@@ -7,15 +7,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import HomeLayout from "../pages/layouts";
 import RegisterPage from "../pages/auth/Register";
-//import PermissionConfig from "./permission.config";
+
 import axiosInstance from "axios";
 import { AuthContext } from "../context/auth.context";
 import { LoadingComponent } from "../components/common";
-// import {
-//   AdminBanner,
-//   AdminBannerCreate,
-//   AdminBannerEdit,
-// } from "../pages/banner";
+
 import { AdminBrandCreate, AdminBrandEdit, AdminBrand } from "../pages/brand";
 import {
   AdminCategoryCreate,
@@ -87,7 +83,7 @@ console.log("Responsesss:", response);
 };
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken") || null;
+    const token = localStorage.getItem("accessToken") 
     if (token) {
       getLoggedInUser();
     } else {
@@ -126,30 +122,7 @@ console.log("Responsesss:", response);
                   </Suspense>
                 }
               />
-              {/* <Route
-                path="banner"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <AdminBanner />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="banner/create"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <AdminBannerCreate />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="banner/:id"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <AdminBannerEdit />
-                  </Suspense>
-                }
-              /> */}
+             
               <Route
                 path="brand"
                 element={

@@ -90,7 +90,7 @@ const RootElement = ReactDOM.createRoot(htmlRoot);
 
 RootElement.render(
   <React.StrictMode>
-    <StartupCleanup /> {/* ✅ Run cleanup on startup */}
+    <StartupCleanup />
     <BrandProvider>
       <CartProvider>
         <BrowserRouter>
