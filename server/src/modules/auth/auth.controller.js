@@ -287,34 +287,67 @@ class AuthController {
 
    
 
+    // getLoggedIn = async (req, res, next) => {
+    //     try {
+    //         console.log("Inside getLoggedIn, Auth User:", req.authUser); // Debugging line
+            
+    //         if (!req.authUser) {
+    //             return res.status(401).json({ message: "User not authenticated" });
+    //         }
+    
+    //         const loggedInUser = req.authUser;
+    //         const response = {
+    //             _id: loggedInUser._id,
+    //             name: loggedInUser.name,
+    //             email: loggedInUser.email,
+    //             role: loggedInUser.role,
+    //             status: loggedInUser.status,
+    //             image: loggedInUser?.image,
+    //         };
+    
+    //         // Send the response with 'data' wrapping 'result'
+    //         res.json({
+    //             data: {
+    //                 result: response
+    //             },
+    //             message: "Your Profile",
+    //             meta: null,
+    //         });
+    //     } catch (exception) {
+    //         console.error("Error in getLoggedIn:", exception); // Debugging line
+    //         next(exception);
+    //     }
+    // };
+    
+
     getLoggedIn = async (req, res, next) => {
         try {
-            console.log("Inside getLoggedIn, Auth User:", req.authUser); // Debugging line
-            
-            if (!req.authUser) {
-                return res.status(401).json({ message: "User not authenticated" });
-            }
-    
             const loggedInUser = req.authUser;
+           
+            const user = await authSvc.findOneUser({ _id: loggedInUser._id });
             const response = {
-                _id: loggedInUser._id,
-                name: loggedInUser.name,
-                email: loggedInUser.email,
-                role: loggedInUser.role,
-                status: loggedInUser.status,
-                image: loggedInUser?.image,
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+                image: user.image,
+                address: user.address,
+                phone: user.phone,
+                gender: user.gender,
+                houseNo: user.houseNo,
+                toleName: user.toleName,
+                occupation: user.occupation,
+                birthdate: user.birthdate
             };
-    
-            // Send the response with 'data' wrapping 'result'
+            console.log(response)
             res.json({
-                data: {
-                    result: response
-                },
+                result: response,
                 message: "Your Profile",
-                meta: null,
+                meta: null
             });
-        } catch (exception) {
-            console.error("Error in getLoggedIn:", exception); // Debugging line
+        }
+        catch (exception) {
             next(exception);
         }
     };
