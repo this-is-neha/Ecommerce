@@ -58,12 +58,12 @@ const LandingPage = () => {
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axios.get(` https://ecommerce-jut4.onrender.com/brand `, {
+      const response = await axios.get(`${baseURL}/brand`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      https://ecommerce-jut4.onrender.com/brand 
+    
       
     console.log(response); // Log the response
       const filteredBrands = response.data.data.result.filter(
