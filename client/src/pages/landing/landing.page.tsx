@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axiosInstance from "axios";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
@@ -33,7 +33,7 @@ const LandingPage = () => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axiosInstance.get(`${baseURL}/category`, {
+      const response = await axios.get(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -58,7 +58,7 @@ const LandingPage = () => {
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axiosInstance.get(`${baseURL}/brand`, {
+      const response = await axios.get(`${baseURL}/brand`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },

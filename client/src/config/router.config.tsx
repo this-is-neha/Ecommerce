@@ -8,7 +8,7 @@ import "react-toastify/ReactToastify.css";
 import HomeLayout from "../pages/layouts";
 import RegisterPage from "../pages/auth/Register";
 
-import axiosInstance from "axios";
+import axios from "axios";
 import { AuthContext } from "../context/auth.context";
 import { LoadingComponent } from "../components/common";
 
@@ -59,7 +59,7 @@ const RoutingConfig = () => {
   const getLoggedInUser = async () => {
     try {
         const token = localStorage.getItem("accessToken") || null;
-        const response = await axiosInstance.get(`${baseURLl}/auth/me`, {
+        const response = await axios.get(`${baseURLl}/auth/me`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
             },

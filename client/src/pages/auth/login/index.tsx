@@ -2,7 +2,7 @@ import  { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { TextInputField } from "../../../components/common/form";
-import axiosInstance from "axios";
+import axios from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -35,7 +35,7 @@ const LoginPage = () => {
         return;
       }
 
-      await axiosInstance.post(`${baseURL}/auth/reset`, { email }, {
+      await axios.post(`${baseURL}/auth/reset`, { email }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       });
 
@@ -51,7 +51,7 @@ const LoginPage = () => {
 
   const submitForm = async (data: any) => {
     try {
-      const response = await axiosInstance.post(`${baseURL}/auth/login`, data);
+      const response = await axios.post(`${baseURL}/auth/login`, data);
 
       localStorage.setItem("accessToken", response.data.result.token.accessToken);
       localStorage.setItem("refreshToken", response.data.result.token.refreshToken);
