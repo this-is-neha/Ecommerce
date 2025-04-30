@@ -4,7 +4,7 @@ import { Popover, PopoverButton, PopoverGroup, PopoverPanel, Transition } from '
 import { HiChevronDown } from "react-icons/hi2";
 import { NavLink } from "react-router-dom";
 import MobileMenu from "./mobile-menu.component";
-import  AuthContext  from "../../../../src/context/auth.context";
+import { AuthContext } from "../../../../src/context/auth.context";
 import axiosInstance from "axios"; 
 import { toast } from "react-toastify";
 
@@ -33,6 +33,7 @@ const HeaderComponent = (): ReactNode => {
   const getLoggedInUser = async () => {
     try {
       const token = localStorage.getItem("accessToken") || null
+      console.log("Neha")
       const response = await axiosInstance.get(`${baseURL}/auth/me`, {
         headers: {
           "Authorization": `Bearer ${token}`,

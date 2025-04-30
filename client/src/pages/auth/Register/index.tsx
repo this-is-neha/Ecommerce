@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-import AuthContext from "../../../context/auth.context";
+import {AuthContext }from "../../../context/auth.context";
 
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;

@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import AuthContext from "../../../context/auth.context";
+import {AuthContext} from "../../../context/auth.context";
 import { FooterComponent } from "../../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const LoginPage = () => {
