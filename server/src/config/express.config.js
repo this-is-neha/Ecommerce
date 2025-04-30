@@ -106,12 +106,20 @@ const app = express();
 
 app.use(helmet());
 
-const corsOptions = {
-  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'],
-  credentials: true, 
-};
+// const corsOptions = {
+//   origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'],
+//   credentials: true, 
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+
+
+app.use(
+  cors({
+    origin: "https://this-is-nehaa.netlify.app",
+    credentials: true,
+  })
+);;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
