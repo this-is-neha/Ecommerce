@@ -9,7 +9,7 @@ import HomeLayout from "../pages/layouts";
 import RegisterPage from "../pages/auth/Register";
 
 import axios from "axios";
-import { AuthContext } from "../context/auth.context";
+import  AuthContext  from "../context/auth.context";
 import { LoadingComponent } from "../components/common";
 
 import { AdminBrandCreate, AdminBrandEdit, AdminBrand } from "../pages/brand";

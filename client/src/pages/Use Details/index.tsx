@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import axiosInstance from "axios";  
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/auth.context';
+import  AuthContext  from '../../context/auth.context';
 import { FooterComponent, HeaderComponent } from '../../components/common';
 
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
