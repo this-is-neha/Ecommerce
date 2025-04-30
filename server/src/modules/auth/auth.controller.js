@@ -285,37 +285,7 @@ class AuthController {
         }
     };
 
-    // getLoggedIn = async (req, res, next) => {
-    //     try {
-    //         console.log("Inside getLoggedIn, Auth User:", req.authUser); // Debugging line
-    
-            
-    //         if (!req.authUser) {
-    //             return res.status(401).json({ message: "User not authenticated" });
-    //         }
-    
-    //         const loggedInUser = req.authUser;
-    //         const response = {
-    //             _id: loggedInUser._id,
-    //             name: loggedInUser.name,
-    //             email: loggedInUser.email,
-    //             // Avoid sending sensitive data like passwords
-    //             role: loggedInUser.role,
-    //             status: loggedInUser.status,
-    //             image: loggedInUser?.image,
-    //         };
-    
-    //         res.json({
-    //             result: response,
-    //             message: "Your Profile",
-    //             meta: null,
-    //         });
-    //     } catch (exception) {
-    //         console.error("Error in getLoggedIn:", exception); // Debugging line
-    //         next(exception);
-    //     }
-    // };
-    
+   
 
     getLoggedIn = async (req, res, next) => {
         try {
