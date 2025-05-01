@@ -74,9 +74,9 @@ router.route('/')
     brandCtrl.create
   )
   .get(
-    auth,
-    // allowRole('admin'),
-    brandCtrl.index // This will call the index method from brand.controller
+    // auth,
+  
+    brandCtrl.index 
   );
 
 router.route('/:id')

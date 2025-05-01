@@ -17,7 +17,7 @@ router.route('/')
     categoryCtrl.create
 )
 .get(
-    auth,
+    // auth,
     // allowRole("admin"),
    categoryCtrl.index
 
