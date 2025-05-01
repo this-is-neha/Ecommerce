@@ -40,17 +40,16 @@ const OrderDetail = () => {
         const token = localStorage.getItem("accessToken");
         if (!token) throw new Error("Authorization token missing");
 
-        // Fetch product details
+       
         const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // Log the full axios response and data
+        
         console.log("Full response:", response);
         console.log("Response data:", response.data.data);
 
-        // Depending on your axios config, data might be wrapped in 'result'
-        // Check and use accordingly
+        
         const product = response.data?.data.result || response.data.data.result || null;
 
         if (!product) {
@@ -58,7 +57,7 @@ const OrderDetail = () => {
           return;
         }
 
-        // Set state from product details
+      
         setProductName(product.title || "");
         setProductDescription(product.description || "");
         setProductPrice(product.price || "");

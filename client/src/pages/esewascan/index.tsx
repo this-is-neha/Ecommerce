@@ -48,7 +48,6 @@ const ImageUploadPage = () => {
       console.log('Delivery Method:', response.data.data.result.deliveryOption);
       console.log('Status:', response.data.data.result.status);
       console.log('Created At:', new Date(response.data.data.result.createdAt).toLocaleDateString());
-      console.log("Neha Shah")
     } catch (error: any) {
       console.error('Error fetching order details:', error.response?.data.data || error.message);
     }

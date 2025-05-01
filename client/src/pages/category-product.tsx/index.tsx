@@ -68,8 +68,8 @@ const CategoryProductList = () => {
   
       console.log("User Details Response:", response);
   
-      if (response.data?.data.result) {
-        const user = response.data.data.result; // ✅ correct extraction
+      if (response.data?.result) {
+        const user = response.data.result; // ✅ correct extraction
         console.log("User Name by:", user.name);
         setLoggedInUser(user.name);
         setLoggedInUserId(user._id);

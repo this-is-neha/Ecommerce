@@ -44,8 +44,8 @@ const getLoggedInUser = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    const user = response.data.data.result; 
-    console.log("User Detailssssssssssssssss:", user); // Log the user details
+    const user = response.data.result; 
+    console.log("User Detailssssssssssssssss:", response.data.result); // Log the user details
     setLoggedInUser(user._id);
     setValue("user", user._id); 
   } catch (error) {

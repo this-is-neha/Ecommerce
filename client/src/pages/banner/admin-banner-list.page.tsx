@@ -5,15 +5,15 @@
 // import PaginationComponent from "../../components/common/table/pagination.component";
 // import TableActionButton from "../../components/common/table/action-button.component";
 // import { useDispatch, useSelector } from "react-redux";
-// import { helloWorld } from "../../reducer/banner.reducer";
-// import React from "react";
+// // import { helloWorld } from "../../reducer/banner.reducer";
+
 // import { FooterComponent, HeaderComponent } from "../../components/common";
 // const baseURL = import.meta.env.VITE_API_BASE_URL;
 // export const PER_PAGE_LIMIT = 15;
 
 // const AdminBanner = () => {
 //   const [loading, setLoading] = useState(true);
-//   const dispatch = useDispatch();
+//   // const dispatch = useDispatch();
 
 //   const bannerData = useSelector((root: any) => root.banner.listAll);
 
@@ -47,7 +47,7 @@
 //       });
   
 //       // Dispatching the banner data
-//       dispatch(helloWorld(response.data.result));  // Assuming you dispatch the result of banners here
+//       // dispatch(helloWorld(response.data.result));  // Assuming you dispatch the result of banners here
   
 //     } catch (exception) {
 //       console.error("Error fetching banner:", exception);

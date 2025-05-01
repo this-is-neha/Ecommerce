@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axiosInstance from "axios";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
@@ -33,7 +33,7 @@ const LandingPage = () => {
   const fetchCategories = async () => {
     try {
       setLoadingCategories(true);
-      const response = await axios.get(`${baseURL}/category`, {
+      const response = await axiosInstance.get(`${baseURL}/category`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -43,8 +43,8 @@ const LandingPage = () => {
         (category: Category) => !excludedCategoryIds.includes(category._id)
       );
       setCategories(filteredCategories);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
+    } catch (error:any) {
+      console.error("Error fetching categories:", error.response ? error.response.data : error);
       toast.error("Error fetching categories...");
     } finally {
       setLoadingCategories(false);
@@ -58,12 +58,11 @@ const LandingPage = () => {
   const fetchBrands = async () => {
     try {
       setLoadingBrands(true);
-      const response = await axios.get(`${baseURL}/brand`, {
+      const response = await axiosInstance.get(`${baseURL}/brand`, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-    
       
     console.log(response); // Log the response
       const filteredBrands = response.data.data.result.filter(

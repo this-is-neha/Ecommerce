@@ -136,7 +136,7 @@ const OrderDetail = () => {
               </div>
             )}
 
-            {/* Optional: Display some product details if needed */}
+       
            
 
             <button

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import axiosInstance from "axios";  
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/auth.context';
+import {AuthContext}  from '../../context/auth.context';
 import { FooterComponent, HeaderComponent } from '../../components/common';
 
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
@@ -33,8 +33,8 @@ const UserDetails = () => {
             });
     console.log("Response:", response); 
             
-            if (response.data.data.result) {
-                const user = response.data.data.result;
+            if (response.data.result) {
+                const user = response.data.result;
                 setLoggedInUser(user);
                 console.log("User Name:", user.name);
             } else {

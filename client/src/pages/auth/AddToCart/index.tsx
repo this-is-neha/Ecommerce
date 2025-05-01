@@ -24,8 +24,8 @@ const CartPage = () => {
 
       console.log("Full Responses:", response);
 
-      if (response.data.data.result) {
-        const user = response.data.data.result;
+      if (response.data.result) {
+        const user = response.data.result;
         setUserId(user._id);
       } else {
         console.error("No user data found in response:", response.data);
