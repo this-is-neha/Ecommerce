@@ -26,8 +26,8 @@ const LandingPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  const baseUrl = `${baseURL}/public/uploads/category/`;
-  const baseUrll = `${baseURL}/public/uploads/brands/`;
+  const baseUrl = `${baseURL}/assets/uploads/category/`;
+  const baseUrll = `${baseURL}/assets/uploads/brands/`;
   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 
   const fetchCategories = async () => {
