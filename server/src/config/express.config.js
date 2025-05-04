@@ -112,11 +112,19 @@ const corsOptions = {
   allowedHeaders: 'Content-Type, Authorization', // Customize as needed
 };
 
+app.use('/assets', express.static('./public', {
+  setHeaders: (res, path) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://this-is-nehaa.netlify.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  }
+}));
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/assets', express.static('./public/'));
+
 
 app.get("/", (req, res) => {
   res.json({
