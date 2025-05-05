@@ -4,7 +4,7 @@ import axiosInstance from "axios";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
-
+import image from "../../../uploads/1727410909086-8MWZk8ghIa.jpg"
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string;
@@ -25,9 +25,8 @@ const LandingPage = () => {
   const [showBrands, setShowBrands] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-
-  const baseUrl = `../../../uploads/category/`;
-  const baseUrll = `../../../uploads/brands/`;
+  const baseUrl = "/uploads/category/";
+  const baseUrll = "/uploads/brands/";
   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 
   const fetchCategories = async () => {
