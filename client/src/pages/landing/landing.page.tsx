@@ -4,7 +4,7 @@ import axiosInstance from "axios";
 import { NavLink } from "react-router-dom";
 import "./landing.page.css";
 import { HomeBannerComponent } from "../../components/banner";
-import image from "../../../uploads/1727410909086-8MWZk8ghIa.jpg"
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 interface Category {
   section: string;
@@ -37,7 +37,7 @@ const LandingPage = () => {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
         },
       });
-      console.log(response); // Log the response
+      console.log(response);
       const filteredCategories = response.data.data.result.filter(
         (category: Category) => !excludedCategoryIds.includes(category._id)
       );

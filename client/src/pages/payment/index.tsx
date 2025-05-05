@@ -128,55 +128,6 @@ useEffect(() => {
       toast.error("Failed to place the order. Please try again.");
     }
   };
-  
-  // const onSubmit = async (formData: any) => {
-  //   try {
-  //     const token = localStorage.getItem("accessToken");
-  //     if (!token) {
-  //       throw new Error("Authorization token missing");
-  //     }
-  
-  //     const orderData = {
-  //       ...formData,
-  //       deliveryLabel,
-  //       deliveryOption: selectedOption,
-  //       productId,
-  //     };
-  
-  //     console.log("Submitting Order Data:", orderData);
-  
-  //     const response = await axiosInstance.post(`${baseURL}/order`, orderData, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  
-  //     console.log("Order Response:", response);
-  
-  //     // Check if the response and result are defined
-  //     if (response?.data?.result) {
-  //       const { order, orderId } = response.data.result;
-  //       if (orderId) {
-  //         console.log("Order ID:", orderId);
-  //         navigate(`/${productName}/${productId}/order/payment`, {
-  //           state: {
-  //             order,
-  //             orderId,
-  //           },
-  //         });
-  //       }
-  //     } else {
-  //       throw new Error("No result returned from order API");
-  //     }
-  
-  //   } catch (error: any) {
-  //     console.error("Error placing order:", error.response ? error.response.data : error.message);
-  //     toast.error("Failed to place the order. Please try again.");
-  //   }
-  // };
-  
-  
-
   return (
     <>
       <HeaderComponent />

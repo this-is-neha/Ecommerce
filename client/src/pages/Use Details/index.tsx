@@ -20,7 +20,7 @@ const UserDetails = () => {
     const [loading, setLoading] = useState(true);
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
-    const baseURL = `${baseURLl}/public/uploads/users/`;
+    const baseURL = "../../../uploads/users/";
 
  
     const getLoggedInUser = async () => {
