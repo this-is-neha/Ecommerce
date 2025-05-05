@@ -26,8 +26,8 @@ const LandingPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
-  const baseUrl = `${baseURL}/assets/uploads/category/`;
-  const baseUrll = `${baseURL}/assets/uploads/brands/`;
+  const baseUrl = `https://this-is-nehaa.netlify.app/uploads/category/`;
+  const baseUrll = `https://this-is-nehaa.netlify.app/uploads/brands/`;
   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 
   const fetchCategories = async () => {

@@ -10,7 +10,7 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [productResponses, setProductResponses] = useState<any[]>([]);
-  const baseURL = `${baseURLl}/public/uploads/product/`;
+  const baseURL = `https://this-is-nehaa.netlify.app/client/uploads`;
   const navigate = useNavigate();
 
   const getLoggedInUser = async () => {
