@@ -4,6 +4,7 @@ import axiosInstance from "axios";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { useParams } from "react-router-dom";
 
+const baseee="../../../uploads/product/"
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const schema = yup.object().shape({
   productId: yup.string(),
@@ -57,13 +58,14 @@ const OrderDetail = () => {
           return;
         }
 
-      
+      console.log("Product Image",product.images)
         setProductName(product.title || "");
         setProductDescription(product.description || "");
         setProductPrice(product.price || "");
-        setProductImage(product.image || "");
+        setProductImage(product.images || "");
         setProductsummary(product.summary || "");
         setProductdiscount(product.discount || "");
+
       } catch (error: any) {
         console.error(
           "Error fetching product details:",
@@ -86,7 +88,15 @@ const OrderDetail = () => {
           <h3 className="text-xl font-semibold">Product Summary: {productSummary}</h3>
           <h3 className="text-xl font-semibold">Product Price: {productPrice}</h3>
           <h3 className="text-xl font-semibold">Product Discount: {productDiscount}</h3>
-          <h3 className="text-xl font-semibold">Product Image: {productImage}</h3>
+          <div className="mt-6">
+    <h3 className="text-xl font-semibold mb-2">Product Image:</h3>
+    <img
+    
+      src={`${baseee}/${productImage}`}
+      alt={productName}
+      className="rounded-lg shadow-md w-full max-w-xs mx-auto"
+    />
+  </div>
         </div>
       </div>
       <FooterComponent />

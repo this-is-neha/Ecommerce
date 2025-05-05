@@ -30,10 +30,11 @@ const PaymentSuccessPage = () => {
     const [orderDeliveryOption, setOrderDeliveryOption] = useState<string>('');
     const [orderDeliveryLabel, setOrderDeliveryLabel] = useState<string>('');
     const [orderImage, setOrderImage] = useState<string>(''); 
-    const [uploadedImageUrl, setUploadedImageUrl] = useState<string>(''); // State for uploaded image URL
+    const [uploadedImageUrl, setUploadedImageUrl] = useState<{ orderId: string; images: string[] } | null>(null);
+    // State for uploaded image URL
     const [loading, setLoading] = useState(false);
     const [productDetails, setProductDetails] = useState<any>(null); // State for product details
-    const baseURL = `${baseURLL}/public/uploads/`;
+    const baseURL = "../../../uploads/";
     useEffect(() => {
         const fetchOrderDetails = async () => {
             if (!orderId) {
@@ -62,28 +63,28 @@ const PaymentSuccessPage = () => {
                   setOrderDeliveryOption(orderResponse.data.deliveryOption);
                   setOrderDeliveryLabel(orderResponse.data.deliveryLabel);
                   
-                  // Fetch product details based on productId
+                
                   const productResponse = await axiosInstance.get(`product/${orderResponse.data.productId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                   });
                   
                   setProductDetails(productResponse.data.result);
                   
-                  // Fetch all images
-                  const allImagesResponse = await axiosInstance.get('/confrom', {
+              
+                  const allImagesResponse = await axiosInstance.get(`${baseURLL}/confrom`, {
                     headers: { Authorization: `Bearer ${token}` },
                   });
                   console.log('All Images Response:', allImagesResponse);
                   
-                  // Fetch the specific image for this order
-                  const imageResponse = await axiosInstance.get(`/confrom/${orderId}`, {
+                  
+                  const imageResponse = await axiosInstance.get(`${baseURLL}/confrom/${orderId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                   });
                   console.log('Image Response:', imageResponse);
                   
                   // Again .data
-                  setUploadedImageUrl(imageResponse.data.images);
-                  
+                  setUploadedImageUrl(imageResponse.data);
+                  console.log("Image is ", imageResponse.data)
                 
             } catch (error: any) {
                 console.error('Error fetching order details:', error.response?.data || error.message);
@@ -102,17 +103,18 @@ const PaymentSuccessPage = () => {
             <p className="text-gray-700">Order ID: {orderId}</p>
 
 
-{uploadedImageUrl ? (
-    <div className="mt-4">
-        <h3 className="text-2xl font-bold mb-2">Uploaded Payment Image:</h3> {/* Increased text size */}
-        <img
-            src={`${baseURL}${uploadedImageUrl}`}
-            alt="Uploaded payment screenshot"
-            className="w-[1000px] h-[700px] object-cover border-2 border-gray-300 rounded-lg" // Custom size for larger image// Increased size
-        />
-    </div>
+
+{uploadedImageUrl?.images?.length ? (
+  <div className="mt-4">
+    <h3 className="text-2xl font-bold mb-2">Uploaded Payment Image:</h3> 
+    <img
+      src={`${baseURL}${uploadedImageUrl.images[0]}`}
+      alt="Uploaded payment screenshot"
+      className="w-[1000px] h-[700px] object-cover border-2 border-gray-300 rounded-lg" 
+    />
+  </div>
 ) : (
-    <p>No image uploaded.</p>
+  <p>No image uploaded.</p>
 )}
 
         </div>
