@@ -17,7 +17,7 @@ const CategoryProductList = () => {
   const { addToCart } = useCart();
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null); // Initialize state for logged-in user
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null); 
-  const baseURL = `../../../uploads/product/`;
+  const baseURL = `${baseURLl}/uploads/product/`;
 
   interface GetProductListParams {
     page?: number;

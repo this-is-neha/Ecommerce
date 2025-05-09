@@ -34,7 +34,7 @@ const UserOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const productImagesBaseURL = "../../../uploads/product";
+  const productImagesBaseURL = `${baseURLl}/uploads/product/`;
 
   useEffect(() => {
     const fetchUserOrders = async () => {

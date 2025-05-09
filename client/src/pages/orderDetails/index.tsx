@@ -4,8 +4,8 @@ import axiosInstance from "axios";
 import { HeaderComponent, FooterComponent } from "../../components/common";
 import { useParams } from "react-router-dom";
 
-const baseee="../../../uploads/product/"
 const baseURL = import.meta.env.VITE_API_BASE_URL;
+const baseee=`${baseURL}/uploads/product/`
 const schema = yup.object().shape({
   productId: yup.string(),
   fullName: yup.string().required("Full name is required"),

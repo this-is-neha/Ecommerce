@@ -34,7 +34,7 @@ const PaymentSuccessPage = () => {
     // State for uploaded image URL
     const [loading, setLoading] = useState(false);
     const [productDetails, setProductDetails] = useState<any>(null); // State for product details
-    const baseURL = "../../../uploads/";
+    const baseURL = `${baseURLL}/uploads/`;
     useEffect(() => {
         const fetchOrderDetails = async () => {
             if (!orderId) {

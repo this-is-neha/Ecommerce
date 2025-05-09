@@ -7,7 +7,7 @@ import { FooterComponent, HeaderComponent } from "../../components/common";
 
 export const PER_PAGE_LIMIT = 22;
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
-const baseURL = `../../../uploads/product/`;
+const baseURL = `${baseURLl}/uploads/product/`;
 
 interface GetProductListParams {
   page?: number;
