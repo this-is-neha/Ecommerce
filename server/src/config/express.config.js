@@ -125,12 +125,18 @@ app.use(helmet());
 
 // Static file serving for uploads
 app.use('/uploads', express.static('public/uploads', {
-  setHeaders: (res, path) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  setHeaders: (res, path, stat) => {
+    const allowedOrigins = ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'];
+    const origin = res.req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Methods', 'GET');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+    }
   }
 }));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
