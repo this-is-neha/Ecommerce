@@ -98,6 +98,9 @@
 // });
 
 // module.exports = app;
+
+
+
 const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -124,18 +127,25 @@ app.use(cors(corsOptions));
 app.use(helmet());
 
 // Static file serving for uploads
-app.use('/uploads', express.static('public/uploads', {
-  setHeaders: (res, path, stat) => {
-    const allowedOrigins = ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'];
-    const origin = res.req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader('Access-Control-Allow-Origin', origin);
-      res.setHeader('Access-Control-Allow-Methods', 'GET');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
-    }
-  }
-}));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "public/uploads"), {
+    setHeaders: (res, filePath) => {
+      const allowedOrigins = ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'];
+      const origin = res.req.headers.origin;
+
+      if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+      }
+
+      // 👇 This is critical to make images load from a different origin (fixes CORS-blocked images)
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
+  })
+);
 
 
 app.use(express.json());
