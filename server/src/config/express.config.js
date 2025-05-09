@@ -106,7 +106,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const cors = require("cors");
 const Joi = require("joi");
-
+const path = require("path")
 require("./db.config");
 const mainRouter = require("./routing.config");
 
