@@ -98,7 +98,6 @@
 // });
 
 // module.exports = app;
-
 const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -110,16 +109,21 @@ const mainRouter = require("./routing.config");
 
 const app = express();
 
-app.use(helmet());
-
+// CORS configuration
 const corsOptions = {
   origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add more methods if necessary
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // Allow credentials if needed
 };
 
-// CORS configuration for static file routes
+// Apply CORS middleware first
+app.use(cors(corsOptions));
+
+// Helmet for basic security
+app.use(helmet());
+
+// Static file serving for uploads
 app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path) => {
     res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins
@@ -127,9 +131,6 @@ app.use('/uploads', express.static('public/uploads', {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
 }));
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
