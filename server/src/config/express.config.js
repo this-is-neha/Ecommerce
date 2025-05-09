@@ -16,7 +16,7 @@ const corsOptions = {
   allowedHeaders: 'Content-Type, Authorization', 
 };
 
-app.use('/public', express.static('./public', {
+app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // Or restrict to your frontend domain
     res.setHeader('Access-Control-Allow-Methods', 'GET');
