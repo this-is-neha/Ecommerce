@@ -4,46 +4,6 @@ const Image = require('./confrom.model'); // Import the Image model
 const { saveImage } = require('./conform.service');
  const mongoose=require('mongoose')
 class ConformController {
-
-
-
-  // async uploadImage(req, res) {
-  //   try {
-  //     const { error } = imageUploadSchema.validate({
-  //       orderId: req.body.orderId,
-  //     });
-  
-  //     if (error) {
-  //       return res.status(400).json({ message: error.details[0].message });
-  //     }
-  
-  //     if (!req.file) {
-  //       return res.status(400).json({ message: 'No image file uploaded' });
-  //     }
-  
-  //     const imageUrl = `${req.file.filename}`;
-  
-  //     const newImage = new Image({
-  //       orderId: req.body.orderId,
-  //       image: req.file.filename,
-  //     });
-  
-  //     const savedImage = await newImage.save();
-  
-    
-  //     res.status(201).json({
-  //       message: 'Image uploaded successfully!',
-  //       orderId: savedImage.orderId,
-  //       imageUrl: savedImage.image,
-  //       id: savedImage._id, 
-  //     });
-  //   } catch (err) {
-  //     console.error('Error while uploading image:', err);
-  //     res.status(500).json({ message: 'Internal server error' });
-  //   }
-  // }
-  
-
   async uploadImage(req, res) {
     try {
       const { error } = imageUploadSchema.validate({

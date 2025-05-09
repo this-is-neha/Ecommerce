@@ -12,17 +12,17 @@ const app = express();
 app.use(helmet());
 
 const corsOptions = {
-  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'], // Allow only this origin
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type, Authorization', // Customize as needed
+  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'], 
+  allowedHeaders: 'Content-Type, Authorization', 
 };
 
-app.use('/assets', express.static('./public', {
+app.use('/public', express.static('./public', {
   setHeaders: (res, path) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://this-is-nehaa.netlify.app');
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Or restrict to your frontend domain
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   }
+  
 }));
 
 app.use(cors(corsOptions));
