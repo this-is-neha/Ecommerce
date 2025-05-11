@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -12,7 +13,7 @@ const app = express();
 app.use(helmet());
 
 const corsOptions = {
-  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173'], 
+  origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173','https://ecommerce-one-umber-34.vercel.app'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add more methods if necessary
   credentials: true, // Allow credentials if needed
