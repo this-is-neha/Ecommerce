@@ -20,16 +20,22 @@ const corsOptions = {
 };
 
 
+// app.use('/uploads', express.static('public/uploads', {
+//   setHeaders: (res, path) => {
+  
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+
+//     res.setHeader('Access-Control-Allow-Methods', 'GET');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//   }
+// }));
+
+
 app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path) => {
-    // res.setHeader('Access-Control-Allow-Origin', 'https://this-is-nehaa.netlify.app'); // Use the frontend URL
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   }
 }));
-
 
 app.use(cors(corsOptions));
 
