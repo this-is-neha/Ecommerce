@@ -13,10 +13,10 @@ const AdminProductEdit = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [detail, setDetail] = useState<any>({});
-  const { id } = useParams();
+  const { productId } = useParams();
   const navigate = useNavigate();
 
- 
+ console.log("Product ID from params:", productId);
   const updateSchema = Yup.object({
     title: Yup.string().min(3).required("Title is required"),
     summary: Yup.string().required("Summary is required"),
@@ -70,7 +70,7 @@ const AdminProductEdit = () => {
   const getProduct = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`${baseURL}/product/${id}`, {
+      const response = await axiosInstance.get(`${baseURL}/product/${productId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
@@ -78,6 +78,7 @@ const AdminProductEdit = () => {
 
       const product = response.data.data.result;
 
+       console.log("Fetched product data:", product);
       if (!product) {
         throw new Error("Product data is missing or not returned properly");
       }
@@ -108,13 +109,13 @@ const AdminProductEdit = () => {
     fetchCategories();
     fetchBrands();
     getProduct();
-  }, [id]);
+  }, [productId]);
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
-      setValue("images", fileArray); // ✅ Store actual File objects
+      setValue("images", fileArray);
     }
   };
   
@@ -144,14 +145,14 @@ const AdminProductEdit = () => {
         "Content-Type": "multipart/form-data",
       };
 
-      await axiosInstance.put(`${baseURL}/product/${id}`, formData, { headers });
+      await axiosInstance.put(`${baseURL}/product/${productId}`, formData, { headers });
       toast.success("Product updated successfully");
       navigate("/admin/product");
 
-    } catch (exception) {
-      console.error("Error updating product:", exception);
-      toast.error("Error updating product");
-    } finally {
+    } catch (exception: any) {
+  console.error("Error updating product:", exception.response?.data || exception.message);
+  toast.error(exception.response?.data?.message || "Error updating product");
+} finally {
       setLoading(false);
     }
   };

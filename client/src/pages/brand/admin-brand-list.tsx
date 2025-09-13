@@ -30,7 +30,7 @@ const AdminBrand = () => {
       console.log('API Response:', response); // Log the entire response
       console.log('Brands Data:', response.data.data.result); 
   
-      // Ensure `meta` exists before accessing `total`
+     
       const totalPages = response.data.meta ? Math.ceil(response.data.meta.total / response.data.meta.limit) : 0;
       console.log(`Total Pages: ${totalPages}`); // Log total pages
   
@@ -58,7 +58,7 @@ const AdminBrand = () => {
       setLoading(true);
       console.log(`Deleting brand with ID: ${id}`); // Log the ID of the brand being deleted
 
-      await axiosInstance.delete(`/brand/${id}`, {
+      await axiosInstance.delete(`${baseURL}/brand/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
 

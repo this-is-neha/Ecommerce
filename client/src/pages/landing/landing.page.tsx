@@ -19,6 +19,7 @@ interface Brand {
   image: string; 
 }
 
+
 const LandingPage = () => {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loadingBrands, setLoadingBrands] = useState(false);
@@ -28,6 +29,25 @@ const LandingPage = () => {
 
 const baseUrl = `${baseURL}/uploads/category/`;
 const baseUrll = `${baseURL}/uploads/brands/`;
+ const getLoggedInUser = async () => {
+    try {
+      const token = localStorage.getItem("accessToken") || null
+      const response = await axiosInstance.get(`${baseURL}/auth/me`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      console.log("Routing page ", response)
+      const user = response.data.data.result;
+      console.log("User Namess:", user.name);
+      
+   
+
+    }
+    catch (exception) {
+
+    }
+  }
 
   const excludedCategoryIds = ["663b8d07bd6403f707ba7694", "663b8d67bd6403f707ba769d"];
 

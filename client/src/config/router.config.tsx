@@ -29,11 +29,15 @@ import UserOrders from "../pages/INDIVIDUAL ORDERS";
 import Reactivate from "../pages/auth/Reactivate";
 import ChangePassword from "../pages/auth/Reset";
 import OrderDetail from "../pages/orderDetails";
-import { CartProvider } from "../context/cart.context"; // ✅ Import CartProvider
-
+import { CartProvider } from "../context/cart.context"; 
+import ProductCreate from "../pages/product/product.create";
+import AdminBrandCreate from "../pages/brand/admin-brand-create.page";
+import AdminCategoryCreate from "../pages/category/category.create";
 const AdminDashboard = lazy(() => import("../pages/dashboard/admin.dashboard.page"));
 const AdminLayout = lazy(() => import("../pages/layouts/admin"));
-
+import  AdminCategoryEdit  from "../pages/category/category.edit";
+const AdminBrandEdit = lazy(() => import("../pages/brand/admin-brand-edit"));
+import AdminProductEdit from "../pages/product/product.edit";
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
 
 const RoutingConfig = () => {
@@ -98,6 +102,12 @@ const RoutingConfig = () => {
                   <Route path="brand" element={<AdminBrand />} />
                   <Route path="product" element={<AdminProductList />} />
                   <Route path="category" element={<AdminCategoryList />} />
+                  <Route path="brand/create" element={<AdminBrandCreate />} />
+                  <Route path="category/create" element={<AdminCategoryCreate />} />  
+                  <Route path="product/create" element={<ProductCreate />} />
+                  <Route path="category/:id" element={<AdminCategoryEdit />} />
+                  <Route path="brand/:brandId" element={<AdminBrandEdit />} />
+                  <Route path="product/:productId" element={<AdminProductEdit />} />
                   <Route path="orderlist" element={<OrderListPage />} />
                   <Route path="orderlist/:orderId" element={<OrderDetails />} />
                   <Route path="orderlist/order-details/:productId" element={<OrderDetail />} />

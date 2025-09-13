@@ -7,13 +7,13 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FooterComponent, HeaderComponent, LoadingComponent } from "../../components/common";
-import React from "react";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 const AdminCategoryEdit = () => {
     let [loading, setLoading] = useState(true);
-    const params = useParams();
+    
     const [detail, setDetail] = useState({} as any);
-
+    const { id } = useParams()
     const editDTO = Yup.object({
         title: Yup.string().min(3).required(),
         status: Yup.string().matches(/^(active|inactive)$/).required(),
@@ -40,14 +40,14 @@ const AdminCategoryEdit = () => {
 
             formData.append('parentId', data.parentId);
             formData.append('section', data.section ? data.section : '');
-            await axiosInstance.put(`${baseURL}/category/` + params.id, formData, {
+            await axiosInstance.put(`${baseURL}/category/${id}`, formData, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('accessToken'),
                     "Content-Type": "multipart/form-data",
                 },
             });
 
-            toast.success("Cayegory updated successfully");
+            toast.success("Category updated successfully");
             navigate("/admin/category");
         } catch (exception) {
             console.log(exception);
@@ -59,15 +59,15 @@ const AdminCategoryEdit = () => {
 
     const getCategoryById = async () => {
         try {
-            const response: any = await axiosInstance.get(`${baseURL}/category/` + params.id, {
+            const response: any = await axiosInstance.get(`${baseURL}/category/${id}`, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("accessToken"),
                 },
             });
 
 
-            console.log("Resposne",response);  
-            console.log("Resposne",response.result);
+            console.log("Resposne", response);
+            console.log("Resposne", response.result);
             setValue("title", response.result.title);
             setValue("parentId", response.result.parentId);
             setValue("status", response.result.status);
@@ -82,11 +82,11 @@ const AdminCategoryEdit = () => {
 
     useEffect(() => {
         getCategoryById();
-    }, [params]);
+    }, [id]);
 
     return (
         <>
-        <HeaderComponent/>
+            <HeaderComponent />
             <section>
                 <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-8 lg:gap-16">
@@ -186,7 +186,7 @@ const AdminCategoryEdit = () => {
                     </div>
                 </div>
             </section>
-            <FooterComponent/>
+            <FooterComponent />
         </>
     );
 };

@@ -12,7 +12,6 @@ import banner13 from "../../assets/banner13.webp"
 
 import {useState,useEffect} from "react"
 import axiosInstance from "axios"
-import React from "react"
 const HomeBannerComponent =()=>{
  
   var settings = {

@@ -313,19 +313,18 @@ const HeaderComponent = (): ReactNode => {
         </PopoverGroup>
 
       
-
+{/* 
 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
 {auth?.loggedInUser ? (
   <>
-    {/* rest of your code */}
+    
     <NavLink to={`/${auth.loggedInUser.role}/${auth.loggedInUser.name}/details`} className="text-m font-semibold leading-6 text-gray-900">
       <i className="fas fa-user text-center text-gray-800 text-3xl"></i>
     </NavLink>
-    {/* rest of your code */}
+    
   </>
 ) : (
   <>
-    {/* Login/Register buttons */}
     <NavLink to="/login" className="text-m font-semibold leading-6 text-gray-900">
       LogIn <span aria-hidden="true">&rarr;</span>
     </NavLink>
@@ -334,6 +333,42 @@ const HeaderComponent = (): ReactNode => {
     </NavLink>
   </>
 )}
+</div> */}
+<div className="hidden lg:flex lg:flex-1 lg:justify-end">
+  {auth?.loggedInUser ? (
+    <>
+    
+      <NavLink
+        to={`/${auth.loggedInUser.role}/${auth.loggedInUser.name}/details`}
+        className="text-m font-semibold leading-6 text-gray-900 flex items-center gap-4"
+      >
+        <i className="fas fa-user text-center text-gray-800 text-3xl"></i>
+      </NavLink>
+
+    
+      <button
+        onClick={() => {
+          localStorage.removeItem("accessToken"); 
+          auth.setLoggedInUser(null); 
+          toast.success("Logged out successfully!");
+          navigate("/login"); 
+        }}
+        className="ml-6 text-m font-semibold leading-6 text-red-600 hover:text-red-800"
+      >
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      {/* Login/Register buttons */}
+      <NavLink to="/login" className="text-m font-semibold leading-6 text-gray-900">
+        LogIn <span aria-hidden="true">&rarr;</span>
+      </NavLink>
+      <NavLink to="/register" className="text-m font-semibold leading-6 px-5 text-gray-900">
+        Register <span aria-hidden="true">&rarr;</span>
+      </NavLink>
+    </>
+  )}
 </div>
 
       </nav>

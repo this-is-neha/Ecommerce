@@ -1,5 +1,5 @@
 import { Key, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
@@ -17,7 +17,7 @@ interface GetProductListParams {
 }
 
 const AdminProductList = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
   const [pagination, setPagination] = useState({ totalPages: 0, currentPage: 1 });
@@ -28,41 +28,41 @@ const AdminProductList = () => {
   const [isCategoryFetched, setIsCategoryFetched] = useState(false);
   const [isBrandFetched, setIsBrandFetched] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
-    const [sortOption, setSortOption] = useState("default");
-    const getProductList = async ({
-      page = 1,
-      limit = PER_PAGE_LIMIT,
-      brandId,
-      sort = sortOption,
-    }: GetProductListParams) => {
-      try {
-        setLoading(true);
-    
-        const response = await axiosInstance.get(`${baseURL}/product`, {
-          params: { page, limit, brandId, sort },
-          headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
-        });
-    
-        console.log("API response:", response);
-    
-        const data = response.data?.data;
-        const result = Array.isArray(data?.result) ? data.result : [];
-    
-        const total = data?.meta?.total ?? 0;
-        const itemsPerPage = data?.meta?.limit ?? PER_PAGE_LIMIT;
-        const currentPage = data?.meta?.page ?? 1;
-        const totalPages = Math.ceil(total / itemsPerPage);
-    
-        setProducts(result);
-        setPagination({ totalPages, currentPage });
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        toast.error("Error fetching products...");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
+  const [sortOption, setSortOption] = useState("default");
+  const getProductList = async ({
+    page = 1,
+    limit = PER_PAGE_LIMIT,
+    brandId,
+    sort = sortOption,
+  }: GetProductListParams) => {
+    try {
+      setLoading(true);
+
+      const response = await axiosInstance.get(`${baseURL}/product`, {
+        params: { page, limit, brandId, sort },
+        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+      });
+
+      console.log("API response:", response);
+
+      const data = response.data?.data;
+      const result = Array.isArray(data?.result) ? data.result : [];
+
+      const total = data?.meta?.total ?? 0;
+      const itemsPerPage = data?.meta?.limit ?? PER_PAGE_LIMIT;
+      const currentPage = data?.meta?.page ?? 1;
+      const totalPages = Math.ceil(total / itemsPerPage);
+
+      setProducts(result);
+      setPagination({ totalPages, currentPage });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      toast.error("Error fetching products...");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchCategories = async () => {
     if (isCategoryFetched) return;
     try {
@@ -100,7 +100,7 @@ const AdminProductList = () => {
     setSelectedImage(image);
     setModalOpen(true);
   };
-  
+
 
   const deleteProduct = async (id: string) => {
     try {
@@ -119,15 +119,15 @@ const AdminProductList = () => {
   };
 
   const handleFilterByCategory = (categoryId: string) => {
-    navigate(`/category/${categoryId}`); 
-    setPagination({ totalPages: 0, currentPage: 1 }); 
-    getProductList({ page: 1, limit: PER_PAGE_LIMIT, categoryId }); 
+    navigate(`/category/${categoryId}`);
+    setPagination({ totalPages: 0, currentPage: 1 });
+    getProductList({ page: 1, limit: PER_PAGE_LIMIT, categoryId });
   };
 
   const handleFilterByBrand = (brandId: string) => {
     navigate(`/brand/${brandId}`);
     setPagination({ totalPages: 0, currentPage: 1 });
-    getProductList({ page: 1, limit: PER_PAGE_LIMIT, brandId }); 
+    getProductList({ page: 1, limit: PER_PAGE_LIMIT, brandId });
   };
 
   const handleCreateProduct = () => {
@@ -135,151 +135,151 @@ const AdminProductList = () => {
   };
 
   return (
- <>
- <HeaderComponent/>
- <section>
-      <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-6xl font-bold">Product List</h1>
-          <button onClick={handleCreateProduct} className="bg-green-600 text-white px-4 py-2 rounded">
-            Create Product
-          </button>
-        </div>
-
-        <div className="grid grid-cols-3 gap-16 lg:gap-18">
-          <div className="flex flex-col">
-            <button onClick={fetchCategories} className="bg-blue-600 text-white px-4 py-2 rounded mb-2">
-              Filter by Category
-            </button>
-            <div className="bg-white border border-gray-200 rounded p-4">
-              {categories.map(category => (
-                <button
-                  key={category._id}
-                  onClick={() => handleFilterByCategory(category._id)}
-                  className="bg-gray-200 mb-2 px-4 py-2 rounded"
-                >
-                  {category.title}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col">
-            <button onClick={fetchBrands} className="bg-blue-600 text-white px-4 py-2 rounded mb-2">
-              Filter by Brand
-            </button>
-            <div className="bg-white border border-gray-200 rounded p-4">
-              {brands.map(brand => (
-                <button
-                  key={brand._id}
-                  onClick={() => handleFilterByBrand(brand._id)}
-                  className="bg-gray-200 mb-2 px-4 py-2 rounded"
-                >
-                  {brand.title}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-lg border border-gray-200 mt-5">
-          <div className="overflow-x-auto rounded-t-lg">
-            <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-              <thead className="ltr:text-left rtl:text-right bg-black">
-                <tr>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Title</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Price</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Discount</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Status</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Category</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Brand</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Images</th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white"></th>
-                </tr>
-              </thead>
-
-            
-              <tbody className="divide-y divide-gray-200">
-  {loading ? (
-    <tr>
-      <td colSpan={8}>
-        <div className="flex justify-center py-4">
-          <span>Loading...</span>
-        </div>
-      </td>
-    </tr>
-  ) : products.length > 0 ? (
-    products.map((product) => (
-      <tr className="odd:bg-gray-50 cursor-pointer" key={product._id}>
-        <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-          {product.title}
-        </td>
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-          ${product.price}
-        </td>
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-          {product.discount}%
-        </td>
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-          {product.status}
-        </td>
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-          <button onClick={() => handleFilterByCategory(product.categoryId)} className="text-blue-500 hover:underline">
-            {product.categoryId || "No category"}
-          </button>
-        </td>
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-          <button onClick={() => handleFilterByBrand(product.brandId)} className="text-blue-500 hover:underline">
-            {product.brandId || "No brand"}
-          </button>
-        </td>
-
-        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-  {product.images && product.images.length > 0 ? (
     <>
-      <img
-        src={product.images[0]}
-        alt={product.title}
-        className="h-12 w-12 object-cover"
-        onClick={() => openImageModal(product.images[0])}
-      />
-      {console.log("Image URL:", product.images[0])} 
-    </>
-  ) : (
-    "No Image"
-  )}
-</td>
-   <td className="whitespace-nowrap px-4 py-2">
-          <TableActionButton
-            editUrl={`/admin/product/${product._id}`}
-            rowId={product._id as string}
-            deleteAction={deleteProduct}
-          />
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={8}>
-        <div className="flex justify-center py-4">
-          <span>No products found</span>
-        </div>
-      </td>
-    </tr>
-  )}
-</tbody>
-
-            </table>
+      <HeaderComponent />
+      <section>
+        <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-6xl font-bold">Product List</h1>
+            <button onClick={handleCreateProduct} className="bg-green-600 text-white px-4 py-2 rounded">
+              Create Product
+            </button>
           </div>
-          <PaginationComponent
-            pagination={{ currentPage: pagination.currentPage, totalPages: pagination.totalPages }}
-            fetchCall={(page: number) => getProductList({ page })}
-          />
+
+          <div className="grid grid-cols-3 gap-16 lg:gap-18">
+            <div className="flex flex-col">
+              <button onClick={fetchCategories} className="bg-blue-600 text-white px-4 py-2 rounded mb-2">
+                Filter by Category
+              </button>
+              <div className="bg-white border border-gray-200 rounded p-4">
+                {categories.map(category => (
+                  <button
+                    key={category._id}
+                    onClick={() => handleFilterByCategory(category._id)}
+                    className="bg-gray-200 mb-2 px-4 py-2 rounded"
+                  >
+                    {category.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <button onClick={fetchBrands} className="bg-blue-600 text-white px-4 py-2 rounded mb-2">
+                Filter by Brand
+              </button>
+              <div className="bg-white border border-gray-200 rounded p-4">
+                {brands.map(brand => (
+                  <button
+                    key={brand._id}
+                    onClick={() => handleFilterByBrand(brand._id)}
+                    className="bg-gray-200 mb-2 px-4 py-2 rounded"
+                  >
+                    {brand.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-gray-200 mt-5">
+            <div className="overflow-x-auto rounded-t-lg">
+              <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+                <thead className="ltr:text-left rtl:text-right bg-black">
+                  <tr>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Title</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Price</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Discount</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Status</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Category</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Brand</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">Images</th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white"></th>
+                  </tr>
+                </thead>
+
+
+                <tbody className="divide-y divide-gray-200">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={8}>
+                        <div className="flex justify-center py-4">
+                          <span>Loading...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : products.length > 0 ? (
+                    products.map((product) => (
+                      <tr className="odd:bg-gray-50 cursor-pointer" key={product._id}>
+                        <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                          {product.title}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          ${product.price}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          {product.discount}%
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          {product.status}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          <button onClick={() => handleFilterByCategory(product.categoryId)} className="text-blue-500 hover:underline">
+                            {product.categoryId || "No category"}
+                          </button>
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          <button onClick={() => handleFilterByBrand(product.brandId)} className="text-blue-500 hover:underline">
+                            {product.brandId || "No brand"}
+                          </button>
+                        </td>
+
+                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                          {product.images && product.images.length > 0 ? (
+                            <>
+                              <img
+                                src={product.images[0]}
+                                alt={product.title}
+                                className="h-12 w-12 object-cover"
+                                onClick={() => openImageModal(product.images[0])}
+                              />
+                              {console.log("Image URL:", product.images[0])}
+                            </>
+                          ) : (
+                            "No Image"
+                          )}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-2">
+                          <TableActionButton
+                            editUrl={`/admin/product/${product._id}`}
+                            rowId={product._id as string}
+                            deleteAction={deleteProduct}
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={8}>
+                        <div className="flex justify-center py-4">
+                          <span>No products found</span>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+
+              </table>
+            </div>
+            <PaginationComponent
+              pagination={{ currentPage: pagination.currentPage, totalPages: pagination.totalPages }}
+              fetchCall={(page: number) => getProductList({ page })}
+            />
+          </div>
         </div>
-      </div>
-    </section>
- <FooterComponent/>
- </>
+      </section>
+      <FooterComponent />
+    </>
   );
 };
 

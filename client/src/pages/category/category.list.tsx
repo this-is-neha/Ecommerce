@@ -4,9 +4,8 @@ import { toast } from "react-toastify";
 import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
-import React from "react";
 import { FooterComponent, HeaderComponent } from "../../components/common";
-export const PER_PAGE_LIMIT = 28;
+export const PER_PAGE_LIMIT = 23;
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminCategoryList = () => {
@@ -21,19 +20,17 @@ const AdminCategoryList = () => {
   const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      console.log(`Fetching categories for page ${page} with limit ${limit}`); // Log the parameters
+      console.log(`Fetching categories for page ${page} with limit ${limit}`); 
   
       const response: any = await axiosInstance.get(`${baseURL}/category`, {
         params: { page, limit },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
   
-      // Log the full response structure to check
       console.log('API Response:', response);
   
-      // Assuming the response is structured as { data: { result: [], meta: { total, page } } }
       const totalPages = Math.ceil(response.data.meta.total / limit);
-      console.log(`Total Pages: ${totalPages}`); // Log total pages
+      console.log(`Total Pages: ${totalPages}`); 
   
       setPagination({
         totalPages: totalPages,
@@ -146,10 +143,7 @@ const AdminCategoryList = () => {
                             rowId={category._id as string}
                             deleteAction={deleteCategory}
                           />
-                        </td>
-
-
-                       
+                        </td>    
                       </tr>
                     ))
                   ) : (

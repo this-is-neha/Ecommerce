@@ -44,17 +44,20 @@ const AdminCategoryCreate = () => {
                 console.log("No image file provided");
             }
             
-            formData.append('parentId', data.parentId ? data.parentId : ''); // Send an empty string if parentId is null
+            formData.append('parentId', data.parentId ? data.parentId : ''); 
             formData.append('section', data.section ? data.section : '');
-            const headers = {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'multipart/form-data'
-            };
+           
 
 
             console.log("FormData:", formData);
             formData.forEach((value, key) => console.log(`${key}:`, value));
-            const response = await axiosInstance.post(`${baseURL}/category`, formData, { headers });
+            const response = await axiosInstance.post(`${baseURL}/category`, formData, { 
+                headers :{
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+
+            });
             console.log("Category creation response:", response.data); // Log the response
             toast.success('Category created successfully');
             navigate('/admin/category');
