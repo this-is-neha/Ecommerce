@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "axios";
 import PaginationComponent from "../../components/common/table/pagination.component";
 import TableActionButton from "../../components/common/table/action-button.component";
-import React from "react";
+
 import { FooterComponent, HeaderComponent } from "../../components/common";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const PER_PAGE_LIMIT = 18;
@@ -17,26 +17,27 @@ const AdminBrand = () => {
     currentPage: 1,
   });
 
+  console.log('Brands State:', brands); 
   const getBrandList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      console.log(`Fetching brands for page ${page} with limit ${limit}`); // Log the parameters
+      console.log(`Fetching brands for page ${page} with limit ${limit}`); 
   
       const response: any = await axiosInstance.get(`${baseURL}/brand`, {
         params: { page, limit },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
   
-      console.log('API Response:', response); // Log the entire response
+      console.log('API Response:', response); 
       console.log('Brands Data:', response.data.data.result); 
   
      
       const totalPages = response.data.meta ? Math.ceil(response.data.meta.total / response.data.meta.limit) : 0;
-      console.log(`Total Pages: ${totalPages}`); // Log total pages
+      console.log(`Total Pages: ${totalPages}`); 
   
       setPagination({
         totalPages,
-        currentPage: response.data.meta ? response.data.meta.page : 1, // Default to 1 if meta is missing
+        currentPage: response.data.meta ? response.data.meta.page : 1, 
       });
       setBrands(response.data.data.result);
   
@@ -56,7 +57,7 @@ const AdminBrand = () => {
   const deleteBrand = async (id: string) => {
     try {
       setLoading(true);
-      console.log(`Deleting brand with ID: ${id}`); // Log the ID of the brand being deleted
+      console.log(`Deleting brand with ID: ${id}`);
 
       await axiosInstance.delete(`${baseURL}/brand/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
@@ -66,7 +67,7 @@ const AdminBrand = () => {
       getBrandList({ page: pagination.currentPage, limit: PER_PAGE_LIMIT });
     } catch (exception) {
       toast.error("Brand cannot be deleted at this moment");
-      console.log('Deletion Error:', exception); // Log any error that occurs during deletion
+      console.log('Deletion Error:', exception); 
     } finally {
       setLoading(false);
     }

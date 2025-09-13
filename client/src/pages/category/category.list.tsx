@@ -16,29 +16,29 @@ const AdminCategoryList = () => {
     currentPage: 2,
   });
 
-  
+
   const getCategoryList = async ({ page = 1, limit = PER_PAGE_LIMIT }: any) => {
     try {
       setLoading(true);
-      console.log(`Fetching categories for page ${page} with limit ${limit}`); 
-  
+      console.log(`Fetching categories for page ${page} with limit ${limit}`);
+
       const response: any = await axiosInstance.get(`${baseURL}/category`, {
         params: { page, limit },
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
       });
-  
+
       console.log('API Response:', response);
-  
+
       const totalPages = Math.ceil(response.data.meta.total / limit);
-      console.log(`Total Pages: ${totalPages}`); 
-  
+      console.log(`Total Pages: ${totalPages}`);
+
       setPagination({
         totalPages: totalPages,
         currentPage: response.data.meta.page,
       });
       setCategories(response.data.data.result);
-  
-      console.log('Categories Data:', response.data.result); 
+
+      console.log('Categories Data:', response.data);
     } catch (exception) {
       console.error("Error fetching categories:", exception);
       toast.error("Error fetching categories...");
@@ -46,18 +46,18 @@ const AdminCategoryList = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     getCategoryList({ page: 1, limit: PER_PAGE_LIMIT });
   }, []);
 
 
-  
+
 
   const deleteCategory = async (id: string) => {
     try {
       setLoading(true);
-      console.log(`Deleting Category with ID: ${id}`); 
+      console.log(`Deleting Category with ID: ${id}`);
 
       await axiosInstance.delete(`${baseURL}/category/${id}`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
@@ -67,7 +67,7 @@ const AdminCategoryList = () => {
       getCategoryList({ page: pagination.currentPage, limit: PER_PAGE_LIMIT });
     } catch (exception) {
       toast.error("Category cannot be deleted at this moment");
-      console.log('Deletion Error:', exception); 
+      console.log('Deletion Error:', exception);
     } finally {
       setLoading(false);
     }
@@ -75,93 +75,93 @@ const AdminCategoryList = () => {
 
   return (
     <>
-    <HeaderComponent/>
-    <section>
-      <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 gap-16 lg:gap-18">
-          <h1 className="text-6xl font-bold">Category List</h1>
-          <div></div>
-          <NavLink
-            to="/admin/category/create"
-            className="bg-green-700 mt-16 text-center py-1 text-white rounded w-[200px]"
-          >
-            Create Category
-          </NavLink>
-        </div>
-
-        <div className="rounded-lg border border-gray-200 mt-5">
-          <div className="overflow-x-auto rounded-t-lg">
-            <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-              <thead className="ltr:text-left rtl:text-right bg-black">
-                <tr>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                    Title
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                    Status
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                    Section
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                    Image
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
-                    Parent ID
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 font-medium text-white"></th>
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200">
-                {loading ? (
-                  <tr>
-                    <td colSpan={5}>Loading...</td>
-                  </tr>
-                ) : (
-                  categories.length > 0 ? (
-                    categories.map((category: any, index: number) => (
-                      <tr className="odd:bg-gray-50" key={index}>
-                        <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                          {category.title}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {category.status}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {category.section}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {category.image}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                          {category.parentId}
-                        </td>
-                        <td className="whitespace-nowrap px-4 py-2">
-                          <TableActionButton
-                            editUrl={`/admin/category/${category._id}`}
-                            rowId={category._id as string}
-                            deleteAction={deleteCategory}
-                          />
-                        </td>    
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={5}>No categories found</td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
+      <HeaderComponent />
+      <section>
+        <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-3 gap-16 lg:gap-18">
+            <h1 className="text-6xl font-bold">Category List</h1>
+            <div></div>
+            <NavLink
+              to="/admin/category/create"
+              className="bg-green-700 mt-16 text-center py-1 text-white rounded w-[200px]"
+            >
+              Create Category
+            </NavLink>
           </div>
-          {!loading && (
-            <PaginationComponent fetchCall={getCategoryList} pagination={pagination} />
-          )}
+
+          <div className="rounded-lg border border-gray-200 mt-5">
+            <div className="overflow-x-auto rounded-t-lg">
+              <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+                <thead className="ltr:text-left rtl:text-right bg-black">
+                  <tr>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                      Title
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                      Status
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                      Section
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                      Image
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white">
+                      Parent ID
+                    </th>
+                    <th className="whitespace-nowrap px-4 py-2 font-medium text-white"></th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-200">
+                  {loading ? (
+                    <tr>
+                      <td colSpan={5}>Loading...</td>
+                    </tr>
+                  ) : (
+                    categories.length > 0 ? (
+                      categories.map((category: any, index: number) => (
+                        <tr className="odd:bg-gray-50" key={index}>
+                          <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                            {category.title}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                            {category.status}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                            {category.section}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                            {category.image}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                            {category.parentId}
+                          </td>
+                          <td className="whitespace-nowrap px-4 py-2">
+                            <TableActionButton
+                              editUrl={`/admin/category/${category._id}`}
+                              rowId={category._id as string}
+                              deleteAction={deleteCategory}
+                            />
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={5}>No categories found</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {!loading && (
+              <PaginationComponent fetchCall={getCategoryList} pagination={pagination} />
+            )}
+          </div>
         </div>
-      </div>
-    </section>
-    <FooterComponent/>
+      </section>
+      <FooterComponent />
     </>
   );
 };

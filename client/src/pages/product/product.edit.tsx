@@ -16,7 +16,7 @@ const AdminProductEdit = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
 
- console.log("Product ID from params:", productId);
+  console.log("Product ID from params:", productId);
   const updateSchema = Yup.object({
     title: Yup.string().min(3).required("Title is required"),
     summary: Yup.string().required("Summary is required"),
@@ -28,17 +28,17 @@ const AdminProductEdit = () => {
     categoryId: Yup.string().required("Category is required"),
     brandId: Yup.string().required("Brand is required"),
     slug: Yup.string().required("Slug is required"),
-    images:Yup.array()
-    .of(Yup.mixed().test("fileType", "Must be a file", value => value instanceof File))
-    .nullable(),
-  
+    images: Yup.array()
+      .of(Yup.mixed().test("fileType", "Must be a file", value => value instanceof File))
+      .nullable(),
+
   });
 
   const { control, handleSubmit, setValue, register, formState: { errors } } = useForm({
     resolver: yupResolver(updateSchema),
   });
 
- 
+
   const fetchCategories = async () => {
     try {
       const response = await axiosInstance.get(`${baseURL}/category`, {
@@ -52,8 +52,8 @@ const AdminProductEdit = () => {
       toast.error("Error fetching categories...");
     }
   };
-  
-  
+
+
   const fetchBrands = async () => {
     try {
       const response = await axiosInstance.get(`${baseURL}/brand`, {
@@ -78,12 +78,12 @@ const AdminProductEdit = () => {
 
       const product = response.data.data.result;
 
-       console.log("Fetched product data:", product);
+      console.log("Fetched product data:", product);
       if (!product) {
         throw new Error("Product data is missing or not returned properly");
       }
 
-    
+
       setValue("title", product.title || "");
       setValue("summary", product.summary || "");
       setValue("description", product.description || "");
@@ -91,7 +91,7 @@ const AdminProductEdit = () => {
       setValue("discount", product.discount || 0);
       setValue("isFeatured", product.isFeatured || false);
       setValue("status", product.status || "inactive");
-      setValue("categoryId", product.categoryId || "");
+      setValue("categoryId", Array.isArray(product.categoryId) ? product.categoryId[0] : product.categoryId || "");
       setValue("brandId", product.brandId || "");
       setValue("slug", product.slug || "");
       setValue("images", product.images || []);
@@ -110,7 +110,7 @@ const AdminProductEdit = () => {
     fetchBrands();
     getProduct();
   }, [productId]);
-  
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
@@ -118,8 +118,9 @@ const AdminProductEdit = () => {
       setValue("images", fileArray);
     }
   };
-  
+
   const submitEvent = async (data: any) => {
+    console.log("Form data to submit:", data);
     try {
       setLoading(true);
       const formData = new FormData();
@@ -139,20 +140,22 @@ const AdminProductEdit = () => {
           formData.append("images", file);
         });
       }
+      console.log("Submitting form data:", formData);
 
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        "Content-Type": "multipart/form-data",
-      };
+      await axiosInstance.put(`${baseURL}/product/${productId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-Type": "multipart/form-data",
+        }
 
-      await axiosInstance.put(`${baseURL}/product/${productId}`, formData, { headers });
+      });
       toast.success("Product updated successfully");
       navigate("/admin/product");
 
     } catch (exception: any) {
-  console.error("Error updating product:", exception.response?.data || exception.message);
-  toast.error(exception.response?.data?.message || "Error updating product");
-} finally {
+      console.error("Error updating product:", exception.response?.data || exception.message);
+      toast.error(exception.response?.data?.message || "Error updating product");
+    } finally {
       setLoading(false);
     }
   };
@@ -161,141 +164,152 @@ const AdminProductEdit = () => {
 
   return (
     <>
-    <HeaderComponent/>
-   
-    <section>
-      <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
-        <h1 className="text-6xl font-bold">Edit Product</h1>
-        <div className="rounded-lg border border-gray-200 mt-5">
-          <div className="overflow-x-auto rounded-t-lg">
-            <form onSubmit={handleSubmit(submitEvent)} className="mt-20 grid grid-cols-6 gap-6">
-              <div className="col-span-6">
-                <label htmlFor="title" className="block text-xl font-medium text-gray-700">
-                  Title<span className="text-red">*</span>
-                </label>
-                <TextInputField
-                  control={control}
-                  name="title"
-                  errMsg={errors.title?.message || ""}
-                  required={true}
-                />
-              </div>
+      <HeaderComponent />
 
-              <div className="col-span-6">
-                <label htmlFor="summary" className="block text-xl font-medium text-gray-700">
-                  Summary<span className="text-red">*</span>
-                </label>
-                <TextInputField
-                  control={control}
-                  name="summary"
-                  errMsg={errors.summary?.message || ""}
-                  required={true}
-                />
-              </div>
+      <section>
+        <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
+          <h1 className="text-6xl font-bold">Edit Product</h1>
+          <div className="rounded-lg border border-gray-200 mt-5">
+            <div className="overflow-x-auto rounded-t-lg">
+              <form
+                onSubmit={handleSubmit(
+                  (data) => {
+                    console.log("✅ SubmitEvent triggered with data:", data);
+                    submitEvent(data);
+                  },
+                  (errors) => {
+                    console.error("❌ Validation errors:", errors);
+                  }
+                )}
+              >
 
-              <div className="col-span-6">
-                <label htmlFor="description" className="block text-xl font-medium text-gray-700">
-                  Description
-                </label>
-                <TextInputField
-                  control={control}
-                  name="description"
-                  errMsg={errors.description?.message || ""}
-                  required={false}
-                />
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="title" className="block text-xl font-medium text-gray-700">
+                    Title<span className="text-red">*</span>
+                  </label>
+                  <TextInputField
+                    control={control}
+                    name="title"
+                    errMsg={errors.title?.message || ""}
+                    required={true}
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <label htmlFor="price" className="block text-xl font-medium text-gray-700">
-                  Price<span className="text-red">*</span>
-                </label>
-                <TextInputField
-                  control={control}
-                  name="price"
-                  type="number"
-                  errMsg={errors.price?.message || ""}
-                  required={true}
-                />
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="summary" className="block text-xl font-medium text-gray-700">
+                    Summary<span className="text-red">*</span>
+                  </label>
+                  <TextInputField
+                    control={control}
+                    name="summary"
+                    errMsg={errors.summary?.message || ""}
+                    required={true}
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <label htmlFor="discount" className="block text-xl font-medium text-gray-700">
-                  Discount
-                </label>
-                <TextInputField
-                  control={control}
-                  name="discount"
-                  type="number"
-                  errMsg={errors.discount?.message || ""}
-                  required={false}
-                />
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="description" className="block text-xl font-medium text-gray-700">
+                    Description
+                  </label>
+                  <TextInputField
+                    control={control}
+                    name="description"
+                    errMsg={errors.description?.message || ""}
+                    required={false}
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <label htmlFor="categoryId" className="block text-xl font-medium text-gray-700">
-                  Category<span className="text-red">*</span>
-                </label>
-                <SelectOptionComponent
-                  options={categories.map(category => ({ label: category._id, value: category._id }))}
-                  control={control}
-                  name="categoryId"
-                  errMsg={errors.categoryId?.message || ""}
-             
-                />
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="price" className="block text-xl font-medium text-gray-700">
+                    Price<span className="text-red">*</span>
+                  </label>
+                  <TextInputField
+                    control={control}
+                    name="price"
+                    type="number"
+                    errMsg={errors.price?.message || ""}
+                    required={true}
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <label htmlFor="brandId" className="block text-xl font-medium text-gray-700">
-                  Brand<span className="text-red">*</span>
-                </label>
-                <SelectOptionComponent
-                  options={brands.map(brand => ({ label: brand._id, value: brand._id }))}
-                  control={control}
-                  name="brandId"
-                  errMsg={errors.brandId?.message || ""}
-                  
-                />
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="discount" className="block text-xl font-medium text-gray-700">
+                    Discount
+                  </label>
+                  <TextInputField
+                    control={control}
+                    name="discount"
+                    type="number"
+                    errMsg={errors.discount?.message || ""}
+                    required={false}
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <label htmlFor="status" className="block text-xl font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  {...register("status")}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
+                <div className="col-span-6">
+                  <label htmlFor="categoryId" className="block text-xl font-medium text-gray-700">
+                    Category<span className="text-red">*</span>
+                  </label>
+                  <SelectOptionComponent
+                    options={categories.map(category => ({ label: category._id, value: category._id }))}
+                    control={control}
+                    name="categoryId"
+                    errMsg={errors.categoryId?.message || ""}
 
-              <div className="col-span-6">
-                <label htmlFor="images" className="block text-xl font-medium text-gray-700">
-                  Upload Images
-                </label>
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleFileChange}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                />
-              </div>
+                  />
+                </div>
 
-              <div className="col-span-6">
-                <button
-                  type="submit"
-                  className="inline-flex justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Update Product
-                </button>
-              </div>
-            </form>
+                <div className="col-span-6">
+                  <label htmlFor="brandId" className="block text-xl font-medium text-gray-700">
+                    Brand<span className="text-red">*</span>
+                  </label>
+                  <SelectOptionComponent
+                    options={brands.map(brand => ({ label: brand._id, value: brand._id }))}
+                    control={control}
+                    name="brandId"
+                    errMsg={errors.brandId?.message || ""}
+
+                  />
+                </div>
+
+                <div className="col-span-6">
+                  <label htmlFor="status" className="block text-xl font-medium text-gray-700">
+                    Status
+                  </label>
+                  <select
+                    {...register("status")}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+
+                <div className="col-span-6">
+                  <label htmlFor="images" className="block text-xl font-medium text-gray-700">
+                    Upload Images
+                  </label>
+                  <input
+                    type="file"
+                    multiple
+                    onChange={handleFileChange}
+                    className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                </div>
+
+                <div className="col-span-6">
+                  <button
+                    type="submit"
+                    className="inline-flex justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Update Product
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <FooterComponent/>
+      </section>
+      <FooterComponent />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TextInputField, SelectOptionComponent } from "../../components/common/form";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import axiosInstance from "axios";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
@@ -11,9 +11,10 @@ const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const AdminCategoryEdit = () => {
     let [loading, setLoading] = useState(true);
-    
+
     const [detail, setDetail] = useState({} as any);
     const { id } = useParams()
+    console.log("ID:", id);
     const editDTO = Yup.object({
         title: Yup.string().min(3).required(),
         status: Yup.string().matches(/^(active|inactive)$/).required(),
@@ -28,52 +29,91 @@ const AdminCategoryEdit = () => {
 
     const navigate = useNavigate();
 
+    // const submitEvent = async (data: any) => {
+    //     try {
+    //         setLoading(true);
+    //         const formData = new FormData();
+    //         formData.append('title', data.title);
+    //         formData.append('status', data.status.value);
+    //         if (data.image instanceof File) {
+    //             formData.append('image', data.image);
+    //         }
+
+    //         formData.append('parentId', data.parentId);
+    //         formData.append('section', data.section ? data.section : '');
+    //         console.log("FormData:", formData);
+    //         await axiosInstance.put(`${baseURL}/category/${id}`, formData, {
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem('accessToken'),
+    //                 "Content-Type": "multipart/form-data",
+    //             },
+    //         });
+
+    //         toast.success("Category updated successfully");
+    //         navigate("/admin/category");
+    //     } catch (exception) {
+    //         console.log(exception);
+    //         toast.error("Error updating Category");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const submitEvent = async (data: any) => {
-        try {
-            setLoading(true);
-            const formData = new FormData();
-            formData.append('title', data.title);
-            formData.append('status', data.status.value);
-            if (data.image instanceof File) {
-                formData.append('image', data.image);
-            }
+  try {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('status', data.status?.value || data.status || '');
+    formData.append('section', data.section?.value || data.section || '');
+    formData.append('parentId', data.parentId || '');
 
-            formData.append('parentId', data.parentId);
-            formData.append('section', data.section ? data.section : '');
-            await axiosInstance.put(`${baseURL}/category/${id}`, formData, {
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem('accessToken'),
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+    if (data.image instanceof File) {
+      formData.append('image', data.image);
+    }
 
-            toast.success("Category updated successfully");
-            navigate("/admin/category");
-        } catch (exception) {
-            console.log(exception);
-            toast.error("Error updating Category");
-        } finally {
-            setLoading(false);
-        }
-    };
+    // Debug
+    Array.from(formData.entries()).forEach(([key, value]) => {
+      console.log(key, value);
+    });
+
+    await axiosInstance.put(`${baseURL}/category/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    toast.success("Category updated successfully");
+    navigate("/admin/category");
+  } catch (exception: any) {
+    console.log("Error updating category:", exception.response?.data || exception.message);
+    toast.error("Error updating Category");
+  } finally {
+    setLoading(false);
+  }
+};
 
     const getCategoryById = async () => {
+        const token = localStorage.getItem("accessToken");
+        console.log("Token:", token);
         try {
             const response: any = await axiosInstance.get(`${baseURL}/category/${id}`, {
                 headers: {
-                    Authorization: "Bearer " + localStorage.getItem("accessToken"),
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
                 },
             });
-
-
-            console.log("Resposne", response);
+            console.log("Resposne of Cta", response);
             console.log("Resposne", response.result);
-            setValue("title", response.result.title);
-            setValue("parentId", response.result.parentId);
-            setValue("status", response.result.status);
+            setValue("title", response.data.result.title);
+            setValue("parentId", response.data.result.parentId);
+            setValue("status", response.data.result.status);
+            setValue("section", response.data.result.section);
             setDetail(response.result);
         } catch (exception) {
             toast.error("Category fetch error");
+            console.log("Error", exception);
             navigate('/admin/category');
         } finally {
             setLoading(false);
@@ -151,11 +191,15 @@ const AdminCategoryEdit = () => {
                                                 setValue('image', uploaded);
                                             }}
                                         />
-                                        {detail.image && (
+                                        {detail?.image && (
                                             <div className="block w-[24%]">
-                                                <img src={import.meta.env.VITE_IMAGE_URL + 'uploads/category/' + detail.image} alt="Banner" />
+                                                <img
+                                                    src={import.meta.env.VITE_IMAGE_URL + 'uploads/category/' + detail.image}
+                                                    alt="Banner"
+                                                />
                                             </div>
                                         )}
+
                                         <span className="text-red">{errors?.image?.message}</span>
                                     </div>
                                     <div className="col-span-6">

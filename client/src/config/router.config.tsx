@@ -106,7 +106,7 @@ const RoutingConfig = () => {
                   <Route path="category/create" element={<AdminCategoryCreate />} />  
                   <Route path="product/create" element={<ProductCreate />} />
                   <Route path="category/:id" element={<AdminCategoryEdit />} />
-                  <Route path="brand/:brandId" element={<AdminBrandEdit />} />
+                  <Route path="brand/:id" element={<AdminBrandEdit />} />
                   <Route path="product/:productId" element={<AdminProductEdit />} />
                   <Route path="orderlist" element={<OrderListPage />} />
                   <Route path="orderlist/:orderId" element={<OrderDetails />} />

@@ -11,7 +11,8 @@ import { FooterComponent, HeaderComponent, LoadingComponent } from "../../compon
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminBrandEdit = () => {
   const [loading, setLoading] = useState(true);
-  const params = useParams();
+const { id } = useParams<{ id: string }>(); // <-- extract the string
+
   const [detail, setDetail] = useState<any>({});
 
   const editDTO = Yup.object({
@@ -43,7 +44,7 @@ const AdminBrandEdit = () => {
 
       formData.append('homeSection', data.homeSection ? 'true' : 'false');
 
-      await axiosInstance.put(`${baseURL}/brand/` + params.id, formData, {
+      await axiosInstance.put(`${baseURL}/brand/${id}` , formData, {
         headers: {
           Authorization: "Bearer " + localStorage.getItem('accessToken'),
           "Content-Type": "multipart/form-data",
@@ -62,9 +63,11 @@ const AdminBrandEdit = () => {
 
   const getBrandById = async () => {
     try {
-      const response: any = await axiosInstance.get(`${baseURL}/brand/` + params.id, {
+     console.log('Fetching brand details for ID:', id);
+      const response: any = await axiosInstance.get(`${baseURL}/brand/${id}` , {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accessToken"),
+          "Content-Type": "application/json",
         },
       });
 
@@ -83,7 +86,7 @@ const AdminBrandEdit = () => {
 
   useEffect(() => {
     getBrandById();
-  }, [params]);
+  }, [id]);
 
   return (
     
