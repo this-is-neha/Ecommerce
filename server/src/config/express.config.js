@@ -15,20 +15,12 @@ app.use(helmet());
 const corsOptions = {
   origin: ['https://this-is-nehaa.netlify.app', 'http://localhost:5173','https://ecommerce-one-umber-34.vercel.app'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add more methods if necessary
-  credentials: true, // Allow credentials if needed
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  credentials: true, 
 };
 
 
-// app.use('/uploads', express.static('public/uploads', {
-//   setHeaders: (res, path) => {
-  
-//     res.setHeader('Access-Control-Allow-Origin', '*');
 
-//     res.setHeader('Access-Control-Allow-Methods', 'GET');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//   }
-// }));
 
 
 app.use('/uploads', express.static('public/uploads', {

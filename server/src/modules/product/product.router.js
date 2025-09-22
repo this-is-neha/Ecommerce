@@ -7,16 +7,16 @@ const { setPath, uploader } = require("../../middleware/uploader.middleware");
 const { bodyValidator } = require("../../middleware/validator.middleware");
 const { ProductCreateDTO, ProductUpdateDTO } = require("./product.dto");
 const productCtrl = require("./product.controller");
-const ProductModel = require("./product.model"); // Ensure you have a ProductModel
+const ProductModel = require("./product.model"); 
 
-// Slug checking route
+
 router.get('/check-slug', async (req, res, next) => {
     try {
         const { slug } = req.query;
         const exists = await ProductModel.findOne({ slug });
         res.status(200).json({ exists: !!exists });
     } catch (error) {
-        next(error); // Pass error to Express error handler
+        next(error);
     }
 });
 
@@ -33,7 +33,7 @@ router.route('/')
     )
     .get(
         auth,
-        // allowRole("admin"),
+        
         productCtrl.index
     );
 
