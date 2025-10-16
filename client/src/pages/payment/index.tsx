@@ -45,7 +45,7 @@ const getLoggedInUser = async () => {
       },
     });
     const user = response.data.result; 
-    console.log("User Detailssssssssssssssss:", response.data.result); // Log the user details
+    console.log("User Detailssssssssssssssss:", response.data.result); 
     setLoggedInUser(user._id);
     setValue("user", user._id); 
   } catch (error) {

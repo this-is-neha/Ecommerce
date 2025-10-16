@@ -35,7 +35,7 @@ const ImageUploadPage = () => {
   const fetchOrderDetails = async (orderId: string) => {
     try {
       const response = await axiosInstance.get(`${baseURL}/order/${orderId}`);
-      console.log("order response",response) // Adjust the endpoint accordingly
+      console.log("order response",response)
       console.log('Order details fetched successfully:', response.data.data);
      
       console.log('Full Name:', response.data.data.result.fullName);
