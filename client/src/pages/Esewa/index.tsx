@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { HeaderComponent } from "../../components/common";
-import { FooterComponent } from "../../components/common";
-import { useNavigate } from "react-router-dom";
+import { HeaderComponent, FooterComponent } from "../../components/common";
+import { useNavigate, useParams } from "react-router-dom";
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 export default function PaymentForm() {
@@ -14,6 +14,8 @@ export default function PaymentForm() {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const navigate = useNavigate();
+  const { orderId } = useParams(); // get orderId from URL
+  console.log("OrderId from URL:", orderId);
 
   const handlePay = async () => {
     if (!name || !accountNumber || amount <= 0) {
@@ -21,21 +23,33 @@ export default function PaymentForm() {
       return;
     }
 
+    if (!orderId) {
+      setStatus("Order ID missing in URL!");
+      console.warn("❌ Order ID is missing in URL params.");
+      return;
+    }
+
     setLoading(true);
     setStatus("Initiating payment...");
+    console.log("Sending payment request with:", { amount, buyerName: name, accountNumber, orderId });
 
     try {
       const createRes = await axios.post(`${baseURL}/confrom/pay`, {
         amount,
         buyerName: name,
         accountNumber,
+        orderId,
         email: "test@example.com",
         mobile: "9806800001",
       });
 
-      const { pid } = createRes.data;
-      if (!pid) {
-        setStatus("Failed to initialize payment (missing PID)");
+      console.log("Backend response:", createRes.data);
+
+      const { orderId: returnedOrderId } = createRes.data;
+      console.log("OrderId returned from backend:", returnedOrderId);
+
+      if (!returnedOrderId) {
+        setStatus("Failed to initialize payment (missing orderId from backend)");
         return;
       }
 
@@ -45,7 +59,8 @@ export default function PaymentForm() {
       const failureURL = "http://localhost:5173/payment/failure";
       const merchantCode = "EPAYTEST";
 
-      const redirectUrl = `https://uat.esewa.com.np/epay/main?amt=${amount}&pid=${pid}&scd=${merchantCode}&su=${successURL}&fu=${failureURL}`;
+      const redirectUrl = `https://uat.esewa.com.np/epay/main?amt=${amount}&pid=${returnedOrderId}&scd=${merchantCode}&su=${successURL}&fu=${failureURL}`;
+      console.log("Redirect URL:", redirectUrl);
 
       window.location.href = redirectUrl;
     } catch (err: any) {
@@ -56,17 +71,11 @@ export default function PaymentForm() {
     }
   };
 
-  // Show popup on success page
+  // Show success popup
   useEffect(() => {
-    // Check URL for success (example: "/payment/success")
     if (window.location.pathname.includes("/payment/success")) {
       setShowSuccess(true);
-
-      // Automatically redirect after 3 seconds
-      const timer = setTimeout(() => {
-        navigate("/"); // navigate to home
-      }, 3000);
-
+      const timer = setTimeout(() => navigate("/"), 3000);
       return () => clearTimeout(timer);
     }
   }, [navigate]);
@@ -115,7 +124,6 @@ export default function PaymentForm() {
         {status && <p className="mt-4 text-center text-gray-700">{status}</p>}
       </div>
 
-      {/* Success Popup */}
       {showSuccess && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg text-center">
