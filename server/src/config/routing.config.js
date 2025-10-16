@@ -9,7 +9,6 @@ const productRouter=require("../modules/product/product.router")
 const orderRouter=require("../modules/delivery/delivery.router")
 const conformRouter=require("../modules/conformation/confrom.router")
 const addToCartRouter= require("../modules/addToCart/add.router")
-//const esewaRouter=require("../modules/Esewa/esewa.router")
 
 mainRoute.use('/auth',authRouter)
 mainRoute.use('/user',userRouter)
@@ -20,5 +19,5 @@ mainRoute.use("/product",productRouter)
 mainRoute.use("/order",orderRouter)
 mainRoute.use("/confrom",conformRouter)
 mainRoute.use("/addToCart",addToCartRouter)
-// mainRoute.use("/payment",esewaRouter)
+
 module.exports=mainRoute

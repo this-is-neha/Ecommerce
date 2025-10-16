@@ -1,33 +1,13 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const OrderSchema = new mongoose.Schema({
-  buyerName: {
-    type: String,
-    required: true,
-  },
-  accountNumber: {
-    type: String,
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  refId: {
-    type: String, // eSewa reference ID
-    default: null,
-  },
-  status: {
-    type: String,
-    enum: ["Pending", "Paid", "Failed"],
-    default: "Pending",
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+const ImageSchema = new mongoose.Schema({
+ orderId:{
+  type:String,
+  required:true
+ },
+ image:[String],
 });
 
-const Order = mongoose.model("payment", OrderSchema);
+const Image = mongoose.model('Image', ImageSchema);
 
-module.exports = Order;
+module.exports = Image;
