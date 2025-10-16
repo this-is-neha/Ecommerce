@@ -7,7 +7,7 @@ class OrderController {
   
   async createOrder(req, res) {
     try {
-        console.log("Request Body:", req.body); // Log the incoming request body
+        console.log("Request Body:", req.body); 
         const { error, value } = OrderDTO.OrderCreateDTO.validate(req.body);
 
         if (error) {
@@ -44,7 +44,7 @@ class OrderController {
     try {
       const orders = await OrderService.getOrders();
       
-      // Wrap the orders in the "data" and "result" fields
+    
       res.status(200).json({
         data: {
           result: orders,
@@ -114,39 +114,43 @@ class OrderController {
   }
   
   
-  async verifyEsewaPayment(req, res) {
-    const MERCHANT_ID = "EPAYTEST"; // Test Merchant ID
-    const { amt, refId, pid } = req.body.amt ? req.body : req.query;
+async verifyEsewaPayment(req, res) {
+  const MERCHANT_ID = "EPAYTEST"; 
+  const { amt, refId, pid, name, accountNumber } = req.body;
 
-    console.log("eSewa Callback Data:", req.body);
+  console.log("eSewa Callback Data:", req.body);
 
-    try {
-      const payload = new URLSearchParams({
-        amt,
-        rid: refId,
-        pid,
-        scd: MERCHANT_ID,
-      }).toString();
+  try {
+    const payload = new URLSearchParams({
+      amt,
+      rid: refId || "",   // eSewa will provide refId after payment
+      pid,
+      scd: MERCHANT_ID,
+    }).toString();
 
-      const verifyRes = await axios.post(
-        "https://uat.esewa.com.np/epay/transrec",
-        payload,
-        { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+    const verifyRes = await axios.post(
+      "https://uat.esewa.com.np/epay/transrec",
+      payload,
+      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+    );
+
+    if (verifyRes.data.includes("Success")) {
+      // Update order with bank info
+      await Order.findOneAndUpdate(
+        { _id: pid },
+        { status: "Paid", refId, name, accountNumber, amount: amt }
       );
 
-      if (verifyRes.data.includes("Success")) {
-        // Update order status using your model
-        await Order.findOneAndUpdate({ _id: pid }, { status: "Paid", refId });
-
-        return res.redirect("http://localhost:5173/payment/success");
-      } else {
-        return res.redirect("http://localhost:5173/payment/failure");
-      }
-    } catch (error) {
-      console.error("Payment verification error:", error.message);
-      res.status(500).send("Payment verification failed");
+      return res.redirect("http://localhost:5173/payment/success");
+    } else {
+      return res.redirect("http://localhost:5173/payment/failure");
     }
+  } catch (error) {
+    console.error("Payment verification error:", error.message);
+    res.status(500).send("Payment verification failed");
   }
+}
+
   async deleteOrder(req, res) {
     try {
       const deletedOrder = await OrderService.deleteOrder(req.params.id);
