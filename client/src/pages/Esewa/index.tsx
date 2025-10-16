@@ -25,7 +25,7 @@ export default function PaymentForm() {
     setStatus("Initiating payment...");
 
     try {
-      const createRes = await axios.post(`${baseURL}/order/esewa`, {
+      const createRes = await axios.post(`${baseURL}/confrom/pay`, {
         amount,
         buyerName: name,
         accountNumber,

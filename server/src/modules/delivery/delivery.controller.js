@@ -114,42 +114,7 @@ class OrderController {
   }
   
   
-async verifyEsewaPayment(req, res) {
-  const MERCHANT_ID = "EPAYTEST"; 
-  const { amt, refId, pid, name, accountNumber } = req.body;
 
-  console.log("eSewa Callback Data:", req.body);
-
-  try {
-    const payload = new URLSearchParams({
-      amt,
-      rid: refId || "",   // eSewa will provide refId after payment
-      pid,
-      scd: MERCHANT_ID,
-    }).toString();
-
-    const verifyRes = await axios.post(
-      "https://uat.esewa.com.np/epay/transrec",
-      payload,
-      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-    );
-
-    if (verifyRes.data.includes("Success")) {
-      // Update order with bank info
-      await Order.findOneAndUpdate(
-        { _id: pid },
-        { status: "Paid", refId, name, accountNumber, amount: amt }
-      );
-
-      return res.redirect("http://localhost:5173/payment/success");
-    } else {
-      return res.redirect("http://localhost:5173/payment/failure");
-    }
-  } catch (error) {
-    console.error("Payment verification error:", error.message);
-    res.status(500).send("Payment verification failed");
-  }
-}
 
   async deleteOrder(req, res) {
     try {
