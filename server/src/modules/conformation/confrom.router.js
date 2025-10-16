@@ -17,12 +17,12 @@
 
 const express = require("express");
 const router = express.Router();
-const ConformController = require("./ConformController");
+const ConformController = require("./conform.controller");
 
-// Create/initiate payment
+
 router.post("/pay", ConformController.createPayment);
 
-// Verify payment (callback from eSewa)
+
 router.post("/verify", ConformController.verifyEsewaPayment);
 
 module.exports = router;
