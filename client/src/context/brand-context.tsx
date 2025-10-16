@@ -11,6 +11,9 @@ interface BrandContextType {
   brands: Brand[];
 }
 
+
+
+
 const BrandContext = createContext<BrandContextType | undefined>(undefined);
 
 export const BrandProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

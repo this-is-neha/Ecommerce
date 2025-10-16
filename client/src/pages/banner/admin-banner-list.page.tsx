@@ -13,7 +13,7 @@
 
 // const AdminBanner = () => {
 //   const [loading, setLoading] = useState(true);
-//   // const dispatch = useDispatch();
+//   const dispatch = useDispatch();
 
 //   const bannerData = useSelector((root: any) => root.banner.listAll);
 
@@ -46,8 +46,8 @@
 //         currentPage: response.data.meta.page,
 //       });
   
-//       // Dispatching the banner data
-//       // dispatch(helloWorld(response.data.result));  // Assuming you dispatch the result of banners here
+  
+//       dispatch(helloWorld(response.data.result));  // Assuming you dispatch the result of banners here
   
 //     } catch (exception) {
 //       console.error("Error fetching banner:", exception);

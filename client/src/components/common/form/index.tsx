@@ -19,12 +19,12 @@ interface CheckboxFieldProps {
   checked:boolean
   
 }
+
+
+
+
+
 export const TextInputField = ({ control, type = "text", name, errMsg = null, required = true }: TextInputProps) => {
-
-
-
-
-
   const { field } = useController({
     control: control,
     name: name,
@@ -33,11 +33,8 @@ export const TextInputField = ({ control, type = "text", name, errMsg = null, re
     }
   })
   return (
-
     <>
-
-
-      <input
+    <input
         id={name}
         type={type}
         {...field}
@@ -48,8 +45,37 @@ export const TextInputField = ({ control, type = "text", name, errMsg = null, re
     </>
   )
 }
+export const SelectOptionComponent = ({ errMsg = null,name, control, options = []  }:{ errMsg?: string | null, options?: any[], name: string, control: any }) => {
+  return (
+      <div>
+          <Controller
+              name={name}
+              control={control}
+            
+              render={({ field }) => (
+                  <select
+                      {...field}
+                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none"
+                  >
+                      {options.map((option, index) => (
+                          <option key={index} value={option.value}>{option.label}</option>
+                      ))}
+                      
+                  </select>
+              )}
+          />
+          <span className="text-red">{errMsg}</span>
+      </div>
+  );
 
-export const SelectComponent = ({ errMsg = null, name, control, options = [] }: { errMsg?: string | null, options?: any[], name: string, control: any }) => {
+
+};
+
+export const SelectComponent = ({ 
+  errMsg = null,
+   name, control,
+    options = [] }: 
+    { errMsg?: string | null, options?: any[], name: string, control: any }) => {
 
   const { field } = useController({
     control: control,
@@ -58,11 +84,7 @@ export const SelectComponent = ({ errMsg = null, name, control, options = [] }: 
 
   return (
     <>
-
-      <select
-        className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
-        {...field}
-      >
+ <select className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"{...field}  >
         <option value="">--select any one--</option>
         {
           options && options.map((opt, ind) => (
@@ -80,29 +102,7 @@ export const SelectComponent = ({ errMsg = null, name, control, options = [] }: 
 
 
 
-export const SelectOptionComponent = ({ errMsg = null, name, control, options = [] }: { errMsg?: string | null, options?: any[], name: string, control: any }) => {
-  return (
-      <div>
-          <Controller
-              name={name}
-              control={control}
-              render={({ field }) => (
-                  <select
-                      {...field}
-                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none"
-                  >
-                      {options.map((option, index) => (
-                          <option key={index} value={option.value}>{option.label}</option>
-                      ))}
-                  </select>
-              )}
-          />
-          <span className="text-red">{errMsg}</span>
-      </div>
-  );
 
-
-};
 
 
 
@@ -135,6 +135,9 @@ export const CheckboxField: React.FC<CheckboxFieldProps> = ({ control, name, lab
   errMsg?: string | null;
   multiple?: boolean; 
 }
+
+
+
 export const FileInputField: React.FC<FileInputFieldProps> = ({
   control,
   name,

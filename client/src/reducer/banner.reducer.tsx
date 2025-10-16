@@ -30,7 +30,7 @@
 // const BannerSlice = createSlice({
 //     name: "banner",
 //     initialState: {
-//         listAll: null,
+//         listAll: null,  //  state properties inside Redux state
 //         bannerDetail:null
 //     },
 //     reducers: {

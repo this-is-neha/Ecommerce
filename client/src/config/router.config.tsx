@@ -38,6 +38,7 @@ const AdminLayout = lazy(() => import("../pages/layouts/admin"));
 import  AdminCategoryEdit  from "../pages/category/category.edit";
 const AdminBrandEdit = lazy(() => import("../pages/brand/admin-brand-edit"));
 import AdminProductEdit from "../pages/product/product.edit";
+import Esewa from "../pages/Esewa";
 const baseURLl = import.meta.env.VITE_API_BASE_URL;
 
 const RoutingConfig = () => {
@@ -120,7 +121,8 @@ const RoutingConfig = () => {
                 <Route path="/category/:categoryId" element={<CategoryProductList />} />
                 <Route path="/brand/:brandId" element={<BrandProductList />} />
                 <Route path="/:productName/:productId/order" element={<ProductOrderPage />} />
-                <Route path="/:productName/:productId/order/payment/:orderId" element={<ImageUploadPage />} />
+                {/* <Route path="/:productName/:productId/order/payment/:orderId" element={<ImageUploadPage />} /> */}
+                           <Route path="/:productName/:productId/order/payment/:orderId" element={<Esewa />} />
                 <Route path="/:id/cart" element={<CartPage />} />
                 <Route path="/admin/page" element={<AdminPage />} />
                 <Route path="/:userrole/:username/details" element={<UserDetails />} />
@@ -129,6 +131,7 @@ const RoutingConfig = () => {
                 <Route path="admin/orderlist/:orderId/payment-success" element={<PaymentSuccessPage />} />
                 <Route path="/:productName/:productId/order/payment" element={<PaymentPage />} />
                 <Route path="/:userId/orders" element={<UserOrders />} />
+                {/* <Route path="/esewa" element={<Esewa />} /> */}
               </Routes>
             </Suspense>
           </CartProvider>

@@ -20,9 +20,6 @@ const corsOptions = {
 };
 
 
-
-
-
 app.use('/uploads', express.static('public/uploads', {
   setHeaders: (res, path) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');

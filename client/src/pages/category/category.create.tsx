@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { TextInputField, SelectOptionComponent } from '../../components/common/form';
-import React from 'react';
 import { FooterComponent, HeaderComponent } from '../../components/common';
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminCategoryCreate = () => {
@@ -58,7 +57,7 @@ const AdminCategoryCreate = () => {
                 }
 
             });
-            console.log("Category creation response:", response.data); // Log the response
+            console.log("Category creation response:", response.data); 
             toast.success('Category created successfully');
             navigate('/admin/category');
         } catch (error: any) {
